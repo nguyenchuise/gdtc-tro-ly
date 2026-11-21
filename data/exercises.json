@@ -1,0 +1,1594 @@
+{
+  "_ghiChu": "Nội dung MẪU DEMO tự viết, chưa đối chiếu SGK. Cấu trúc phần/chủ đề cần đối chiếu mục lục sách giáo khoa. Xem README mục \"Cập nhật nội dung\".",
+  "schemaVersion": 1,
+  "bookSeries": null,
+  "curriculum": [
+    {
+      "grade": 6,
+      "parts": [
+        {
+          "id": "g6-p1",
+          "title": "Phần 1. Vận động cơ bản",
+          "chapters": [
+            {
+              "id": "g6-c1",
+              "title": "Chủ đề 1. Bài thể dục khởi động"
+            },
+            {
+              "id": "g6-c2",
+              "title": "Chủ đề 2. Chạy cự li ngắn"
+            }
+          ]
+        },
+        {
+          "id": "g6-p2",
+          "title": "Phần 2. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g6-c3",
+              "title": "Chủ đề 3. Bóng đá"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": 7,
+      "parts": [
+        {
+          "id": "g7-p1",
+          "title": "Phần 1. Vận động cơ bản",
+          "chapters": [
+            {
+              "id": "g7-c1",
+              "title": "Chủ đề 1. Bài thể dục phát triển chung"
+            },
+            {
+              "id": "g7-c2",
+              "title": "Chủ đề 2. Chạy cự li trung bình"
+            }
+          ]
+        },
+        {
+          "id": "g7-p2",
+          "title": "Phần 2. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g7-c3",
+              "title": "Chủ đề 3. Ném bóng"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": 8,
+      "parts": [
+        {
+          "id": "g8-p1",
+          "title": "Phần 1. Vận động cơ bản",
+          "chapters": [
+            {
+              "id": "g8-c1",
+              "title": "Chủ đề 1. Bài tập sức mạnh chân"
+            },
+            {
+              "id": "g8-c2",
+              "title": "Chủ đề 2. Nhảy xa"
+            }
+          ]
+        },
+        {
+          "id": "g8-p2",
+          "title": "Phần 2. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g8-c3",
+              "title": "Chủ đề 3. Bóng rổ"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": 9,
+      "parts": [
+        {
+          "id": "g9-p1",
+          "title": "Phần 1. Vận động cơ bản",
+          "chapters": [
+            {
+              "id": "g9-c1",
+              "title": "Chủ đề 1. Bài tập thể lực"
+            },
+            {
+              "id": "g9-c2",
+              "title": "Chủ đề 2. Chạy cự li ngắn"
+            }
+          ]
+        },
+        {
+          "id": "g9-p2",
+          "title": "Phần 2. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g9-c3",
+              "title": "Chủ đề 3. Cầu lông"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "demo": true,
+      "related": [
+        "g6-tay-dua-cao"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "rules": [
+          {
+            "label": "Tay trái ngang vai",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 90,
+            "tolerance": 12,
+            "range": 40
+          },
+          {
+            "label": "Tay phải ngang vai",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 90,
+            "tolerance": 12,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay trái thẳng",
+            "joints": [
+              11,
+              13,
+              15
+            ],
+            "target": 180,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay phải thẳng",
+            "joints": [
+              12,
+              14,
+              16
+            ],
+            "target": 180,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g6-dang-tay",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 1,
+      "title": "Đứng thẳng, hai tay dang ngang",
+      "topic": "Bài thể dục",
+      "keywords": "dang tay ngang vai khoi dong tu the dung thang",
+      "steps": [
+        "Đứng thẳng, hai chân rộng bằng vai, mắt nhìn thẳng.",
+        "Từ từ đưa hai tay sang ngang, cao ngang vai.",
+        "Duỗi thẳng khuỷu tay, bàn tay úp, các ngón khép.",
+        "Giữ tư thế 2 giây, hít thở đều, rồi hạ tay."
+      ],
+      "commonErrors": [
+        "Tay đưa cao hoặc thấp hơn vai.",
+        "Khuỷu tay bị chùng, không duỗi thẳng.",
+        "Nhún vai, rụt cổ."
+      ],
+      "summary": [
+        "Tay ngang vai, tạo thành một đường thẳng.",
+        "Khuỷu tay duỗi thẳng, vai thả lỏng.",
+        "Giữ 2 giây, thở đều."
+      ],
+      "youtubeSearch": "bài thể dục lớp 6 động tác dang tay ngang"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g6-dang-tay"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "rules": [
+          {
+            "label": "Tay trái đưa cao",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 172,
+            "tolerance": 12,
+            "range": 40
+          },
+          {
+            "label": "Tay phải đưa cao",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 172,
+            "tolerance": 12,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay trái thẳng",
+            "joints": [
+              11,
+              13,
+              15
+            ],
+            "target": 180,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay phải thẳng",
+            "joints": [
+              12,
+              14,
+              16
+            ],
+            "target": 180,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g6-tay-dua-cao",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 2,
+      "title": "Hai tay đưa thẳng lên cao",
+      "topic": "Bài thể dục",
+      "keywords": "gio tay len cao vuon tay khoi dong",
+      "steps": [
+        "Đứng thẳng, hai chân rộng bằng vai.",
+        "Đưa hai tay từ trước lên cao, lòng bàn tay hướng vào nhau.",
+        "Duỗi thẳng tay, cánh tay sát tai, mắt nhìn theo tay.",
+        "Giữ 2 giây rồi hạ tay về tư thế ban đầu."
+      ],
+      "commonErrors": [
+        "Tay chếch ra trước, không thẳng lên trên.",
+        "Khuỷu tay gập.",
+        "Ưỡn bụng, ngửa người ra sau."
+      ],
+      "summary": [
+        "Tay thẳng, sát tai, hướng lên trời.",
+        "Thân người thẳng, không ưỡn bụng.",
+        "Giữ 2 giây."
+      ],
+      "youtubeSearch": "bài thể dục động tác vươn thở hai tay đưa lên cao"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g6-chay-bien-toc"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "rules": [],
+        "reps": {
+          "label": "Góc hông (vai – hông – gối)",
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ],
+          "pick": "min",
+          "down": 110,
+          "up": 160,
+          "target": 10,
+          "depthTarget": 90,
+          "tolerance": 15,
+          "range": 40
+        }
+      },
+      "id": "g6-nang-cao-dui",
+      "grade": 6,
+      "chapter": "g6-c2",
+      "order": 1,
+      "title": "Chạy nâng cao đùi tại chỗ",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "nang cao dui chay tai cho bo tro chay nhanh",
+      "steps": [
+        "Đứng thẳng, hai tay co khoảng 90° ở khuỷu.",
+        "Lần lượt nâng đùi lên cao ngang hông, mũi chân hướng xuống.",
+        "Tiếp đất bằng nửa trước bàn chân, đánh tay phối hợp nhịp nhàng.",
+        "Thực hiện 10 lần, giữ thân người thẳng."
+      ],
+      "commonErrors": [
+        "Đùi nâng thấp.",
+        "Ngả người ra sau khi nâng đùi.",
+        "Tiếp đất cả bàn chân, nặng nề."
+      ],
+      "summary": [
+        "Đùi nâng ngang hông.",
+        "Thân thẳng, hơi đổ trước.",
+        "Đánh tay nhịp nhàng với chân."
+      ],
+      "youtubeSearch": "chạy nâng cao đùi tại chỗ hướng dẫn"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g6-nang-cao-dui"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g6-chay-bien-toc",
+      "grade": 6,
+      "chapter": "g6-c2",
+      "order": 2,
+      "title": "Chạy biến tốc 30 m",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "chay bien toc 30m chay nhanh tang toc",
+      "steps": [
+        "Xuất phát cao, chạy chậm 10 m đầu.",
+        "Tăng tốc dần trong 10 m tiếp theo.",
+        "Chạy nhanh nhất ở 10 m cuối, giữ thăng bằng.",
+        "Đi bộ thả lỏng sau khi về đích."
+      ],
+      "commonErrors": [
+        "Tăng tốc quá sớm.",
+        "Đánh tay ngang thân.",
+        "Dừng đột ngột ở vạch đích."
+      ],
+      "summary": [
+        "Chậm – nhanh dần – nhanh nhất.",
+        "Đánh tay trước – sau.",
+        "Chạy qua vạch đích rồi mới giảm tốc."
+      ],
+      "youtubeSearch": "chạy biến tốc 30m lớp 6"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g6-tang-bong"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g6-dan-bong",
+      "grade": 6,
+      "chapter": "g6-c3",
+      "order": 1,
+      "title": "Dẫn bóng bằng lòng bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "dan bong long ban chan bong da",
+      "steps": [
+        "Đặt bóng phía trước, chân trụ cạnh bóng.",
+        "Dùng lòng bàn chân đẩy nhẹ bóng về trước.",
+        "Bước theo bóng, giữ bóng cách chân khoảng 1 bước.",
+        "Đổi chân thuận và không thuận để luyện cả hai."
+      ],
+      "commonErrors": [
+        "Đẩy bóng quá mạnh, mất kiểm soát.",
+        "Nhìn chằm chằm xuống bóng.",
+        "Chân trụ đặt quá xa bóng."
+      ],
+      "summary": [
+        "Chạm bóng nhẹ, đều nhịp.",
+        "Bóng luôn gần chân.",
+        "Ngẩng đầu quan sát."
+      ],
+      "youtubeSearch": "dẫn bóng bằng lòng bàn chân bóng đá học sinh"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g6-dan-bong"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g6-tang-bong",
+      "grade": 6,
+      "chapter": "g6-c3",
+      "order": 2,
+      "title": "Tâng bóng bằng mu bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "tang bong mu ban chan bong da",
+      "steps": [
+        "Thả bóng từ tay xuống trước mặt.",
+        "Duỗi mũi chân, dùng mu bàn chân chạm nhẹ vào giữa bóng.",
+        "Bóng bật lên ngang hông là vừa.",
+        "Đếm số lần tâng liên tục."
+      ],
+      "commonErrors": [
+        "Chạm bóng bằng mũi chân.",
+        "Đá quá mạnh, bóng bay xa.",
+        "Đứng cứng gối."
+      ],
+      "summary": [
+        "Duỗi mũi chân, chạm giữa bóng.",
+        "Lực nhẹ, bóng cao ngang hông.",
+        "Gối chân trụ hơi khuỵu."
+      ],
+      "youtubeSearch": "tâng bóng bằng mu bàn chân hướng dẫn"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-nghieng-luon"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 3,
+        "camera": "front",
+        "rules": [
+          {
+            "label": "Gối chân co khoảng 90°",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "target": 90,
+            "tolerance": 20,
+            "range": 50
+          },
+          {
+            "label": "Chân trụ thẳng",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "target": 178,
+            "tolerance": 12,
+            "range": 40
+          },
+          {
+            "label": "Tay trái dang ngang",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Tay phải dang ngang",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g7-dung-mot-chan",
+      "grade": 7,
+      "chapter": "g7-c1",
+      "order": 1,
+      "title": "Đứng thăng bằng một chân",
+      "topic": "Bài thể dục",
+      "keywords": "thang bang mot chan dung co chan",
+      "steps": [
+        "Đứng thẳng, hai tay dang ngang.",
+        "Co một chân lên, gối gập khoảng 90°, đùi song song mặt đất.",
+        "Chân trụ duỗi thẳng, mắt nhìn một điểm cố định phía trước.",
+        "Giữ 3 giây rồi đổi chân."
+      ],
+      "commonErrors": [
+        "Chân trụ bị khuỵu.",
+        "Nghiêng người sang một bên.",
+        "Tay buông thõng."
+      ],
+      "summary": [
+        "Chân trụ thẳng, gối co 90°.",
+        "Tay dang ngang giữ thăng bằng.",
+        "Mắt nhìn một điểm cố định."
+      ],
+      "youtubeSearch": "bài tập đứng thăng bằng một chân học sinh"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-dung-mot-chan"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "rules": [
+          {
+            "label": "Tay đưa cao qua đầu",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "target": 165,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Tay trên duỗi thẳng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "target": 178,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Thân nghiêng sang bên",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "target": 150,
+            "tolerance": 10,
+            "range": 30
+          }
+        ]
+      },
+      "id": "g7-nghieng-luon",
+      "grade": 7,
+      "chapter": "g7-c1",
+      "order": 2,
+      "title": "Động tác nghiêng lườn",
+      "topic": "Bài thể dục",
+      "keywords": "nghieng luon nghieng than gian co",
+      "steps": [
+        "Đứng hai chân rộng hơn vai.",
+        "Một tay chống hông, tay kia đưa thẳng lên cao.",
+        "Nghiêng thân sang phía tay chống hông, tay trên vươn theo.",
+        "Giữ 2 giây, trở về rồi đổi bên."
+      ],
+      "commonErrors": [
+        "Gập người ra trước thay vì nghiêng sang bên.",
+        "Tay trên bị gập khuỷu.",
+        "Nhấc gót chân."
+      ],
+      "summary": [
+        "Nghiêng sang bên, không gập trước.",
+        "Tay trên thẳng, vươn xa.",
+        "Hai bàn chân bám đất."
+      ],
+      "youtubeSearch": "bài thể dục động tác nghiêng lườn"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-chay-deu"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "rules": [
+          {
+            "label": "Khuỷu tay trái gập ~90°",
+            "joints": [
+              11,
+              13,
+              15
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay phải gập ~90°",
+            "joints": [
+              12,
+              14,
+              16
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g7-danh-tay",
+      "grade": 7,
+      "chapter": "g7-c2",
+      "order": 1,
+      "title": "Tư thế đánh tay khi chạy",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "danh tay khi chay tu the tay chay ben",
+      "steps": [
+        "Đứng thẳng, hai chân trước sau.",
+        "Co hai tay ở khuỷu khoảng 90°, bàn tay nắm hờ.",
+        "Đánh tay trước – sau theo hướng chạy, không vắt ngang thân.",
+        "Giữ tư thế tay 90° trong 2 giây để kiểm tra."
+      ],
+      "commonErrors": [
+        "Duỗi thẳng tay khi đánh.",
+        "Vắt tay ngang ngực.",
+        "Nắm tay quá chặt, gồng vai."
+      ],
+      "summary": [
+        "Khuỷu tay 90°.",
+        "Đánh trước – sau, không vắt ngang.",
+        "Vai thả lỏng."
+      ],
+      "youtubeSearch": "kỹ thuật đánh tay khi chạy cự li trung bình"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-danh-tay"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g7-chay-deu",
+      "grade": 7,
+      "chapter": "g7-c2",
+      "order": 2,
+      "title": "Chạy đều và phối hợp hơi thở",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "chay deu nhip tho chay ben hit tho",
+      "steps": [
+        "Chạy với tốc độ vừa phải, đều chân.",
+        "Hít vào 2 bước, thở ra 2 bước.",
+        "Thở bằng cả mũi và miệng khi mệt.",
+        "Kết thúc bằng đi bộ và thả lỏng."
+      ],
+      "commonErrors": [
+        "Xuất phát quá nhanh rồi đuối sức.",
+        "Nín thở.",
+        "Dừng lại đột ngột."
+      ],
+      "summary": [
+        "Tốc độ đều từ đầu đến cuối.",
+        "Nhịp thở 2 – 2.",
+        "Thả lỏng sau khi chạy."
+      ],
+      "youtubeSearch": "cách thở khi chạy bền học sinh"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-nem-bong-xa"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g7-cam-bong",
+      "grade": 7,
+      "chapter": "g7-c3",
+      "order": 1,
+      "title": "Cách cầm bóng ném",
+      "topic": "Ném bóng",
+      "keywords": "cam bong nem bong xa bong nho",
+      "steps": [
+        "Đặt bóng vào các đầu ngón tay, không áp sát lòng bàn tay.",
+        "Ngón cái và ngón út đỡ hai bên bóng.",
+        "Cổ tay thả lỏng.",
+        "Đưa bóng lên ngang vai, sẵn sàng ném."
+      ],
+      "commonErrors": [
+        "Nắm bóng sát lòng bàn tay.",
+        "Cổ tay cứng."
+      ],
+      "summary": [
+        "Bóng nằm ở đầu ngón tay.",
+        "Cổ tay mềm.",
+        "Bóng ngang vai."
+      ],
+      "youtubeSearch": "cách cầm bóng ném bóng xa"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g7-cam-bong"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g7-nem-bong-xa",
+      "grade": 7,
+      "chapter": "g7-c3",
+      "order": 2,
+      "title": "Ném bóng xa có đà",
+      "topic": "Ném bóng",
+      "keywords": "nem bong xa co da",
+      "steps": [
+        "Chạy đà vài bước ngắn.",
+        "Đưa tay cầm bóng ra sau, thân hơi ngả sau.",
+        "Đạp chân sau, xoay hông, vung tay ném qua vai.",
+        "Bóng rời tay khoảng 45° so với mặt đất."
+      ],
+      "commonErrors": [
+        "Ném bằng tay, không dùng lực chân và hông.",
+        "Ném thấp, bóng đi sát đất.",
+        "Dẫm qua vạch ném."
+      ],
+      "summary": [
+        "Chân – hông – tay phối hợp.",
+        "Ném qua vai, góc ~45°.",
+        "Không dẫm vạch."
+      ],
+      "youtubeSearch": "kỹ thuật ném bóng xa có đà"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-chung-chan"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "rules": [],
+        "reps": {
+          "label": "Góc gối (hông – gối – cổ chân)",
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ],
+          "pick": "min",
+          "down": 100,
+          "up": 160,
+          "target": 10,
+          "depthTarget": 90,
+          "tolerance": 15,
+          "range": 40
+        }
+      },
+      "id": "g8-squat",
+      "grade": 8,
+      "chapter": "g8-c1",
+      "order": 1,
+      "title": "Đứng lên ngồi xuống (squat)",
+      "topic": "Sức mạnh chân",
+      "keywords": "squat ngoi xuong dung len gap goi suc manh chan",
+      "steps": [
+        "Đứng hai chân rộng bằng vai, mũi chân hơi mở.",
+        "Đẩy hông ra sau, hạ người cho đến khi đùi gần song song mặt đất.",
+        "Lưng thẳng, gối hướng theo mũi chân.",
+        "Đẩy gót chân đứng lên. Làm 10 lần."
+      ],
+      "commonErrors": [
+        "Gối chụm vào trong.",
+        "Kiễng gót.",
+        "Gù lưng khi xuống."
+      ],
+      "summary": [
+        "Xuống đến khi đùi gần ngang.",
+        "Lưng thẳng, gối theo mũi chân.",
+        "Đứng lên bằng lực gót chân."
+      ],
+      "youtubeSearch": "hướng dẫn squat đúng kỹ thuật cho học sinh"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-squat"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 3,
+        "camera": "side",
+        "rules": [
+          {
+            "label": "Gối trước gập ~90°",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Hông chân sau duỗi",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "target": 170,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g8-chung-chan",
+      "grade": 8,
+      "chapter": "g8-c1",
+      "order": 2,
+      "title": "Tư thế chùng chân (lunge)",
+      "topic": "Sức mạnh chân",
+      "keywords": "chung chan lunge buoc dai gap goi",
+      "steps": [
+        "Bước một chân lên trước một bước dài.",
+        "Hạ người thẳng xuống, gối trước gập khoảng 90°.",
+        "Gối sau hướng xuống đất, thân trên thẳng.",
+        "Giữ 3 giây rồi đứng lên, đổi chân."
+      ],
+      "commonErrors": [
+        "Gối trước vượt quá mũi chân.",
+        "Đổ người ra trước.",
+        "Bước quá ngắn."
+      ],
+      "summary": [
+        "Gối trước 90°.",
+        "Thân trên thẳng đứng.",
+        "Giữ 3 giây."
+      ],
+      "youtubeSearch": "hướng dẫn lunge chùng chân đúng kỹ thuật"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-tiep-dat"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "front",
+        "rules": [],
+        "reps": {
+          "label": "Góc gối khi khuỵu",
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ],
+          "pick": "min",
+          "down": 125,
+          "up": 165,
+          "target": 10,
+          "depthTarget": 110,
+          "tolerance": 15,
+          "range": 40
+        }
+      },
+      "id": "g8-bat-nhay",
+      "grade": 8,
+      "chapter": "g8-c2",
+      "order": 1,
+      "title": "Bật nhảy tại chỗ",
+      "topic": "Nhảy xa",
+      "keywords": "bat nhay tai cho bat cao nhay xa bo tro",
+      "steps": [
+        "Đứng hai chân rộng bằng vai.",
+        "Khuỵu gối, đánh hai tay ra sau.",
+        "Đạp mạnh, vung tay lên, bật người lên cao.",
+        "Tiếp đất nhẹ bằng nửa trước bàn chân, gối hơi khuỵu. Làm 10 lần."
+      ],
+      "commonErrors": [
+        "Không khuỵu gối trước khi bật.",
+        "Tiếp đất thẳng gối.",
+        "Tay không phối hợp."
+      ],
+      "summary": [
+        "Khuỵu – đạp – vung tay.",
+        "Tiếp đất mềm, gối khuỵu.",
+        "10 lần liên tục."
+      ],
+      "youtubeSearch": "bài tập bật nhảy tại chỗ bổ trợ nhảy xa"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-bat-nhay"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g8-tiep-dat",
+      "grade": 8,
+      "chapter": "g8-c2",
+      "order": 2,
+      "title": "Kỹ thuật tiếp đất khi nhảy xa",
+      "topic": "Nhảy xa",
+      "keywords": "tiep dat nhay xa ho cat",
+      "steps": [
+        "Khi sắp chạm cát, đưa hai chân ra trước.",
+        "Hai tay đưa ra trước để giữ thăng bằng.",
+        "Chạm cát bằng gót chân, khuỵu gối ngay.",
+        "Đổ người ra trước, không ngã ra sau."
+      ],
+      "commonErrors": [
+        "Ngã ngửa ra sau.",
+        "Tiếp đất thẳng gối."
+      ],
+      "summary": [
+        "Hai chân ra trước.",
+        "Chạm cát rồi khuỵu gối.",
+        "Đổ người ra trước."
+      ],
+      "youtubeSearch": "kỹ thuật tiếp đất nhảy xa kiểu ngồi"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-dan-bong-ro"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "rules": [
+          {
+            "label": "Khuỷu tay ném gập ~90°",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Cánh tay ném ngang vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "target": 95,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Gối hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "target": 150,
+            "tolerance": 12,
+            "range": 30
+          }
+        ]
+      },
+      "id": "g8-nem-ro",
+      "grade": 8,
+      "chapter": "g8-c3",
+      "order": 1,
+      "title": "Tư thế chuẩn bị ném rổ một tay",
+      "topic": "Bóng rổ",
+      "keywords": "nem ro mot tay tren vai bong ro tu the chuan bi",
+      "steps": [
+        "Đứng hai chân rộng bằng vai, gối hơi khuỵu.",
+        "Tay ném đỡ bóng, khuỷu tay gập khoảng 90°, hướng về rổ.",
+        "Cánh tay trên ngang vai, tay kia đỡ cạnh bóng.",
+        "Giữ tư thế 2 giây trước khi ném."
+      ],
+      "commonErrors": [
+        "Khuỷu tay chĩa ra ngoài.",
+        "Đứng thẳng gối.",
+        "Bóng đặt trong lòng bàn tay."
+      ],
+      "summary": [
+        "Khuỷu 90°, hướng về rổ.",
+        "Gối hơi khuỵu.",
+        "Bóng ở đầu ngón tay."
+      ],
+      "youtubeSearch": "kỹ thuật ném rổ một tay trên vai"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g8-nem-ro"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g8-dan-bong-ro",
+      "grade": 8,
+      "chapter": "g8-c3",
+      "order": 2,
+      "title": "Dẫn bóng rổ tại chỗ",
+      "topic": "Bóng rổ",
+      "keywords": "dan bong ro tai cho dap bong",
+      "steps": [
+        "Gối hơi khuỵu, thân hơi đổ trước.",
+        "Dùng các ngón tay ấn bóng xuống, không vỗ bằng lòng bàn tay.",
+        "Bóng nảy lên ngang thắt lưng.",
+        "Ngẩng đầu, tập cả hai tay."
+      ],
+      "commonErrors": [
+        "Vỗ bóng bằng lòng bàn tay.",
+        "Nhìn xuống bóng."
+      ],
+      "summary": [
+        "Ấn bóng bằng ngón tay.",
+        "Bóng cao ngang thắt lưng.",
+        "Ngẩng đầu."
+      ],
+      "youtubeSearch": "dẫn bóng rổ tại chỗ cho học sinh"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-gap-than"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 5,
+        "camera": "side",
+        "rules": [
+          {
+            "label": "Thân thẳng (vai – hông – cổ chân)",
+            "oneOf": [
+              [
+                11,
+                23,
+                27
+              ],
+              [
+                12,
+                24,
+                28
+              ]
+            ],
+            "target": 178,
+            "tolerance": 10,
+            "range": 30
+          },
+          {
+            "label": "Khuỷu tay vuông góc",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g9-plank",
+      "grade": 9,
+      "chapter": "g9-c1",
+      "order": 1,
+      "title": "Plank chống cẳng tay",
+      "topic": "Thể lực",
+      "keywords": "plank chong cang tay co bung the luc",
+      "steps": [
+        "Nằm sấp, chống hai cẳng tay xuống đất, khuỷu tay dưới vai.",
+        "Nâng người lên, chỉ mũi chân và cẳng tay chạm đất.",
+        "Giữ vai – hông – cổ chân thành một đường thẳng.",
+        "Giữ 5 giây (tăng dần), thở đều."
+      ],
+      "commonErrors": [
+        "Võng hông xuống.",
+        "Đẩy mông lên cao.",
+        "Nín thở."
+      ],
+      "summary": [
+        "Vai – hông – chân thẳng hàng.",
+        "Khuỷu tay dưới vai, 90°.",
+        "Thở đều."
+      ],
+      "youtubeSearch": "hướng dẫn plank đúng kỹ thuật"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-plank"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 3,
+        "camera": "side",
+        "rules": [
+          {
+            "label": "Gập thân sâu (vai – hông – gối)",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "target": 50,
+            "tolerance": 15,
+            "range": 50
+          },
+          {
+            "label": "Gối thẳng",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "target": 178,
+            "tolerance": 12,
+            "range": 30
+          }
+        ]
+      },
+      "id": "g9-gap-than",
+      "grade": 9,
+      "chapter": "g9-c1",
+      "order": 2,
+      "title": "Đứng gập thân (dẻo)",
+      "topic": "Thể lực",
+      "keywords": "gap than deo dai keo gian dung gap nguoi",
+      "steps": [
+        "Đứng thẳng, hai chân khép.",
+        "Từ từ gập thân về trước, hai tay với xuống mũi chân.",
+        "Giữ hai gối thẳng.",
+        "Giữ 3 giây, không nhún."
+      ],
+      "commonErrors": [
+        "Co gối.",
+        "Nhún người liên tục.",
+        "Gập quá sức gây đau."
+      ],
+      "summary": [
+        "Gối thẳng.",
+        "Gập từ hông, tay với mũi chân.",
+        "Giữ yên, không nhún."
+      ],
+      "youtubeSearch": "bài tập đứng gập thân dẻo dai"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-xuat-phat-thap"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "rules": [],
+        "reps": {
+          "label": "Góc gối (hông – gối – cổ chân)",
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ],
+          "pick": "min",
+          "down": 70,
+          "up": 150,
+          "target": 10,
+          "depthTarget": 45,
+          "tolerance": 15,
+          "range": 40
+        }
+      },
+      "id": "g9-dap-sau",
+      "grade": 9,
+      "chapter": "g9-c2",
+      "order": 1,
+      "title": "Chạy đạp sau (gót chạm mông)",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "chay dap sau got cham mong bo tro chay",
+      "steps": [
+        "Chạy tại chỗ, thân thẳng.",
+        "Co gối, đưa gót chân lên chạm hoặc gần chạm mông.",
+        "Đùi giữ gần thẳng đứng, đánh tay phối hợp.",
+        "Thực hiện 10 lần."
+      ],
+      "commonErrors": [
+        "Gót không lên cao.",
+        "Đùi đưa ra trước.",
+        "Gù lưng."
+      ],
+      "summary": [
+        "Gót chạm mông.",
+        "Đùi thẳng đứng.",
+        "Đánh tay phối hợp."
+      ],
+      "youtubeSearch": "chạy đạp sau gót chạm mông bổ trợ"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-dap-sau"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g9-xuat-phat-thap",
+      "grade": 9,
+      "chapter": "g9-c2",
+      "order": 2,
+      "title": "Xuất phát thấp",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "xuat phat thap bon do chay ngan",
+      "steps": [
+        "\"Vào chỗ\": quỳ gối chân sau, hai tay chống sau vạch, rộng bằng vai.",
+        "\"Sẵn sàng\": nâng hông cao hơn vai một chút, dồn trọng tâm về trước.",
+        "\"Chạy\": đạp mạnh hai chân, đánh tay, lao ra trước.",
+        "Những bước đầu ngắn, thân đổ trước, rồi đứng dần lên."
+      ],
+      "commonErrors": [
+        "Hông nâng quá cao hoặc quá thấp.",
+        "Đứng thẳng người ngay sau xuất phát."
+      ],
+      "summary": [
+        "Vào chỗ – Sẵn sàng – Chạy.",
+        "Hông cao hơn vai một chút.",
+        "Thân đổ trước ở những bước đầu."
+      ],
+      "youtubeSearch": "kỹ thuật xuất phát thấp chạy ngắn"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-cau-long-di-chuyen"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "rules": [
+          {
+            "label": "Gối trái hơi khuỵu",
+            "joints": [
+              23,
+              25,
+              27
+            ],
+            "target": 155,
+            "tolerance": 12,
+            "range": 30
+          },
+          {
+            "label": "Gối phải hơi khuỵu",
+            "joints": [
+              24,
+              26,
+              28
+            ],
+            "target": 155,
+            "tolerance": 12,
+            "range": 30
+          },
+          {
+            "label": "Tay cầm vợt hơi gập",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "target": 110,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      },
+      "id": "g9-cau-long-chuan-bi",
+      "grade": 9,
+      "chapter": "g9-c3",
+      "order": 1,
+      "title": "Tư thế chuẩn bị đánh cầu lông",
+      "topic": "Cầu lông",
+      "keywords": "cau long tu the chuan bi cam vot",
+      "steps": [
+        "Đứng hai chân rộng hơn vai, gối hơi khuỵu.",
+        "Trọng tâm dồn lên nửa trước bàn chân.",
+        "Tay cầm vợt đưa lên trước, khuỷu tay hơi gập.",
+        "Mắt theo dõi quả cầu, sẵn sàng di chuyển."
+      ],
+      "commonErrors": [
+        "Đứng thẳng gối.",
+        "Hạ vợt xuống thấp."
+      ],
+      "summary": [
+        "Gối khuỵu nhẹ.",
+        "Vợt đưa lên trước.",
+        "Sẵn sàng di chuyển."
+      ],
+      "youtubeSearch": "tư thế chuẩn bị cầu lông cơ bản"
+    },
+    {
+      "demo": true,
+      "related": [
+        "g9-cau-long-chuan-bi"
+      ],
+      "youtube": [],
+      "book": {
+        "series": null,
+        "pages": [],
+        "url": null
+      },
+      "scoring": null,
+      "id": "g9-cau-long-di-chuyen",
+      "grade": 9,
+      "chapter": "g9-c3",
+      "order": 2,
+      "title": "Di chuyển ngang sân cầu lông",
+      "topic": "Cầu lông",
+      "keywords": "di chuyen ngang buoc dem cau long",
+      "steps": [
+        "Từ tư thế chuẩn bị, bước đệm sang ngang.",
+        "Bước chân cùng phía với hướng di chuyển trước.",
+        "Không bắt chéo chân.",
+        "Về lại giữa sân sau mỗi lần đánh."
+      ],
+      "commonErrors": [
+        "Bắt chéo chân.",
+        "Đứng yên chờ cầu."
+      ],
+      "summary": [
+        "Bước đệm, không bắt chéo.",
+        "Luôn về giữa sân."
+      ],
+      "youtubeSearch": "cách di chuyển ngang trong cầu lông"
+    }
+  ]
+}

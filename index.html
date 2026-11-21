@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GDTC Trợ lý tập luyện</title>
+  <meta name="description" content="Trợ lý tập luyện Giáo dục thể chất THCS: hỏi bài bằng chữ hoặc giọng nói, xem video, trang sách và tự chấm tư thế bằng camera ngay trên máy.">
+  <meta name="theme-color" content="#0f8a5f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f8a5f'/%3E%3Ccircle cx='32' cy='14' r='6' fill='white'/%3E%3Cpath d='M12 26h40M32 26v16M32 42l-10 14M32 42l10 14' stroke='white' stroke-width='6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="modulepreload" href="js/app.js">
+</head>
+<body>
+  <a class="skip-link" href="#main">Bỏ qua, đến nội dung chính</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#" aria-label="GDTC Trợ lý tập luyện — Trang chủ">
+        <span class="brand__logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="36" height="36"><rect width="64" height="64" rx="14" fill="currentColor"/><circle cx="32" cy="14" r="6" fill="#fff"/><path d="M12 26h40M32 26v16M32 42l-10 14M32 42l10 14" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"/></svg>
+        </span>
+        <span class="brand__text"><span class="hide-sm">GDTC </span><strong>Trợ lý tập luyện</strong></span>
+      </a>
+      <nav aria-label="Điều hướng chính">
+        <a class="nav-link" href="#giao-vien" data-nav="teacher"><span class="hide-sm">Dành cho&nbsp;</span>Giáo viên</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="draft-banner" class="draft-banner" hidden>
+    <div class="container">
+      Máy này đang hiển thị <strong>bản nháp chưa đăng</strong> của thầy cô. Học sinh chưa thấy các thay đổi này.
+      <a href="#giao-vien">Quản lý bản nháp</a>
+    </div>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <!-- TRANG CHỦ -->
+    <section id="home-view" aria-labelledby="hero-title">
+      <div class="hero">
+        <div class="container">
+          <h1 id="hero-title">Em muốn tập bài nào hôm nay?</h1>
+          <p class="hero__sub">Gõ hoặc nói câu hỏi, ví dụ “squat lớp 8”, “chủ đề 2 lớp 6”, “dang tay”.</p>
+          <form id="search-form" class="search" role="search">
+            <label for="q" class="visually-hidden">Hỏi bài tập</label>
+            <input id="q" name="q" type="search" autocomplete="off" enterkeyhint="search"
+                   placeholder="Hỏi bài tập…" aria-describedby="voice-msg">
+            <button type="button" id="mic" class="icon-btn mic" aria-label="Nói để tìm" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2z"/></svg>
+            </button>
+            <button type="submit" class="btn btn--primary search__go">Tìm</button>
+          </form>
+          <p id="voice-msg" class="voice-msg" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="filters">
+          <div class="chips" role="group" aria-label="Lọc theo lớp" id="grade-chips"></div>
+          <div class="chapter-nav" id="chapter-nav" aria-label="Lọc theo phần và chủ đề"></div>
+        </div>
+        <p id="result-summary" class="result-summary" role="status" aria-live="polite"></p>
+        <div id="results"></div>
+      </div>
+    </section>
+
+    <!-- DÀNH CHO GIÁO VIÊN (nạp khi mở #giao-vien) -->
+    <section id="teacher-view" class="container teacher" hidden aria-labelledby="teacher-title"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>Bản demo.</strong> Nội dung bài tập là mẫu tự viết, <strong>chưa đối chiếu sách giáo khoa</strong>. Điểm chấm là mức giống tư thế mẫu để tự luyện, không thay đánh giá của giáo viên.</p>
+      <p>Không đăng nhập, không thu thập thông tin cá nhân. Hình ảnh camera chỉ xử lý trên thiết bị của em, không lưu, không gửi đi.</p>
+    </div>
+  </footer>
+
+  <!-- CHI TIẾT BÀI TẬP -->
+  <dialog id="lesson" class="sheet" aria-labelledby="lesson-title">
+    <div class="sheet__inner">
+      <header class="sheet__head">
+        <div class="sheet__grip" aria-hidden="true"></div>
+        <p class="crumbs" id="lesson-crumbs"></p>
+        <h2 id="lesson-title"></h2>
+        <button type="button" class="icon-btn sheet__close" data-close aria-label="Đóng">
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4z"/></svg>
+        </button>
+        <div class="tabs" role="tablist" aria-label="Nội dung bài tập" id="lesson-tabs"></div>
+      </header>
+      <div class="sheet__body" id="lesson-body"></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <noscript><p class="container">Trang web cần bật JavaScript để hoạt động.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
