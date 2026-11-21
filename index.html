@@ -46,15 +46,26 @@
         <div class="container">
           <p class="hero__eyebrow">Giáo dục thể chất · Lớp 6–9</p>
           <h1 id="hero-title">Hôm nay em tập bài gì?</h1>
-          <form id="search-form" class="search" role="search">
-            <svg class="icon search__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M10 3a7 7 0 0 1 5.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
-            <label for="q" class="visually-hidden">Tìm bài tập</label>
-            <input id="q" name="q" type="search" autocomplete="off" enterkeyhint="search"
-                   placeholder="Gõ hoặc nói tên bài…" aria-describedby="voice-msg">
-            <button type="button" id="mic" class="icon-btn mic" aria-label="Nói để tìm" aria-pressed="false">
-              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2z"/></svg>
-            </button>
-            <button type="submit" class="btn btn--primary search__go">Tìm</button>
+          <ol class="steps-strip" aria-label="Cách dùng">
+            <li><span class="steps-strip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M10 3a7 7 0 0 1 5.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg></span>Tìm bài</li>
+            <li><span class="steps-strip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M4 6h11a1 1 0 0 1 1 1v3l5-3v10l-5-3v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"/></svg></span>Xem cách làm</li>
+            <li><span class="steps-strip__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg></span>Tự tập</li>
+          </ol>
+          <form id="search-form" class="search-box" role="search">
+            <label for="q" class="search-box__label">Gõ hoặc nói tên bài tập</label>
+            <div class="search">
+              <svg class="icon search__icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M10 3a7 7 0 0 1 5.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
+              <input id="q" name="q" type="search" autocomplete="off" enterkeyhint="search"
+                     placeholder="Ví dụ: squat, dang tay" aria-describedby="voice-msg">
+              <button type="button" id="mic" class="mic" aria-pressed="false">
+                <svg class="icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.1A7 7 0 0 0 19 12h-2z"/></svg>
+                <span>Nói</span>
+              </button>
+              <button type="submit" class="btn btn--primary search__go">
+                <svg class="icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10 3a7 7 0 0 1 5.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></svg>
+                <span>Tìm</span>
+              </button>
+            </div>
           </form>
           <p id="voice-msg" class="voice-msg" role="status" aria-live="polite"></p>
           <div class="suggest" id="suggest" role="group" aria-label="Gợi ý tìm nhanh">
@@ -69,7 +80,8 @@
 
       <div class="container">
         <div class="filters">
-          <div class="seg" role="group" aria-label="Chọn lớp" id="grade-chips"></div>
+          <p class="filters__label" id="grade-label">Chọn lớp</p>
+          <div class="seg" role="group" aria-labelledby="grade-label" id="grade-chips"></div>
           <div class="chapter-nav" id="chapter-nav" hidden></div>
         </div>
         <div class="results-head">

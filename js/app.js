@@ -89,6 +89,8 @@ function renderResults({ openSingle = false } = {}) {
   summary.textContent = hasTerms || filters.length
     ? `Tìm thấy ${results.length} bài${filters.length ? ` · ${filters.join(', ')}` : ''}`
     : `${results.length} bài tập`;
+  box.classList.toggle('reveal', !renderResults.done);
+  renderResults.done = true;
   box.innerHTML = hasTerms ? `<ul class="grid">${results.map((e) => card(e, { crumbs: true })).join('')}</ul>` : renderTree(results);
   updateToggleAll();
   if (openSingle && results.length === 1) location.hash = `bai/${results[0].id}`;
@@ -128,7 +130,8 @@ function updateToggleAll() {
   const all = $$('#results details');
   const anyOpen = all.some((d) => d.open);
   const btn = $('#toggle-all');
-  btn.textContent = anyOpen ? 'Thu gọn tất cả' : 'Mở tất cả';
+  btn.innerHTML = `${svg('chevron', 20)}<span>${anyOpen ? 'Thu gọn tất cả' : 'Mở tất cả'}</span>`;
+  btn.classList.toggle('is-closed', !anyOpen);
   btn.dataset.open = String(anyOpen);
 }
 
@@ -198,6 +201,7 @@ function initHome() {
         const on = s === 'listening';
         mic.setAttribute('aria-pressed', String(on));
         mic.classList.toggle('mic--on', on);
+        mic.querySelector('span').textContent = on ? 'Dừng' : 'Nói';
         msg.textContent = on ? 'Đang nghe… Em nói tên bài nhé.' : msg.textContent.startsWith('Đang nghe') ? '' : msg.textContent;
         if (!on) stopListening = null;
       },
