@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0] - 2026-11-21: Phong cách tinh gọn, gợi ý ngay trên camera
+
+### Thay đổi
+- Cỡ chữ gốc 18px → **16px**, chữ mảnh hơn (bỏ độ đậm 800; nút/tab 600). Tiêu đề, ô lớp, thẻ bài, số liệu gọn lại. Nút vẫn ≥ 48px.
+- **Tự tập:** câu gợi ý sửa tư thế hiện **ngay trên hình camera** (dải tối, chữ trắng; xanh khi đúng).
+  Khi camera chạy, thẻ mục tiêu, mẹo đặt máy và nút chọn nguồn tự ẩn để hình và gợi ý nằm trọn trong màn hình điện thoại.
+- MASTER.md cập nhật cỡ chữ và quy tắc trang Tự tập.
+
+### Đã kiểm tra
+- Lighthouse mobile trang chủ: Performance 100, Accessibility 100, Best Practices 100.
+- Điện thoại 375px: gợi ý và điểm nhìn thấy cùng lúc với camera, không cần cuộn; toàn bộ test chức năng đạt.
+
 ## [0.3.0] - 2026-11-21: Trang chủ mới theo mẫu Bento (skill ui-ux-pro-max)
 
 ### Thay đổi

@@ -36,9 +36,11 @@ chuyển động bằng CSS (không GSAP).
 ## 2. Chữ
 
 - **Font:** Be Vietnam Pro (đủ dấu tiếng Việt), dự phòng `system-ui`. *Không* dùng Baloo 2 / Comic Neue.
-- **Cỡ gốc:** `html { font-size: 112.5% }` → 1rem = **18px**. Mọi cỡ chữ dùng `rem` để phóng to 200% không vỡ.
-- Thân 1rem (18px), line-height 1.55. Phụ ≥ 0.85rem (≈15px). Không có chữ < 13px.
-- Tiêu đề trang 1.6–2.4rem, đậm 800. Câu ngắn < 12 từ.
+- **Cỡ gốc (v0.4, phong cách tinh gọn):** `html { font-size: 100% }` → 1rem = **16px**. Mọi cỡ chữ dùng `rem` để phóng to 200% không vỡ.
+  (v0.3 dùng 18px nhưng trên điện thoại chữ quá to, che mất gợi ý khi tập với camera → giảm theo góp ý của nhà trường.)
+- **Độ đậm:** thân 400, nút/tab/tiêu đề thẻ 600, tiêu đề trang và số lớn 700. Không dùng 800.
+- Thân 1rem (16px), line-height 1.55. Phụ ≥ 0.75rem (12px) cho huy hiệu. Câu ngắn < 12 từ.
+- Nút vẫn cao ≥ 48px dù chữ nhỏ hơn.
 
 ## 3. Khoảng cách (density 4/10 — Standard)
 
@@ -101,6 +103,10 @@ lưới 4→2→1 cột, bo 24px, bóng mềm) kết hợp *Feature-Rich Showcas
 4. **Điện thoại (< 760px):** thanh điều hướng dưới đáy 3 mục (Trang chủ · Tìm bài · Giáo viên), mỗi mục có biểu tượng + chữ.
 
 Đường tới bài tập: **tối đa 3 lần chạm** (Ô lớp → Thẻ bài → Tab Tự tập).
+
+### Trang Tự tập (bổ sung v0.4)
+- Gợi ý sửa tư thế hiện **ngay trên hình camera** (dải tối mờ phía dưới, chữ trắng; xanh khi đang đúng).
+- Khi camera chạy: ẩn thẻ mục tiêu, mẹo đặt máy và nút chọn nguồn để hình chiếm trọn màn hình (tối đa 70% chiều cao).
 
 ## 8. Không làm (Anti-patterns)
 

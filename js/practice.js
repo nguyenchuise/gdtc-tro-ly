@@ -63,6 +63,7 @@ export function mountPractice(root, ex) {
         </div>
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
+        <p class="stage-advice" aria-hidden="true"></p>
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden>${icon('flip')}<span class="visually-hidden">Đổi camera</span></button>
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
@@ -159,6 +160,8 @@ export function mountPractice(root, ex) {
 
   async function begin() {
     stage.hidden = false; board.hidden = false;
+    root.querySelector('.practice').classList.add('is-live');
+    requestAnimationFrame(() => stage.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     newAttempt();
     try { await video.play(); } catch { /* iOS: video tải lên có nút play */ }
     let lm;
@@ -418,7 +421,14 @@ export function mountPractice(root, ex) {
 
   function setVal(k, v) { const n = root.querySelector(`[data-k="${k}"]`); if (n && n.textContent !== v) n.textContent = v; }
   function setProgress(f) { $('.hud-progress span').style.width = `${Math.min(1, Math.max(0, f)) * 100}%`; }
-  function showAdvice(t) { if (t !== lastAdvice) { lastAdvice = t; $('.advice').textContent = t; } }
+  function showAdvice(t) {
+    if (t === lastAdvice) return;
+    lastAdvice = t;
+    $('.advice').textContent = t;
+    const sa = $('.stage-advice');
+    sa.textContent = t;
+    sa.classList.toggle('is-good', /^(Đúng rồi|Tốt)/.test(t));
+  }
 
   function stop() {
     running = false;
@@ -433,6 +443,7 @@ export function mountPractice(root, ex) {
     if (objectUrl) { URL.revokeObjectURL(objectUrl); objectUrl = null; }
     lastVideoTime = -1;
     stage.hidden = true;
+    root.querySelector('.practice').classList.remove('is-live');
     labelsBox.replaceChildren();
     setStatus('');
   }
