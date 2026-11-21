@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] - 2026-11-21: Trang chủ mới theo mẫu Bento (skill ui-ux-pro-max)
+
+### Thay đổi
+- Design system lưu tại `design-system/gdtc/MASTER.md` (sinh bằng skill ui-ux-pro-max, đã chỉnh theo yêu cầu nhà trường):
+  nền Accessible & Ethical, Claymorphism nhẹ, mẫu bố cục **Bento Box Grid**; giữ xanh #0f8a5f, cam thành tích, Be Vietnam Pro.
+- Trang chủ: hero 2 cột có minh hoạ màn hình chấm điểm; khối “Bắt đầu nhanh” gồm ô “Tự tập với camera” và 4 ô Lớp 6–9 màu riêng
+  (số bài, số bài chấm điểm, dấu ✓ khi chọn); thẻ bài có hình minh hoạ theo môn; thanh điều hướng dưới đáy trên điện thoại.
+- Chữ gốc 18px; mọi nút ≥ 48px, có biểu tượng kèm chữ (nút Nói/Tìm, Đóng…); ô tìm có nhãn hiện rõ.
+- Phóng to chữ 200% không cuộn ngang; tôn trọng chế độ giảm chuyển động.
+
+### Đã kiểm tra
+- Lighthouse mobile trang chủ: Performance 99, Accessibility 100, Best Practices 100.
+- Không có nút < 48px ở 375px và 1366px; toàn bộ test chức năng cũ vẫn đạt, không lỗi console.
+
 ## [0.2.0] - 2026-11-21: Giao diện mới, chấm điểm có ảnh kết quả, khoá trang giáo viên
 
 ### Thêm mới

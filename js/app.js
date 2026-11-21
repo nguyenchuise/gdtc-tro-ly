@@ -20,6 +20,8 @@ const ICONS = {
   book: '<path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v15h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2H4V4zm2 2v11h4a4 4 0 0 1 1 .2V7a1 1 0 0 0-1-1H6zm12 0h-4a1 1 0 0 0-1 1v10.2a4 4 0 0 1 1-.2h4V6z"/>',
   target: '<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>',
   wait: '<path d="M6 2h12v2h-1v3.6a3 3 0 0 1-.9 2.1L13.8 12l2.3 2.3a3 3 0 0 1 .9 2.1V20h1v2H6v-2h1v-3.6a3 3 0 0 1 .9-2.1l2.3-2.3-2.3-2.3A3 3 0 0 1 7 7.6V4H6V2zm3 2v3.6l3 3 3-3V4H9zm3 9.4-3 3V20h6v-3.6l-3-3z"/>',
+  check: '<path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/>',
+  close: '<path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4z"/>',
   list: '<path d="M4 5h2v2H4V5zm4 0h12v2H8V5zm-4 6h2v2H4v-2zm4 0h12v2H8v-2zm-4 6h2v2H4v-2zm4 0h12v2H8v-2z"/>',
   chevron: '<path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z"/>',
   arrow: '<path d="M10 6 8.6 7.4l4.6 4.6-4.6 4.6L10 18l6-6z"/>',
@@ -27,10 +29,37 @@ const ICONS = {
 const svg = (name, size = 18) => `<svg class="icon" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true"><g fill="currentColor">${ICONS[name]}</g></svg>`;
 
 // ---------------------------------------------------------------- Trang chủ
+/** Ô chọn lớp kiểu bento: số lớp lớn, số bài và số bài chấm được bằng camera. */
 function renderGradeChips() {
-  const chips = [{ g: null, label: 'Tất cả' }, ...GRADES.map((g) => ({ g, label: `Lớp ${g}` }))];
-  $('#grade-chips').innerHTML = chips.map(({ g, label }) =>
-    `<button type="button" class="seg__btn" data-grade="${g ?? ''}" aria-pressed="${state.grade === g}">${label}</button>`).join('');
+  $('#grade-tiles').innerHTML = GRADES.map((g) => {
+    const list = store.exercises.filter((e) => e.grade === g);
+    const cam = list.filter((e) => e.scoring).length;
+    return `<button type="button" class="grade-tile" data-grade="${g}" aria-pressed="${state.grade === g}">
+      <span class="grade-tile__label">Lớp</span><span class="grade-tile__num">${g}</span>
+      <span class="grade-tile__meta">${list.length} bài · ${cam} chấm điểm</span>
+      <span class="grade-tile__check" aria-hidden="true">${svg('check', 18)}</span>
+    </button>`;
+  }).join('');
+  const title = $('#list-title');
+  if (title) title.innerHTML = state.grade ? `Lớp ${state.grade} <button type="button" class="link-btn" data-grade="">${svg('close', 18)}<span>Xem tất cả lớp</span></button>` : 'Tất cả bài tập';
+}
+
+/** Biểu tượng minh hoạ theo môn (nét, 24×24). */
+const TOPIC_ICONS = {
+  run: '<circle cx="15" cy="4" r="2"/><path d="M14 7l-3 6 4 3-1 5M11 13l-3 3-3-1M13.5 8.5 18 10M13 9 9 8"/>',
+  ball: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5l3.5 2.5-1.3 4h-4.4L8.5 10z"/><path d="M12 3.5v4M15.5 10l4-1M14.2 14l2.3 3.5M9.8 14l-2.3 3.5M8.5 10l-4-1"/>',
+  hoop: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5v17M6 5.8c2.5 3.4 2.5 9 0 12.4M18 5.8c-2.5 3.4-2.5 9 0 12.4"/>',
+  racket: '<ellipse cx="9" cy="8" rx="5" ry="5.5" transform="rotate(-35 9 8)"/><path d="M12.5 11.5 20 19M6 6l6 4M5 9.5l4.5-4.5"/><circle cx="19" cy="5" r="1.6"/>',
+  throw: '<circle cx="9" cy="4" r="2"/><path d="M9 7v7l-3 7M9 14l3 3v4M9 9 5 11M9 8l4-3 3-1"/><circle cx="19" cy="3.5" r="1.6"/>',
+  jump: '<circle cx="12" cy="4" r="2"/><path d="M12 7v5M12 9l-4-2M12 9l4-2M12 12l-3 3 2 2M12 12l3 3-2 2M4 21h16"/>',
+  strength: '<path d="M6 8v8M3.5 10v4M18 8v8M20.5 10v4M6 12h12"/>',
+  body: '<circle cx="12" cy="4.5" r="2"/><path d="M4 9h16M12 7.5V15M12 15l-4 6M12 15l4 6"/>',
+};
+function topicIcon(topic) {
+  const t = topic.toLowerCase();
+  const key = /chạy/.test(t) ? 'run' : /bóng đá/.test(t) ? 'ball' : /bóng rổ/.test(t) ? 'hoop' : /cầu lông/.test(t) ? 'racket'
+    : /ném/.test(t) ? 'throw' : /nhảy/.test(t) ? 'jump' : /sức mạnh|thể lực/.test(t) ? 'strength' : 'body';
+  return `<svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TOPIC_ICONS[key]}</svg>`;
 }
 
 /** Bộ lọc chủ đề: “Tất cả chủ đề” đứng riêng một dòng; mỗi Phần là một nhóm thu gọn được. */
@@ -63,6 +92,7 @@ function card(e, { crumbs = false } = {}) {
     e._draft && '<span class="badge badge--draft">Bản nháp</span>',
   ].filter(Boolean).join('');
   return `<li><a class="card" data-grade="${e.grade}" href="#bai/${encodeURIComponent(e.id)}">
+    <span class="card__art">${topicIcon(e.topic)}</span>
     <span class="card__body">
       ${crumbs ? `<span class="card__crumbs">Lớp ${e.grade} · ${esc(e._chapterTitle)}</span>` : ''}
       <span class="card__title">${esc(e.title)}</span>
@@ -158,9 +188,19 @@ function initHome() {
     input.value = b.dataset.q; state.q = b.dataset.q;
     renderResults({ openSingle: true });
   });
-  $('#grade-chips').addEventListener('click', (ev) => {
-    const b = ev.target.closest('[data-grade]');
-    if (b) setGrade(b.dataset.grade ? Number(b.dataset.grade) : null);
+  const pickGrade = (ev) => {
+    const b = ev.target.closest('button[data-grade]');
+    if (!b) return;
+    const g = b.dataset.grade ? Number(b.dataset.grade) : null;
+    setGrade(state.grade === g ? null : g);
+    if (g && state.grade === g) $('#chapter-nav').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  $('#grade-tiles').addEventListener('click', pickGrade);
+  $('#list-title').addEventListener('click', pickGrade);
+  $('#nav-search').addEventListener('click', () => {
+    if (location.hash && location.hash !== '#') location.hash = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => input.focus(), 250);
   });
   $('#chapter-nav').addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-chapter]');
@@ -400,7 +440,10 @@ async function route() {
   const teacher = h.startsWith('giao-vien');
   $('#home-view').hidden = teacher;
   $('#teacher-view').hidden = !teacher;
-  $$('[data-nav]').forEach((a) => a.toggleAttribute('aria-current', teacher && a.dataset.nav === 'teacher'));
+  $$('[data-nav]').forEach((a) => {
+    const on = a.dataset.nav === (teacher ? 'teacher' : 'home');
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
   if (teacher) {
     closeLesson({ fromRoute: true });
     document.title = 'Giáo viên — GDTC Trợ lý tập luyện';

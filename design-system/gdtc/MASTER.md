@@ -88,14 +88,19 @@ chuyển động bằng CSS (không GSAP).
 - Không có hiệu ứng lặp vô hạn để trang trí (chỉ dùng cho “đang tải”, mic “đang nghe”).
 - `@media (prefers-reduced-motion: reduce)` → tắt hết.
 
-## 7. Bố cục trang chủ (mẫu “Feature-Rich Showcase” rút gọn)
+## 7. Bố cục trang chủ — mẫu “Bento Box Grid” (v0.3)
 
-1. **Hero:** câu hỏi lớn + ô tìm (có nhãn) + nút Tìm (nút chính duy nhất) + nút Nói.
-2. **3 bước** bằng biểu tượng + chữ: Tìm bài → Xem cách làm → Tự tập.
-3. **Chọn lớp** (thanh chọn) → **Phần/Chủ đề** (thu gọn được) → **thẻ bài**.
-4. Chân trang: ghi chú bản demo, quyền riêng tư.
+Tra cứu skill: `"bento grid modern app" --domain style` → **Bento Box Grid** (light mode, accessibility risk: low,
+lưới 4→2→1 cột, bo 24px, bóng mềm) kết hợp *Feature-Rich Showcase* của nhóm Educational App; `--variance 7`.
 
-Đường tới bài tập: **tối đa 3 lần chạm** (Chọn lớp → Chọn bài → Tab Tự tập).
+1. **Hero 2 cột:** tiêu đề lớn + câu phụ + ô tìm (nút chính duy nhất “Tìm”) | minh hoạ màn hình chấm điểm
+   (khung xương + nhãn % nổi + HUD điểm + huy hiệu “Kỷ lục mới!”). Minh hoạ chỉ hiện từ 900px.
+2. **Bento “Bắt đầu nhanh”:** ô lớn “Tự tập với camera” (màu cam thành tích) + 4 ô lớp màu riêng
+   (số lớp to, số bài, số bài chấm điểm). Lớp đang chọn có dấu ✓ và viền — không chỉ đổi màu.
+3. **Bộ lọc Phần/Chủ đề** (hiện khi chọn lớp) → **danh sách** nhóm Lớp → Phần → Chủ đề, thẻ có hình minh hoạ theo môn.
+4. **Điện thoại (< 760px):** thanh điều hướng dưới đáy 3 mục (Trang chủ · Tìm bài · Giáo viên), mỗi mục có biểu tượng + chữ.
+
+Đường tới bài tập: **tối đa 3 lần chạm** (Ô lớp → Thẻ bài → Tab Tự tập).
 
 ## 8. Không làm (Anti-patterns)
 
