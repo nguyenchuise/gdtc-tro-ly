@@ -30,8 +30,18 @@ Website tĩnh giúp học sinh THCS (lớp 6–9) hỏi bài Giáo dục thể c
 
 Mọi nội dung nằm trong **`data/exercises.json`**; ảnh trang sách nằm trong **`media/sach/<mã-bài>/`**. Có 3 cách, từ dễ đến “kỹ thuật”:
 
-### Cách 1: Trang “Dành cho giáo viên” (khuyên dùng)
-Mở `…/gdtc-tro-ly/#giao-vien`:
+### Mã vào trang giáo viên
+Trang `#giao-vien` cần nhập mã (mặc định **1324**). Mã đúng được nhớ đến khi đóng tab; nút **Khoá lại** để thoát.
+
+> Đây chỉ là khoá chống học sinh bấm nhầm, **không phải bảo mật thật**: trang tĩnh nên người rành kỹ thuật vẫn vượt qua được. Mã không nằm nguyên văn trong mã nguồn (chỉ có mã băm SHA-256). Quyền sửa nội dung thật sự vẫn cần **token GitHub** riêng của thầy cô.
+
+Đổi mã: chạy lệnh dưới (thay `MÃ_MỚI`), rồi dán kết quả vào `CODE_HASH` trong `js/teacher-gate.js`:
+```bash
+printf '%s' 'gdtc:MÃ_MỚI' | sha256sum
+```
+
+### Cách 1: Trang giáo viên (khuyên dùng)
+Mở `…/gdtc-tro-ly/#giao-vien`, nhập mã:
 1. **Tình trạng nội dung**: bảng cho biết bài nào còn “Chờ” video / sách / tóm tắt. Bấm **Cập nhật**.
 2. **Cập nhật một bài**:
    - Dán link YouTube (mỗi dòng một video, thêm `| Tên video` nếu muốn). Nhận mọi dạng link: `youtu.be/…`, `watch?v=…`, `shorts/…`, có `&t=1m5s` để bắt đầu giữa video.
@@ -101,7 +111,14 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 
 > Các góc mục tiêu trong bản demo là ước lượng. Nên để thầy cô làm mẫu, xem bảng “Đo được” trên tab Tự tập, rồi chỉnh `target` cho khớp thực tế (Phase 2 sẽ tự động hoá việc này).
 
-## 4. Chạy thử trên máy
+## 4. Tự tập và chấm điểm (học sinh)
+
+- Trên hình camera, mỗi bộ phận hiện **nhãn % nổi** ngay cạnh khớp (xanh ≥ 80%, cam 50–79%, đỏ < 50%). Màn hình chật thì nhãn chỉ ghi số %.
+- **Đạt** khi *mọi* bộ phận ≥ 80% liên tục đủ số giây (bài giữ tư thế), hoặc đủ số lần đạt chuẩn (bài đếm lần, ví dụ nâng cao đùi: lần nào đủ sâu mới được tính).
+- Khi đạt, trang **tự chụp ảnh** (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
+- Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
+
+## 5. Chạy thử trên máy
 
 ```bash
 python3 -m http.server 8080
@@ -113,7 +130,7 @@ Kiểm tra dữ liệu và logic chấm điểm (cần Node 18+):
 node tools/validate-data.mjs && node tools/test-scoring.mjs
 ```
 
-## 5. Cấu trúc thư mục
+## 6. Cấu trúc thư mục
 
 ```
 index.html            Trang duy nhất (trang chủ, hộp chi tiết bài, trang giáo viên)
@@ -123,8 +140,9 @@ js/search.js          Tìm kiếm bỏ dấu, nhận "lớp 6", "chủ đề 2",
 js/voice.js           Nói để tìm (Web Speech API, vi-VN)
 js/youtube.js         Đọc link YouTube, khung video "bấm mới tải" (youtube-nocookie)
 js/pose-scoring.js    Tính góc, chấm điểm, đếm giữ/lần; nạp MediaPipe khi cần
-js/practice.js        Tab Tự tập: camera / tải video, vẽ khung xương, bảng kết quả
+js/practice.js        Tab Tự tập: camera / video, nhãn % nổi, tự chụp ảnh khi đạt, kết quả tốt nhất
 js/teacher.js         Trang giáo viên: tình trạng, trình soạn, đăng lên GitHub
+js/teacher-gate.js    Ô nhập mã vào trang giáo viên
 js/data.js            Nạp exercises.json + media.json + bản nháp
 js/ai-chat.js         (Phase 2, chưa dùng) chỗ để sẵn cho hỏi đáp AI
 data/exercises.json   Toàn bộ nội dung
@@ -137,20 +155,20 @@ tools/                Sinh media.json, kiểm tra dữ liệu, test chấm đi�
 
 Đường dẫn trực tiếp: `#bai/g8-squat` (Hướng dẫn), `#bai/g8-squat/video`, `#bai/g8-squat/sach`, `#bai/g8-squat/tu-tap`, `#giao-vien/g8-squat`. Thầy cô có thể dán link này vào nhóm lớp.
 
-## 6. Quyền riêng tư
+## 7. Quyền riêng tư
 
 - Không đăng nhập, không cookie theo dõi, không analytics.
 - Hình camera / video tải lên chỉ xử lý trong trình duyệt, không lưu, không gửi đi. Camera tự tắt khi đóng bài, đổi tab hoặc ẩn trang.
 - Video YouTube dùng `youtube-nocookie.com` và chỉ tải khi học sinh bấm Play.
 - Giọng nói: do trình duyệt nhận dạng (Chrome gửi âm thanh tới dịch vụ nhận dạng của Google). Trang web không lưu lại. Học sinh luôn có thể gõ thay vì nói.
 
-## 7. Phase 2 (chưa làm, đã để sẵn chỗ)
+## 8. Phase 2 (chưa làm, đã để sẵn chỗ)
 
 - **Quay video mẫu → tự sinh góc mục tiêu** cho phần `scoring`.
 - **Hỏi đáp AI tự do (Gemini)**: chỉ gọi qua **Cloudflare Worker** làm proxy giữ API key (xem `js/ai-chat.js`). Không bao giờ đặt key trong front-end. Không gửi ảnh/video học sinh lên gói miễn phí (Google dùng dữ liệu gói miễn phí để cải thiện sản phẩm).
 - **Đăng nhập theo lớp, lưu điểm cho giáo viên**: cần nhà trường đồng ý và sự đồng ý của phụ huynh theo Luật Bảo vệ dữ liệu cá nhân 2025.
 
-## 8. Hỗ trợ trình duyệt
+## 9. Hỗ trợ trình duyệt
 
 | | Tìm kiếm | Nói để tìm | Video | Camera + chấm điểm |
 |---|---|---|---|---|

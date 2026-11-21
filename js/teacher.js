@@ -3,6 +3,7 @@
 import { store, contentStatus, readDrafts, writeDrafts } from './data.js';
 import { parseYouTube, thumbUrl } from './youtube.js';
 import { esc, $, $$, toast } from './util.js';
+import { lockTeacher } from './teacher-gate.js';
 
 const GH_KEY = 'gdtc-github-v1';
 const MAX_IMG = 1600;
@@ -119,8 +120,11 @@ export function renderTeacher(root, editId) {
   const startId = (editId && store.byId.has(editId) && editId) || ed?.id || ex[0]?.id;
 
   root.innerHTML = `
-    <h1 id="teacher-title">Dành cho giáo viên</h1>
-    <p class="lead">Cập nhật video, ảnh trang sách và phần tóm tắt cho từng bài. Không cần biết lập trình: chọn bài, dán link, chụp ảnh, xem thử, rồi bấm đăng.</p>
+    <div class="teacher-head">
+      <h1 id="teacher-title">Trang giáo viên</h1>
+      <button type="button" class="btn btn--ghost btn--small" id="lock-teacher">Khoá lại</button>
+    </div>
+    <p class="lead">Chọn bài → dán link video, chụp trang sách, viết ý chính → Xem thử → Đăng.</p>
     <nav class="teacher-toc" aria-label="Mục lục trang giáo viên">
       <a href="#tv-status">1. Tình trạng nội dung</a><a href="#tv-editor">2. Cập nhật một bài</a>
       <a href="#tv-github">3. Kết nối GitHub</a><a href="#tv-folder">4. Cách khác</a><a href="#tv-phase2">5. Sắp có</a>
@@ -231,6 +235,7 @@ export function renderTeacher(root, editId) {
       </ul>
     </section>`;
 
+  $('#lock-teacher', root).addEventListener('click', () => { lockTeacher(); location.hash = ''; });
   const sel = $('#ed-lesson', root);
   sel.value = startId;
   const open = (id) => { ed = editorFromExercise(id); renderEditor(root, conn); };

@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.0] - 2026-11-21: Giao diện mới, chấm điểm có ảnh kết quả, khoá trang giáo viên
+
+### Thêm mới
+- **Tự tập**: nhãn % của từng bộ phận nổi ngay trên camera (tự né nhau, né ô điểm và nút Dừng; màn hình nhỏ thì chỉ ghi %).
+- **Tự chụp ảnh khi đạt**: ảnh có khung xương, % từng bộ phận, điểm và thời gian. Hiện thẻ “Kết quả lần này” và “Kết quả tốt nhất”; tập lại mà cao hơn thì tự thay kỷ lục. Có nút lưu ảnh về máy. Không lưu, không gửi đi.
+- Điều kiện **Đạt** chặt hơn: *mọi* bộ phận ≥ 80% (trước đây là điểm trung bình).
+- Bài đếm lần (ví dụ nâng cao đùi, squat): tự đếm, chỉ tính lần đạt chuẩn, dừng ở mục tiêu và giữ kết quả tốt nhất.
+- Thanh tiến độ và ô điểm (HUD) ngay trên hình; viền xanh khi đang đúng tư thế; vòng xoay khi đang tải bộ chấm điểm.
+- **Trang giáo viên cần mã** (mặc định 1324, chỉ lưu mã băm), có nút “Khoá lại”.
+- Trang chủ: khối Lớp và Phần **thu gọn được**, nút “Thu gọn/Mở tất cả”; bộ lọc chủ đề có nút “Tất cả chủ đề” đứng riêng, mỗi Phần là một nhóm thu gọn; gợi ý tìm nhanh.
+
+### Thay đổi
+- Giao diện mới theo gợi ý của skill ui-ux-pro-max (nhóm education/fitness): màu riêng cho từng lớp, thẻ bài gọn, tab dạng nút, cam “thành tích” cho kết quả tốt nhất, biểu tượng SVG thay emoji, bỏ hiệu ứng lặp vô hạn trang trí.
+- Tab trên điện thoại vừa một hàng (biểu tượng trên, chữ dưới): “Hướng dẫn · Video · Sách · Tự tập”.
+- Tab Sách: bỏ các nút chọn tỉ lệ, luôn chia đôi cân bằng (Ý chính | Trang sách).
+- Câu chữ ngắn gọn, dễ hiểu hơn cho học sinh THCS.
+
+### Sửa lỗi
+- Bộ đếm giữ tư thế bị kẹt khi video tải lên tự lặp lại (thời gian quay về 0).
+
+### Đã kiểm tra
+- Lighthouse mobile trang chủ: Performance 100, Accessibility 100, Best Practices 100.
+- Playwright: bộ lọc/thu gọn, mã giáo viên (sai/đúng/khoá lại), tab Sách, chấm điểm người thật + tự chụp + tập lại giữ kỷ lục, đếm 10 lần với chuyển động giả lập; không có lỗi console.
+
 ## [0.1.0] - 2026-11-21: Bản demo đầu tiên
 
 ### Thêm mới

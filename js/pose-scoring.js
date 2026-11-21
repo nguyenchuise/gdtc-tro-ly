@@ -90,8 +90,11 @@ export function adviceFor(evaluation) {
 /** Đếm thời gian giữ tư thế (điểm ≥ PASS_SCORE liên tục). */
 export class HoldTimer {
   constructor(holdSeconds = 2) { this.holdSeconds = holdSeconds; this.reset(); }
-  reset() { this.start = null; this.current = 0; this.best = 0; this.done = false; }
+  reset() { this.start = null; this.last = null; this.current = 0; this.best = 0; this.done = false; }
   update(score, tSec) {
+    // Thời gian lùi lại (video tua/lặp lại) hoặc ngắt quãng > 0.5 s → tính lại từ đầu.
+    if (this.last != null && (tSec < this.last || tSec - this.last > 0.5)) this.start = null;
+    this.last = tSec;
     if (score != null && score >= PASS_SCORE) {
       if (this.start == null) this.start = tSec;
       this.current = tSec - this.start;
@@ -136,7 +139,7 @@ let landmarkerPromise = null;
 export function loadPoseLandmarker(onStatus = () => {}) {
   if (landmarkerPromise) return landmarkerPromise;
   landmarkerPromise = (async () => {
-    onStatus('Đang tải mô hình nhận dạng tư thế (khoảng 15 MB, chỉ tải lần đầu)…');
+    onStatus('Đang tải bộ chấm điểm (khoảng 15 MB, chỉ lần đầu)…');
     const { FilesetResolver, PoseLandmarker } = await import('../mp/vision_bundle.mjs');
     const base = new URL('../mp/', import.meta.url).href;
     const fileset = await FilesetResolver.forVisionTasks(base + 'wasm');

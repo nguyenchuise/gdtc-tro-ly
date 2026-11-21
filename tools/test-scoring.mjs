@@ -35,8 +35,13 @@ assert.equal(Math.round(measure(knees, { oneOf: [[23, 25, 27], [24, 26, 28]], ta
 assert.equal(Math.round(measure(knees, { oneOf: [[23, 25, 27], [24, 26, 28]], target: 180 }, 1, 1).angle), 180);
 
 const t = new HoldTimer(2);
-t.update(85, 0); t.update(85, 1); assert.equal(t.done, false); t.update(85, 2.1); assert.equal(t.done, true);
-t.reset(); t.update(85, 0); t.update(50, 1); t.update(85, 1.5); assert.equal(t.current, 0);
+const run = (from, to, score) => { for (let x = from; x <= to + 1e-9; x += 0.1) t.update(score, Math.round(x * 10) / 10); };
+run(0, 1, 85); assert.equal(t.done, false); run(1.1, 2.1, 85); assert.equal(t.done, true);
+t.reset(); run(0, 1, 85); t.update(50, 1.1); assert.equal(t.current, 0);
+// Video lặp lại (thời gian lùi về 0) → bắt đầu tính lại, không bị kẹt
+t.reset(); run(4, 4.8, 85); run(0, 2.1, 85); assert.equal(t.done, true);
+// Ngắt quãng > 0.5 s → không cộng dồn
+t.reset(); run(0, 1, 85); t.update(85, 3); assert.equal(t.current, 0);
 
 const rc = new RepCounter({ down: 100, up: 160, target: 2, depthTarget: 90, tolerance: 15, range: 40 });
 [170, 120, 95, 85, 120, 165, 170, 98, 150, 165].forEach((a) => rc.update(a));
