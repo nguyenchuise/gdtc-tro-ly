@@ -29,6 +29,8 @@ jobs:
         run: node tools/validate-data.mjs
       - name: Kiểm tra logic chấm điểm và tìm kiếm
         run: node tools/test-scoring.mjs
+      - name: Bỏ thư mục công cụ (.claude) khỏi trang web
+        run: rm -rf .claude
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
