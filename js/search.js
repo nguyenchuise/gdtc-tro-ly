@@ -69,6 +69,7 @@ export function search(exercises, raw, { grade = null, chapter = null } = {}) {
     }
     // Cụm nhiều từ khớp liền nhau trong tiêu đề → cộng thêm.
     if (q.terms.length > 1 && e._title.includes(q.terms.join(' '))) s += 6;
+    else if (q.terms.length > 1 && e._hay.includes(q.terms.join(' '))) s += 3;
     if (hits) scored.push({ e, s: s + hits * 2, hits });
   }
   // Ưu tiên bài khớp đủ mọi từ; nếu không có (câu nói dài, lẫn từ thừa) thì nới lỏng còn một nửa số từ.

@@ -319,7 +319,15 @@ function panelBook(e, root) {
         ${pages.length > 1 ? `<div class="book-pages" role="group" aria-label="Chọn trang">${pages.map((p, i) =>
           `<button type="button" class="chip chip--sm" data-page="${i}" aria-pressed="${i === 0}">${p.page ? `Trang ${p.page}` : `Ảnh ${i + 1}`}</button>`).join('')}</div>` : ''}
        </figure>`
-    : waitingPanel('book', e, b.url ? `<p><a class="btn btn--ghost" href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : '');
+    : b.url && b.range
+      ? `<div class="waiting book-link" role="note">
+          <div class="waiting__icon">${svg('book', 30)}</div>
+          <h3>SGK trang ${b.range[0]}${b.range[1] > b.range[0] ? `–${b.range[1]}` : ''}</h3>
+          <p>Xem hình minh hoạ trong sách điện tử của NXB Giáo dục.</p>
+          <p><a class="btn btn--primary" href="${esc(b.url)}" target="_blank" rel="noopener">${svg('book', 20)}<span>Mở sách trang ${b.range[0]}</span></a></p>
+          <p class="muted small">Hoặc mở sách giấy đến trang ${b.range[0]}.</p>
+        </div>`
+      : waitingPanel('book', e, b.url ? `<p><a class="btn btn--ghost" href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : '');
   root.innerHTML = `
     ${series ? `<p class="muted small book-series">Bộ sách: ${esc(series)}</p>` : ''}
     <div class="book-split">

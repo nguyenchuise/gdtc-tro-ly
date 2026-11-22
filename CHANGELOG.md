@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.5.0] - 2026-11-22: Lớp 6 theo sách giáo khoa
+
+### Thay đổi
+- **Lớp 6 dựng lại theo SGK Giáo dục thể chất 6 – Kết nối tri thức với cuộc sống:** 3 phần, 8 chủ đề, 25 bài,
+  tên phần, chủ đề và bài **đúng theo mục lục sách** (thay cho dữ liệu mẫu cũ).
+  - Phần 1. Kiến thức chung: Chế độ dinh dưỡng trong luyện tập TDTT.
+  - Phần 2. Vận động cơ bản: Chạy cự li ngắn (60 m), Ném bóng, Chạy cự li trung bình, Bài tập thể dục.
+  - Phần 3. Thể thao tự chọn: Cầu lông, Bóng đá, Bóng rổ.
+- Mỗi bài có các bước, lỗi hay gặp và ý chính **viết lại ngắn gọn** (không chép nguyên văn sách),
+  cùng **số trang SGK** và nút "Mở sách trang …" tới sách điện tử của NXB Giáo dục.
+- Chấm điểm camera giữ cho 3 bài: Bài thể dục liên hoàn nhịp 1–11 (nhịp 3, dang ngang), nhịp 12–23 (nhịp 17, tay lên cao),
+  và các động tác bổ trợ chạy ngắn (đếm nâng cao đùi).
+- Tìm kiếm: cụm từ đứng liền nhau trong nội dung được ưu tiên hơn.
+- Ảnh trang sách **chưa** đưa lên: sách ghi bản quyền thuộc NXB Giáo dục Việt Nam, cấm sao chép, phát tán khi chưa được phép.
+
 ## [0.4.0] - 2026-11-21: Phong cách tinh gọn, gợi ý ngay trên camera
 
 ### Thay đổi

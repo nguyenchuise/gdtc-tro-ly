@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { angleAt, ruleScore, evaluateRules, HoldTimer, RepCounter, measure, adviceFor } from '../js/pose-scoring.js';
-import { normalize, parseQuery, search, buildIndex } from '../js/search.js';
+import { normalize, parseQuery, search, buildIndex, leadingNumber } from '../js/search.js';
 
 const P = (x, y, visibility = 0.99) => ({ x, y, visibility });
 assert.equal(Math.round(angleAt(P(0, 1), P(0, 0), P(1, 0))), 90);
@@ -53,11 +53,14 @@ const q = parseQuery('Em muốn xem hướng dẫn bài tập squat lớp 8');
 assert.deepEqual([q.grade, q.terms], [8, ['squat']]);
 assert.equal(parseQuery('chủ đề 2 lop 6').chapterNo, 2);
 const data = JSON.parse(readFileSync(new URL('../data/exercises.json', import.meta.url)));
-const chapterNo = new Map(data.curriculum.flatMap((g) => g.parts.flatMap((p) => p.chapters.map((c) => [c.id, Number(c.title.match(/\d+/)[0])]))));
+const chapterNo = new Map(data.curriculum.flatMap((g) => g.parts.flatMap((p) => p.chapters.map((c) => [c.id, leadingNumber(c.title)]))));
 const ex = data.exercises.map((e) => ({ ...e, _chapterNo: chapterNo.get(e.chapter), _chapterTitle: '', _partTitle: '' }));
 buildIndex(ex);
 assert.deepEqual(search(ex, 'squat').results.map((e) => e.id), ['g8-squat']);
 assert.deepEqual(search(ex, 'hướng dẫn dang tay').results[0].id, 'g6-dang-tay');
-assert.equal(search(ex, 'chủ đề 2 lớp 6').results.length, 2);
-assert.ok(search(ex, 'bong ro').results.every((e) => e.grade === 8));
+// Lớp 6 theo SGK: Chủ đề 2 Ném bóng (3 bài) + Chủ đề 2 Bóng đá ở phần tự chọn (4 bài)
+assert.equal(search(ex, 'chủ đề 2 lớp 6').results.length, 7);
+assert.equal(search(ex, 'ném rổ').results[0].id, 'g6-nem-ro');
+assert.ok(search(ex, 'dinh dưỡng').results.some((e) => e.id === 'g6-dinh-duong'));
+assert.ok(search(ex, 'bong ro lop 8').results.every((e) => e.grade === 8));
 console.log('✅ Tất cả kiểm tra chấm điểm và tìm kiếm đều đạt.');

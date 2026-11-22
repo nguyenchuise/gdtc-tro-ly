@@ -1,32 +1,59 @@
 {
-  "_ghiChu": "Nội dung MẪU DEMO tự viết, chưa đối chiếu SGK. Cấu trúc phần/chủ đề cần đối chiếu mục lục sách giáo khoa. Xem README mục \"Cập nhật nội dung\".",
+  "_ghiChu": "Lớp 6: theo SGK Giáo dục thể chất 6 – Kết nối tri thức với cuộc sống (tóm tắt, viết lại ngắn gọn; không chép nguyên văn). Lớp 7–9: nội dung MẪU DEMO, chưa đối chiếu SGK.",
   "schemaVersion": 1,
   "bookSeries": null,
   "curriculum": [
     {
       "grade": 6,
+      "source": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
       "parts": [
         {
           "id": "g6-p1",
-          "title": "Phần 1. Vận động cơ bản",
+          "title": "Phần 1. Kiến thức chung",
           "chapters": [
             {
-              "id": "g6-c1",
-              "title": "Chủ đề 1. Bài thể dục khởi động"
-            },
-            {
-              "id": "g6-c2",
-              "title": "Chủ đề 2. Chạy cự li ngắn"
+              "id": "g6-kt",
+              "title": "Chủ đề: Chế độ dinh dưỡng trong luyện tập TDTT"
             }
           ]
         },
         {
           "id": "g6-p2",
-          "title": "Phần 2. Thể thao tự chọn",
+          "title": "Phần 2. Vận động cơ bản",
           "chapters": [
             {
+              "id": "g6-c1",
+              "title": "Chủ đề 1. Chạy cự li ngắn (60 m)"
+            },
+            {
+              "id": "g6-c2",
+              "title": "Chủ đề 2. Ném bóng"
+            },
+            {
               "id": "g6-c3",
-              "title": "Chủ đề 3. Bóng đá"
+              "title": "Chủ đề 3. Chạy cự li trung bình"
+            },
+            {
+              "id": "g6-c4",
+              "title": "Chủ đề 4. Bài tập thể dục"
+            }
+          ]
+        },
+        {
+          "id": "g6-p3",
+          "title": "Phần 3. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g6-tc1",
+              "title": "Chủ đề 1. Cầu lông"
+            },
+            {
+              "id": "g6-tc2",
+              "title": "Chủ đề 2. Bóng đá"
+            },
+            {
+              "id": "g6-tc3",
+              "title": "Chủ đề 3. Bóng rổ"
             }
           ]
         }
@@ -122,15 +149,513 @@
   ],
   "exercises": [
     {
-      "demo": true,
+      "id": "g6-dinh-duong",
+      "grade": 6,
+      "chapter": "g6-kt",
+      "order": 1,
+      "title": "Chế độ dinh dưỡng trong luyện tập thể dục thể thao",
+      "topic": "Dinh dưỡng",
+      "keywords": "dinh duong an uong chat dam chat beo vitamin khoang chat uong nuoc suc khoe",
+      "steps": [
+        "Sức khoẻ phụ thuộc vào 3 yếu tố: dinh dưỡng, vận động cơ thể và nghỉ ngơi.",
+        "Các chất cần thiết: chất bột đường, chất đạm, chất béo, vitamin, khoáng chất và nước.",
+        "Ăn đúng giờ, đúng bữa và ăn đủ các chất dinh dưỡng.",
+        "Uống đủ nước, nhất là khi tập luyện ra nhiều mồ hôi.",
+        "Tập ở nơi có không khí trong lành."
+      ],
+      "commonErrors": [
+        "Bỏ bữa hoặc ăn lệch một loại thức ăn.",
+        "Quên uống nước khi tập, dễ bị chuột rút, mệt lả."
+      ],
+      "summary": [
+        "3 yếu tố: ăn uống – vận động – nghỉ ngơi.",
+        "Ăn đủ chất, đúng giờ, đúng bữa.",
+        "Tập ra mồ hôi thì phải uống đủ nước."
+      ],
+      "related": [],
+      "youtube": [],
+      "youtubeSearch": "dinh dưỡng trong luyện tập thể dục thể thao lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=5",
+        "range": [
+          4,
+          7
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-nang-cao-dui",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 1,
+      "title": "Các động tác bổ trợ kĩ thuật chạy cự li ngắn",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "chay buoc nho nang cao dui dap sau bo tro chay ngan khoi dong",
+      "steps": [
+        "Chạy bước nhỏ: chạm đất bằng nửa trước bàn chân, nâng cao gót, đổi chân liên tục.",
+        "Nâng cao đùi: đùi nâng gần vuông góc với thân, cẳng chân hướng xuống đất.",
+        "Đạp sau: ngả thân ra trước, chân sau đạp mạnh, duỗi thẳng gối và cổ chân.",
+        "Tập từ tại chỗ đến di chuyển, từ chậm đến nhanh."
+      ],
+      "commonErrors": [
+        "Đùi nâng thấp, ngả người ra sau.",
+        "Tiếp đất cả bàn chân, nặng nề.",
+        "Đánh tay không nhịp nhàng với chân."
+      ],
+      "summary": [
+        "Bước nhỏ – nâng cao đùi – đạp sau.",
+        "Đùi nâng gần vuông góc với thân.",
+        "Tập trên mặt sân bằng phẳng."
+      ],
       "related": [
-        "g6-tay-dua-cao"
+        "g6-chay-giua-quang",
+        "g6-xuat-phat-cao"
       ],
       "youtube": [],
+      "youtubeSearch": "động tác bổ trợ chạy cự li ngắn chạy bước nhỏ nâng cao đùi đạp sau lớp 6",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=9",
+        "range": [
+          8,
+          12
+        ]
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "rules": [],
+        "reps": {
+          "label": "Góc hông (vai – hông – gối)",
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ],
+          "pick": "min",
+          "down": 110,
+          "up": 160,
+          "target": 10,
+          "depthTarget": 90,
+          "tolerance": 15,
+          "range": 40
+        }
+      }
+    },
+    {
+      "id": "g6-chay-giua-quang",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 2,
+      "title": "Chạy giữa quãng",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "chay giua quang chay ngan tu the than nguoi danh tay tho",
+      "steps": [
+        "Thân trên hơi ngả ra trước, đầu thẳng, mắt nhìn phía trước.",
+        "Tay đánh luân phiên: chếch vào trong khi ra trước, chếch ra ngoài khi ra sau.",
+        "Chân phía trước đưa đùi lên – ra trước, chạm đất bằng nửa trước bàn chân.",
+        "Chân phía sau duỗi và đạp mạnh để đưa cơ thể lên trước.",
+        "Khi chạy hít vào, thở ra nhanh bằng mũi và miệng."
+      ],
+      "commonErrors": [
+        "Ngửa người ra sau khi chạy.",
+        "Đánh tay ngang trước ngực.",
+        "Nín thở khi chạy."
+      ],
+      "summary": [
+        "Giữ tốc độ cao nhất sau chạy lao.",
+        "Thân hơi ngả trước, mắt nhìn thẳng.",
+        "Tập 30 – 50 m, từ chậm đến nhanh."
+      ],
+      "related": [
+        "g6-nang-cao-dui",
+        "g6-xuat-phat-cao"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật chạy giữa quãng chạy cự li ngắn lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=14",
+        "range": [
+          13,
+          15
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-xuat-phat-cao",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 3,
+      "title": "Xuất phát và chạy lao sau xuất phát",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "xuat phat cao chay lao vao cho san sang chay khau lenh",
+      "steps": [
+        "“Vào chỗ”: chân thuận đặt sát sau vạch, chân sau cách gót chân trước 15 – 20 cm.",
+        "“Sẵn sàng”: khuỵu gối, thân hơi ngả trước, kiễng gót chân sau.",
+        "“Chạy!”: đạp mạnh hai chân, đưa nhanh chân sau ra trước.",
+        "Chạy lao: tăng dần tốc độ và độ dài bước, thân trên nâng dần lên."
+      ],
+      "commonErrors": [
+        "Giẫm lên vạch xuất phát.",
+        "Xuất phát trước hiệu lệnh.",
+        "Đứng thẳng người ngay khi vừa xuất phát."
+      ],
+      "summary": [
+        "Khẩu lệnh: Vào chỗ – Sẵn sàng – Chạy!",
+        "Không chạm vạch, không chạy trước hiệu lệnh.",
+        "Chạy lao: bước ngắn, tăng tốc nhanh."
+      ],
+      "related": [
+        "g6-nang-cao-dui",
+        "g6-chay-giua-quang"
+      ],
+      "youtube": [],
+      "youtubeSearch": "xuất phát cao chạy lao sau xuất phát lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=17",
+        "range": [
+          16,
+          20
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chay-ve-dich",
+      "grade": 6,
+      "chapter": "g6-c1",
+      "order": 4,
+      "title": "Chạy về đích",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "chay ve dich gap than qua vach dich phoi hop cac giai doan 60m",
+      "steps": [
+        "Giữ tốc độ cao nhất đến cuối cự li.",
+        "Ở bước cuối, gập thân nhanh ra trước để qua vạch đích.",
+        "Sau khi qua đích không dừng đột ngột: chạy chậm dần, đi bộ, thả lỏng.",
+        "Phối hợp đủ 4 giai đoạn: xuất phát – chạy lao – giữa quãng – về đích (40, 50, 60 m)."
+      ],
+      "commonErrors": [
+        "Giảm tốc trước vạch đích.",
+        "Dừng lại đột ngột ngay sau vạch."
+      ],
+      "summary": [
+        "Qua đích khi thân người (trừ đầu, cổ, tay, chân) chạm mặt phẳng vạch đích.",
+        "Gập thân ở bước cuối.",
+        "Chạy chậm rồi đi bộ thả lỏng."
+      ],
+      "related": [
+        "g6-nang-cao-dui",
+        "g6-chay-giua-quang"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật chạy về đích chạy cự li ngắn 60m lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=21",
+        "range": [
+          20,
+          23
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-nem-bong-bo-tro",
+      "grade": 6,
+      "chapter": "g6-c2",
+      "order": 1,
+      "title": "Các động tác bổ trợ kĩ thuật ném bóng",
+      "topic": "Ném bóng",
+      "keywords": "nem bong cam bong tung bat bong mot tay hai tay nem tren cao",
+      "steps": [
+        "Cầm bóng: các ngón tay mở rộng, bóng chạm chai tay và ngón tay.",
+        "Tung bóng cao 1 – 2 m rồi bắt bằng hai tay, sau đó bằng một tay.",
+        "Hai tay dang rộng phía trước, tung và bắt bóng luân phiên.",
+        "Ném một tay trên cao: đưa bóng lên cao ra sau đầu, ưỡn thân rồi gập nhanh và ném ra trước."
+      ],
+      "commonErrors": [
+        "Cầm bóng sát lòng bàn tay.",
+        "Ném chỉ bằng tay, không dùng sức thân người.",
+        "Đứng quá gần bạn khi tập."
+      ],
+      "summary": [
+        "Cầm bóng bằng các ngón tay.",
+        "Ném: thân ưỡn căng rồi gập nhanh.",
+        "Giữ khoảng cách an toàn khi tập."
+      ],
+      "related": [
+        "g6-ra-suc-cuoi-cung",
+        "g6-chay-da-nem-bong"
+      ],
+      "youtube": [],
+      "youtubeSearch": "động tác bổ trợ kĩ thuật ném bóng lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=25",
+        "range": [
+          24,
+          28
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-ra-suc-cuoi-cung",
+      "grade": 6,
+      "chapter": "g6-c2",
+      "order": 2,
+      "title": "Ra sức cuối cùng và giữ thăng bằng",
+      "topic": "Ném bóng",
+      "keywords": "ra suc cuoi cung giu thang bang nem bong nhay doi chan",
+      "steps": [
+        "TTCB: đứng chân trước chân sau, tay cầm bóng duỗi thẳng phía sau, thân ngả ra sau.",
+        "Đạp mạnh chân sau, gập nhanh thân ra trước, dùng sức tay ném bóng.",
+        "Giữ thăng bằng cách 1: nhón chân trước, nâng gót chân sau, hai tay dang rộng.",
+        "Giữ thăng bằng cách 2: nhảy đổi chân, đưa chân sau ra trước."
+      ],
+      "commonErrors": [
+        "Không đạp chân sau, chỉ ném bằng tay.",
+        "Chạm vạch giới hạn sau khi ném."
+      ],
+      "summary": [
+        "Đạp chân – gập thân – vung tay.",
+        "Sau khi ném phải giữ thăng bằng.",
+        "Tập từ không bóng đến có bóng."
+      ],
+      "related": [
+        "g6-nem-bong-bo-tro",
+        "g6-chay-da-nem-bong"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật ra sức cuối cùng ném bóng lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=29",
+        "range": [
+          28,
+          32
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chay-da-nem-bong",
+      "grade": 6,
+      "chapter": "g6-c2",
+      "order": 3,
+      "title": "Chuẩn bị chạy đà và chạy đà",
+      "topic": "Ném bóng",
+      "keywords": "chay da nem bong bon buoc cuoi luat nem bong 150g",
+      "steps": [
+        "Chuẩn bị: đứng chân trước chân sau, bóng cầm ngang đầu, lòng bàn tay hướng ra trước.",
+        "Chạy đà 13 – 15 bước, tốc độ tăng dần.",
+        "Bốn bước cuối: đưa dần tay cầm bóng xuống dưới, ra sau, lên cao; thân ngả ra sau.",
+        "Phối hợp chạy đà, bốn bước cuối và ra sức cuối cùng."
+      ],
+      "commonErrors": [
+        "Chạy đà quá nhanh, mất nhịp ở bốn bước cuối.",
+        "Bước qua vạch giới hạn khi ném."
+      ],
+      "summary": [
+        "Bóng nặng 150 g, đường chạy đà rộng 4 m.",
+        "Sân ném hình phễu góc 29°.",
+        "Chạm vạch giới hạn là phạm luật."
+      ],
+      "related": [
+        "g6-nem-bong-bo-tro",
+        "g6-ra-suc-cuoi-cung"
+      ],
+      "youtube": [],
+      "youtubeSearch": "chạy đà ném bóng bốn bước cuối lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=33",
+        "range": [
+          32,
+          36
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chay-trung-binh-bo-tro",
+      "grade": 6,
+      "chapter": "g6-c3",
+      "order": 1,
+      "title": "Các động tác bổ trợ kĩ thuật chạy cự li trung bình",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "chay cu li trung binh tho nhip don nhip kep hinh so 8 luon coc dich dac suc ben",
+      "steps": [
+        "Thở nhịp đơn: 2 bước hít vào bằng mũi, 2 bước thở ra bằng mũi và miệng.",
+        "Thở nhịp kép: 2 bước hít vào hai lần liên tục, 2 bước thở ra hai lần.",
+        "Chạy hình số 8 và chạy luồn cọc: nghiêng thân vào trong vòng, tay ngoài đánh rộng hơn.",
+        "Chạy dích dắc: giảm tốc khi đổi hướng, giữ đều nhịp thở."
+      ],
+      "commonErrors": [
+        "Thở không theo nhịp bước chạy.",
+        "Không giảm tốc khi đổi hướng, dễ ngã."
+      ],
+      "summary": [
+        "Giữ nhịp thở đều suốt quãng chạy.",
+        "Nghiêng thân vào phía trong khi chạy vòng.",
+        "Tập từ chậm đến nhanh."
+      ],
+      "related": [
+        "g6-chay-trung-binh-giua-quang",
+        "g6-chay-trung-binh-xuat-phat"
+      ],
+      "youtube": [],
+      "youtubeSearch": "chạy cự li trung bình thở nhịp đơn nhịp kép lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=38",
+        "range": [
+          37,
+          40
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chay-trung-binh-giua-quang",
+      "grade": 6,
+      "chapter": "g6-c3",
+      "order": 2,
+      "title": "Chạy giữa quãng trên đường thẳng, đường vòng",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "chay giua quang duong thang duong vong cu li trung binh 800m 1500m",
+      "steps": [
+        "Đường thẳng: thân hơi ngả trước, đầu thẳng, mắt nhìn trước.",
+        "Tay đánh chếch vào trong khi ra trước, chếch ra ngoài khi ra sau.",
+        "Đường vòng (ngược chiều kim đồng hồ): thân nghiêng sang trái, tay phải đánh rộng hơn.",
+        "Khi tiếp đất ở đường vòng, bàn chân phải hơi xoay vào trong."
+      ],
+      "commonErrors": [
+        "Chạy quá nhanh ngay từ đầu, hết sức giữa chừng.",
+        "Không nghiêng người khi vào đường vòng."
+      ],
+      "summary": [
+        "Cự li trung bình: 500 m đến dưới 2000 m.",
+        "Không chạy theo ô riêng.",
+        "Chạy vòng ngược chiều kim đồng hồ."
+      ],
+      "related": [
+        "g6-chay-trung-binh-bo-tro",
+        "g6-chay-trung-binh-xuat-phat"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật chạy giữa quãng đường vòng chạy cự li trung bình lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=42",
+        "range": [
+          41,
+          43
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chay-trung-binh-xuat-phat",
+      "grade": 6,
+      "chapter": "g6-c3",
+      "order": 3,
+      "title": "Xuất phát và tăng tốc độ sau xuất phát. Chạy về đích",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "xuat phat cao tang toc chay ve dich cu li trung binh",
+      "steps": [
+        "“Vào chỗ”: bước nhanh đến sau vạch, đứng tư thế sẵn sàng như chạy ngắn.",
+        "“Chạy!”: rời vạch, tăng tốc vừa phải rồi chạy vào mép trong đường chạy.",
+        "Về đích: giữ hoặc tăng tốc độ để chạy qua đích.",
+        "Sau đích: chạy chậm, đi bộ, hít thở sâu, thả lỏng. Không ngồi hoặc nằm ngay."
+      ],
+      "commonErrors": [
+        "Tăng tốc tối đa như chạy ngắn ngay khi xuất phát.",
+        "Ngồi hoặc nằm ngay sau khi về đích."
+      ],
+      "summary": [
+        "Xuất phát cao trên đường thẳng hoặc đường vòng.",
+        "Không dốc hết sức từ đầu.",
+        "Về đích rồi đi bộ thả lỏng."
+      ],
+      "related": [
+        "g6-chay-trung-binh-bo-tro",
+        "g6-chay-trung-binh-giua-quang"
+      ],
+      "youtube": [],
+      "youtubeSearch": "xuất phát chạy về đích chạy cự li trung bình lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=45",
+        "range": [
+          44,
+          47
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-dang-tay",
+      "grade": 6,
+      "chapter": "g6-c4",
+      "order": 1,
+      "title": "Bài thể dục liên hoàn (từ nhịp 1 đến nhịp 11)",
+      "topic": "Bài tập thể dục",
+      "keywords": "dang tay ngang vai bai the duc lien hoan nhip 1 den 11 dang ngang tay len cao chu v xoay nguoi",
+      "steps": [
+        "Nhịp 1 – 2: hai tay đưa ra trước rồi lên cao, lòng bàn tay hướng vào nhau.",
+        "Nhịp 3: hai tay dang ngang, lòng bàn tay sấp, mắt nhìn trước.",
+        "Nhịp 4 – 5: khuỵu gối, tay bắt chéo trước bụng; rồi duỗi gối, tay lên cao chữ V.",
+        "Nhịp 6 – 8: ngón tay chạm mỏm vai; dang ngang; bước chân trái rộng bằng vai, gập tay trước ngực.",
+        "Nhịp 9 – 11: dang ngang xoay người sang trái, về nhịp 8, rồi xoay sang phải."
+      ],
+      "commonErrors": [
+        "Tay dang không ngang vai.",
+        "Khuỷu tay chùng.",
+        "Đếm nhịp không rõ, làm nhanh hơn nhịp."
+      ],
+      "summary": [
+        "Tập từng nhịp, rồi ghép 3 – 4 nhịp.",
+        "Đếm nhịp to, rõ.",
+        "Chấm điểm bằng camera: nhịp 3 – dang ngang."
+      ],
+      "related": [
+        "g6-tay-dua-cao",
+        "g6-the-duc-nhip-24-30"
+      ],
+      "youtube": [],
+      "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 1 đến 11",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=49",
+        "range": [
+          48,
+          52
+        ]
       },
       "scoring": {
         "mode": "hold",
@@ -182,42 +707,45 @@
             "range": 40
           }
         ]
-      },
-      "id": "g6-dang-tay",
-      "grade": 6,
-      "chapter": "g6-c1",
-      "order": 1,
-      "title": "Đứng thẳng, hai tay dang ngang",
-      "topic": "Bài thể dục",
-      "keywords": "dang tay ngang vai khoi dong tu the dung thang",
-      "steps": [
-        "Đứng thẳng, hai chân rộng bằng vai, mắt nhìn thẳng.",
-        "Từ từ đưa hai tay sang ngang, cao ngang vai.",
-        "Duỗi thẳng khuỷu tay, bàn tay úp, các ngón khép.",
-        "Giữ tư thế 2 giây, hít thở đều, rồi hạ tay."
-      ],
-      "commonErrors": [
-        "Tay đưa cao hoặc thấp hơn vai.",
-        "Khuỷu tay bị chùng, không duỗi thẳng.",
-        "Nhún vai, rụt cổ."
-      ],
-      "summary": [
-        "Tay ngang vai, tạo thành một đường thẳng.",
-        "Khuỷu tay duỗi thẳng, vai thả lỏng.",
-        "Giữ 2 giây, thở đều."
-      ],
-      "youtubeSearch": "bài thể dục lớp 6 động tác dang tay ngang"
+      }
     },
     {
-      "demo": true,
+      "id": "g6-tay-dua-cao",
+      "grade": 6,
+      "chapter": "g6-c4",
+      "order": 2,
+      "title": "Bài thể dục liên hoàn (từ nhịp 12 đến nhịp 23)",
+      "topic": "Bài tập thể dục",
+      "keywords": "hai tay dua thang len cao bai the duc lien hoan nhip 12 den 23 nghieng nguoi gap than bat chan sang ngang tay len cao",
+      "steps": [
+        "Nhịp 12 – 16: dang ngang xoay người; chống hông nghiêng người sang trái, rồi đổi bên.",
+        "Nhịp 17: thu chân về, hai tay đưa thẳng lên cao, mắt nhìn theo tay.",
+        "Nhịp 18 – 19: gập thân, ngón tay chạm mũi chân; ngồi xuống, hai tay chống đất.",
+        "Nhịp 20 – 23: bật đưa chân trái sang ngang, thu về; đổi sang chân phải."
+      ],
+      "commonErrors": [
+        "Gập thân nhưng co gối.",
+        "Tay lên cao không thẳng, không sát tai."
+      ],
+      "summary": [
+        "Biết tự sửa sai về tư thế.",
+        "Tập chậm trước, nhanh sau.",
+        "Chấm điểm bằng camera: nhịp 17 – tay thẳng lên cao."
+      ],
       "related": [
-        "g6-dang-tay"
+        "g6-dang-tay",
+        "g6-the-duc-nhip-24-30"
       ],
       "youtube": [],
+      "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 12 đến 23",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=54",
+        "range": [
+          53,
+          56
+        ]
       },
       "scoring": {
         "mode": "hold",
@@ -269,205 +797,488 @@
             "range": 40
           }
         ]
-      },
-      "id": "g6-tay-dua-cao",
-      "grade": 6,
-      "chapter": "g6-c1",
-      "order": 2,
-      "title": "Hai tay đưa thẳng lên cao",
-      "topic": "Bài thể dục",
-      "keywords": "gio tay len cao vuon tay khoi dong",
-      "steps": [
-        "Đứng thẳng, hai chân rộng bằng vai.",
-        "Đưa hai tay từ trước lên cao, lòng bàn tay hướng vào nhau.",
-        "Duỗi thẳng tay, cánh tay sát tai, mắt nhìn theo tay.",
-        "Giữ 2 giây rồi hạ tay về tư thế ban đầu."
-      ],
-      "commonErrors": [
-        "Tay chếch ra trước, không thẳng lên trên.",
-        "Khuỷu tay gập.",
-        "Ưỡn bụng, ngửa người ra sau."
-      ],
-      "summary": [
-        "Tay thẳng, sát tai, hướng lên trời.",
-        "Thân người thẳng, không ưỡn bụng.",
-        "Giữ 2 giây."
-      ],
-      "youtubeSearch": "bài thể dục động tác vươn thở hai tay đưa lên cao"
+      }
     },
     {
-      "demo": true,
+      "id": "g6-the-duc-nhip-24-30",
+      "grade": 6,
+      "chapter": "g6-c4",
+      "order": 3,
+      "title": "Bài thể dục liên hoàn (từ nhịp 24 đến nhịp 30)",
+      "topic": "Bài tập thể dục",
+      "keywords": "bai the duc lien hoan nhip 24 den 30 bat chan chong day bat cao chu v",
+      "steps": [
+        "Nhịp 24 – 25: bật hai chân ra sau thành tư thế chống đẩy, rồi bật thu về.",
+        "Nhịp 26: đứng thẳng, hai tay đưa lên cao.",
+        "Nhịp 27 – 28: khuỵu gối đánh tay ra sau; bật mạnh lên cao, tay chữ V, thân ưỡn căng.",
+        "Nhịp 29 – 30: tiếp đất bằng nửa trước bàn chân, gối khuỵu; trở về TTCB."
+      ],
+      "commonErrors": [
+        "Võng lưng khi chống đẩy.",
+        "Tiếp đất cả bàn chân, gối thẳng."
+      ],
+      "summary": [
+        "Tiếp đất nhẹ, gối hơi khuỵu.",
+        "Phối hợp 7 nhịp từ chậm đến nhanh.",
+        "Ôn cả bài 30 nhịp."
+      ],
       "related": [
-        "g6-chay-bien-toc"
+        "g6-dang-tay",
+        "g6-tay-dua-cao"
       ],
       "youtube": [],
+      "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 24 đến 30",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=58",
+        "range": [
+          57,
+          61
+        ]
       },
-      "scoring": {
-        "mode": "reps",
-        "camera": "side",
-        "rules": [],
-        "reps": {
-          "label": "Góc hông (vai – hông – gối)",
-          "oneOf": [
-            [
-              11,
-              23,
-              25
-            ],
-            [
-              12,
-              24,
-              26
-            ]
-          ],
-          "pick": "min",
-          "down": 110,
-          "up": 160,
-          "target": 10,
-          "depthTarget": 90,
-          "tolerance": 15,
-          "range": 40
-        }
-      },
-      "id": "g6-nang-cao-dui",
+      "scoring": null
+    },
+    {
+      "id": "g6-cau-long-bo-tro",
       "grade": 6,
-      "chapter": "g6-c2",
+      "chapter": "g6-tc1",
       "order": 1,
-      "title": "Chạy nâng cao đùi tại chỗ",
-      "topic": "Chạy cự li ngắn",
-      "keywords": "nang cao dui chay tai cho bo tro chay nhanh",
+      "title": "Bài tập bổ trợ và di chuyển đơn bước",
+      "topic": "Cầu lông",
+      "keywords": "cau long cam vot cam cau tang cau xoay lac co tay di chuyen don buoc",
       "steps": [
-        "Đứng thẳng, hai tay co khoảng 90° ở khuỷu.",
-        "Lần lượt nâng đùi lên cao ngang hông, mũi chân hướng xuống.",
-        "Tiếp đất bằng nửa trước bàn chân, đánh tay phối hợp nhịp nhàng.",
-        "Thực hiện 10 lần, giữ thân người thẳng."
+        "Cầm cầu bằng ngón trỏ và ngón cái (đầu cánh, thân cánh hoặc đế cầu).",
+        "TTCB: hai chân rộng bằng vai, gối hơi khuỵu, vợt phía trước cao hơn trán.",
+        "Xoay, lắc cổ tay với vợt; tâng cầu, mặt vợt song song mặt đất.",
+        "Di chuyển đơn bước tiến phải, tiến trái, sang phải, sang trái."
       ],
       "commonErrors": [
-        "Đùi nâng thấp.",
-        "Ngả người ra sau khi nâng đùi.",
-        "Tiếp đất cả bàn chân, nặng nề."
+        "Cầm vợt quá chặt, cổ tay cứng.",
+        "Đứng thẳng gối, không sẵn sàng di chuyển."
       ],
       "summary": [
-        "Đùi nâng ngang hông.",
-        "Thân thẳng, hơi đổ trước.",
-        "Đánh tay nhịp nhàng với chân."
+        "Gối hơi khuỵu, mắt quan sát cầu.",
+        "Tập từ tại chỗ đến di chuyển.",
+        "Trò chơi: thi tâng cầu."
       ],
-      "youtubeSearch": "chạy nâng cao đùi tại chỗ hướng dẫn"
-    },
-    {
-      "demo": true,
       "related": [
-        "g6-nang-cao-dui"
+        "g6-cau-long-thap-tay",
+        "g6-cau-long-phat-cau"
       ],
       "youtube": [],
+      "youtubeSearch": "cầu lông lớp 6 cách cầm vợt di chuyển đơn bước",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=63",
+        "range": [
+          62,
+          68
+        ]
       },
-      "scoring": null,
-      "id": "g6-chay-bien-toc",
+      "scoring": null
+    },
+    {
+      "id": "g6-cau-long-thap-tay",
       "grade": 6,
-      "chapter": "g6-c2",
+      "chapter": "g6-tc1",
       "order": 2,
-      "title": "Chạy biến tốc 30 m",
-      "topic": "Chạy cự li ngắn",
-      "keywords": "chay bien toc 30m chay nhanh tang toc",
+      "title": "Kĩ thuật đánh cầu thấp tay bên phải, bên trái",
+      "topic": "Cầu lông",
+      "keywords": "cau long danh cau thap tay ben phai ben trai luat san cau long",
       "steps": [
-        "Xuất phát cao, chạy chậm 10 m đầu.",
-        "Tăng tốc dần trong 10 m tiếp theo.",
-        "Chạy nhanh nhất ở 10 m cuối, giữ thăng bằng.",
-        "Đi bộ thả lỏng sau khi về đích."
+        "TTCB: hai chân rộng bằng vai, gối khuỵu, vợt phía trước.",
+        "Chân phải bước chếch về hướng cầu rơi, đưa vợt ra sau lên cao.",
+        "Đánh cầu từ trên xuống dưới ra trước, chạm cầu ngang tầm đầu gối.",
+        "Bên trái làm tương tự, đưa vợt sang trái. Đánh xong thu vợt về TTCB."
       ],
       "commonErrors": [
-        "Tăng tốc quá sớm.",
-        "Đánh tay ngang thân.",
-        "Dừng đột ngột ở vạch đích."
+        "Không bước chân về hướng cầu.",
+        "Chạm cầu quá sát người."
       ],
       "summary": [
-        "Chậm – nhanh dần – nhanh nhất.",
-        "Đánh tay trước – sau.",
-        "Chạy qua vạch đích rồi mới giảm tốc."
+        "Sân dài 13,40 m; lưới cao 1,55 m.",
+        "Vợt chạm cầu trước chân phải.",
+        "Đánh xong về TTCB."
       ],
-      "youtubeSearch": "chạy biến tốc 30m lớp 6"
-    },
-    {
-      "demo": true,
       "related": [
-        "g6-tang-bong"
+        "g6-cau-long-bo-tro",
+        "g6-cau-long-phat-cau"
       ],
       "youtube": [],
+      "youtubeSearch": "kĩ thuật đánh cầu thấp tay cầu lông lớp 6",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=69",
+        "range": [
+          68,
+          72
+        ]
       },
-      "scoring": null,
+      "scoring": null
+    },
+    {
+      "id": "g6-cau-long-phat-cau",
+      "grade": 6,
+      "chapter": "g6-tc1",
+      "order": 3,
+      "title": "Kĩ thuật phát cầu trái tay",
+      "topic": "Cầu lông",
+      "keywords": "cau long phat cau trai tay luat phat cau o giao cau",
+      "steps": [
+        "TTCB: chân phải trước, chân trái sau kiễng gót; tay trái cầm cầu.",
+        "Đầu vợt chếch xuống, mặt vợt phía sau quả cầu.",
+        "Tay trái thả cầu, tay phải đưa nhanh vợt từ sau ra trước đánh cầu.",
+        "Điểm chạm cầu không cao quá thắt lưng; đánh xong về TTCB."
+      ],
+      "commonErrors": [
+        "Chạm cầu cao hơn thắt lưng.",
+        "Chân giẫm vạch ô giao cầu."
+      ],
+      "summary": [
+        "Phát và nhận cầu đứng chéo nhau.",
+        "Không chạm vạch giới hạn.",
+        "Bên thắng phát cầu trước ở hiệp sau."
+      ],
+      "related": [
+        "g6-cau-long-bo-tro",
+        "g6-cau-long-thap-tay"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật phát cầu trái tay cầu lông lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=74",
+        "range": [
+          73,
+          76
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-bong-da-bo-tro",
+      "grade": 6,
+      "chapter": "g6-tc2",
+      "order": 1,
+      "title": "Bài tập bổ trợ trong bóng đá",
+      "topic": "Bóng đá",
+      "keywords": "bong da chay da lang cang chan bat cao chay tien lui dich dac bo tro",
+      "steps": [
+        "Chạy đá lăng cẳng chân ra trước, sang hai bên, vào trong.",
+        "Tại chỗ bật cao bằng hai chân: đánh tay từ sau ra trước, tiếp đất bằng nửa trước bàn chân.",
+        "Chạy tiến rồi lùi theo vạch giới hạn, hạ thấp trọng tâm khi lùi.",
+        "Chạy chuyển hướng dích dắc, giảm tốc khi đổi hướng."
+      ],
+      "commonErrors": [
+        "Tiếp đất thẳng gối khi bật cao.",
+        "Không hạ trọng tâm khi đổi hướng."
+      ],
+      "summary": [
+        "Khởi động kĩ trước khi chơi bóng.",
+        "Gối khuỵu khi tiếp đất.",
+        "Đổi hướng: giảm tốc, hạ trọng tâm."
+      ],
+      "related": [
+        "g6-da-bong-long-ban-chan",
+        "g6-dung-bong"
+      ],
+      "youtube": [],
+      "youtubeSearch": "bài tập bổ trợ bóng đá lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=78",
+        "range": [
+          77,
+          81
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-da-bong-long-ban-chan",
+      "grade": 6,
+      "chapter": "g6-tc2",
+      "order": 2,
+      "title": "Kĩ thuật đá bóng bằng lòng bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "da bong long ban chan chuyen bong chan tru bong so 4 luat bong da 7 nguoi",
+      "steps": [
+        "TTCB: chân trụ đặt ngang bóng, cách bóng khoảng 10 cm.",
+        "Chân thuận đặt sau, trọng lượng dồn đều hai chân.",
+        "Dồn trọng tâm lên chân trụ, đưa chân thuận từ sau ra trước, đá bằng lòng bàn chân vào phía sau bóng.",
+        "Tập phối hợp một bước và ba bước đà rồi đá."
+      ],
+      "commonErrors": [
+        "Chân trụ đặt quá xa bóng.",
+        "Đá bằng mũi chân thay vì lòng bàn chân."
+      ],
+      "summary": [
+        "Chân trụ cách bóng 10 cm.",
+        "Lòng bàn chân chạm phía sau bóng.",
+        "Thiếu niên dùng bóng số 4."
+      ],
+      "related": [
+        "g6-bong-da-bo-tro",
+        "g6-dung-bong"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật đá bóng bằng lòng bàn chân lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=83",
+        "range": [
+          82,
+          85
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-dung-bong",
+      "grade": 6,
+      "chapter": "g6-tc2",
+      "order": 3,
+      "title": "Kĩ thuật dừng bóng bằng lòng bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "dung bong long ban chan don bong bong da 7 nguoi",
+      "steps": [
+        "TTCB: đứng chân trước chân sau, thân hướng về phía bóng đến.",
+        "Đưa lòng bàn chân thuận ra trước đón bóng.",
+        "Khi chạm bóng, đưa nhanh chân ra sau để giảm tốc độ bóng.",
+        "Thân trên hơi xoay về phía chân dừng bóng rồi hạ chân giữ bóng."
+      ],
+      "commonErrors": [
+        "Để chân cứng, bóng bật ra xa.",
+        "Không nhìn bóng khi đón."
+      ],
+      "summary": [
+        "Đón bóng – thu chân – dừng bóng.",
+        "Mỗi đội tối đa 7 người, có 1 thủ môn.",
+        "Tập đá nhẹ vào tường rồi dừng bóng."
+      ],
+      "related": [
+        "g6-bong-da-bo-tro",
+        "g6-da-bong-long-ban-chan"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật dừng bóng bằng lòng bàn chân lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=87",
+        "range": [
+          86,
+          89
+        ]
+      },
+      "scoring": null
+    },
+    {
       "id": "g6-dan-bong",
       "grade": 6,
-      "chapter": "g6-c3",
-      "order": 1,
-      "title": "Dẫn bóng bằng lòng bàn chân",
+      "chapter": "g6-tc2",
+      "order": 4,
+      "title": "Kĩ thuật dẫn bóng bằng lòng bàn chân",
       "topic": "Bóng đá",
-      "keywords": "dan bong long ban chan bong da",
+      "keywords": "dan bong long ban chan bong da dan bong luon coc",
       "steps": [
-        "Đặt bóng phía trước, chân trụ cạnh bóng.",
-        "Dùng lòng bàn chân đẩy nhẹ bóng về trước.",
-        "Bước theo bóng, giữ bóng cách chân khoảng 1 bước.",
-        "Đổi chân thuận và không thuận để luyện cả hai."
+        "TTCB: chân trụ đặt ngang bóng, cách 10 cm; chân dẫn bóng đặt sau.",
+        "Hai tay co tự nhiên, mắt nhìn bóng.",
+        "Xoay bàn chân sang ngang, đá nhẹ vào phía sau bóng để bóng lăn 0,5 – 1 m.",
+        "Lặp lại và di chuyển theo bóng."
       ],
       "commonErrors": [
-        "Đẩy bóng quá mạnh, mất kiểm soát.",
-        "Nhìn chằm chằm xuống bóng.",
-        "Chân trụ đặt quá xa bóng."
+        "Đá bóng đi quá xa, mất kiểm soát.",
+        "Chỉ nhìn bóng, không quan sát xung quanh."
       ],
       "summary": [
-        "Chạm bóng nhẹ, đều nhịp.",
-        "Bóng luôn gần chân.",
-        "Ngẩng đầu quan sát."
+        "Chạm bóng nhẹ, bóng lăn 0,5 – 1 m.",
+        "Luôn giữ bóng gần chân.",
+        "Tập từ chậm đến nhanh."
       ],
-      "youtubeSearch": "dẫn bóng bằng lòng bàn chân bóng đá học sinh"
-    },
-    {
-      "demo": true,
       "related": [
-        "g6-dan-bong"
+        "g6-bong-da-bo-tro",
+        "g6-da-bong-long-ban-chan"
       ],
       "youtube": [],
+      "youtubeSearch": "kĩ thuật dẫn bóng bằng lòng bàn chân lớp 6",
       "book": {
-        "series": null,
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
         "pages": [],
-        "url": null
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=91",
+        "range": [
+          90,
+          92
+        ]
       },
-      "scoring": null,
-      "id": "g6-tang-bong",
+      "scoring": null
+    },
+    {
+      "id": "g6-bong-ro-bo-tro",
       "grade": 6,
-      "chapter": "g6-c3",
-      "order": 2,
-      "title": "Tâng bóng bằng mu bàn chân",
-      "topic": "Bóng đá",
-      "keywords": "tang bong mu ban chan bong da",
+      "chapter": "g6-tc3",
+      "order": 1,
+      "title": "Bài tập bổ trợ với bóng và kĩ thuật di chuyển",
+      "topic": "Bóng rổ",
+      "keywords": "bong ro tung bat bong chuyen bong quanh than lan bong dap bong buoc truot ngang",
       "steps": [
-        "Thả bóng từ tay xuống trước mặt.",
-        "Duỗi mũi chân, dùng mu bàn chân chạm nhẹ vào giữa bóng.",
-        "Bóng bật lên ngang hông là vừa.",
-        "Đếm số lần tâng liên tục."
+        "Tung bóng cao 1 – 1,5 m và bắt bằng hai tay trên đầu.",
+        "Chuyển bóng quanh thân, lăn bóng giữa hai chân, chuyển bóng vòng quanh chân.",
+        "Đập bóng xuống sân rồi bắt bóng nảy lên bằng hai tay.",
+        "Bước trượt ngang: gối khuỵu, thân ngả trước, bàn chân lướt trên mặt sân sang phải, sang trái."
       ],
       "commonErrors": [
-        "Chạm bóng bằng mũi chân.",
-        "Đá quá mạnh, bóng bay xa.",
-        "Đứng cứng gối."
+        "Đứng thẳng gối khi di chuyển.",
+        "Bắt bóng bằng lòng bàn tay, không dùng ngón."
       ],
       "summary": [
-        "Duỗi mũi chân, chạm giữa bóng.",
-        "Lực nhẹ, bóng cao ngang hông.",
-        "Gối chân trụ hơi khuỵu."
+        "Làm quen với bóng trước khi học kĩ thuật.",
+        "Bước trượt: chân lướt, không bắt chéo.",
+        "Tập từ chậm đến nhanh."
       ],
-      "youtubeSearch": "tâng bóng bằng mu bàn chân hướng dẫn"
+      "related": [
+        "g6-dan-bong-ro",
+        "g6-chuyen-bat-bong-ro"
+      ],
+      "youtube": [],
+      "youtubeSearch": "bài tập bổ trợ bóng rổ bước trượt ngang lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=94",
+        "range": [
+          93,
+          97
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-dan-bong-ro",
+      "grade": 6,
+      "chapter": "g6-tc3",
+      "order": 2,
+      "title": "Kĩ thuật dẫn bóng",
+      "topic": "Bóng rổ",
+      "keywords": "dan bong ro tai cho duong thang dap bong",
+      "steps": [
+        "Dẫn bóng tại chỗ: dùng cẳng tay, bàn tay, ngón tay đập bóng thẳng xuống sân.",
+        "Bóng nảy lên ngang thắt lưng; lòng bàn tay không chạm bóng.",
+        "Dẫn bóng đường thẳng: tay chạm phía trên, hơi chếch sau bóng.",
+        "Bóng chạm sân phía trước bên cùng tay dẫn, hai chân bước luân phiên."
+      ],
+      "commonErrors": [
+        "Đập bóng bằng lòng bàn tay.",
+        "Nhìn chằm chằm vào bóng."
+      ],
+      "summary": [
+        "Dẫn bằng ngón tay, không bằng lòng bàn tay.",
+        "Bóng nảy ngang thắt lưng.",
+        "Tập cả tay thuận và không thuận."
+      ],
+      "related": [
+        "g6-bong-ro-bo-tro",
+        "g6-chuyen-bat-bong-ro"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật dẫn bóng rổ lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=99",
+        "range": [
+          98,
+          100
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-chuyen-bat-bong-ro",
+      "grade": 6,
+      "chapter": "g6-tc3",
+      "order": 3,
+      "title": "Kĩ thuật chuyền và bắt bóng hai tay trước ngực",
+      "topic": "Bóng rổ",
+      "keywords": "chuyen bong bat bong hai tay truoc nguc bong ro san bong ro",
+      "steps": [
+        "TTCB: chân trước chân sau, gối hơi khuỵu, hai tay ôm bóng trước bụng, khuỷu sát thân.",
+        "Chuyền: đạp chân, vươn người, đưa bóng theo vòng cung rồi duỗi nhanh hai tay đẩy bóng.",
+        "Bóng rời tay: tay duỗi thẳng, lòng bàn tay hướng ra ngoài.",
+        "Bắt: đưa tay ra đón, bắt bằng ngón tay rồi thu nhanh về trước ngực."
+      ],
+      "commonErrors": [
+        "Chuyền chỉ bằng sức tay, không đạp chân.",
+        "Bắt bóng tay cứng, bóng bật ra."
+      ],
+      "summary": [
+        "Sân bóng rổ dài 28 m, rộng 15 m.",
+        "Chuyền: duỗi tay, lật cổ tay.",
+        "Bắt: đón bóng rồi thu tay về."
+      ],
+      "related": [
+        "g6-bong-ro-bo-tro",
+        "g6-dan-bong-ro"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật chuyền bắt bóng hai tay trước ngực bóng rổ lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=102",
+        "range": [
+          101,
+          105
+        ]
+      },
+      "scoring": null
+    },
+    {
+      "id": "g6-nem-ro",
+      "grade": 6,
+      "chapter": "g6-tc3",
+      "order": 4,
+      "title": "Kĩ thuật tại chỗ ném rổ một tay trên vai",
+      "topic": "Bóng rổ",
+      "keywords": "nem ro mot tay tren vai bong ro tai cho",
+      "steps": [
+        "TTCB: chân cùng bên tay ném đặt trước, hai tay cầm bóng trước ngực, mắt nhìn rổ.",
+        "Đưa bóng lên trên vai: bàn tay ném đỡ dưới bóng, khuỷu hướng về rổ.",
+        "Tay kia đỡ bên thân bóng.",
+        "Khuỵu gối, đạp mạnh, vươn người và tay ném lên cao ra trước; bóng rời tay qua ngón trỏ, ngón giữa."
+      ],
+      "commonErrors": [
+        "Khuỷu tay chĩa ra ngoài.",
+        "Ném bằng hai tay đẩy bóng.",
+        "Không phối hợp đạp chân."
+      ],
+      "summary": [
+        "Khuỷu tay hướng về rổ.",
+        "Đạp chân – vươn người – miết ngón tay.",
+        "Mắt luôn nhìn rổ."
+      ],
+      "related": [
+        "g6-bong-ro-bo-tro",
+        "g6-dan-bong-ro"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật ném rổ một tay trên vai lớp 6",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "pages": [],
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=107",
+        "range": [
+          106,
+          110
+        ]
+      },
+      "scoring": null
     },
     {
       "demo": true,
