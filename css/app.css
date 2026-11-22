@@ -245,7 +245,7 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 .tab-dot { position: absolute; top: 6px; right: calc(50% - 22px); width: 8px; height: 8px; border-radius: 50%; background: #e0a100; }
 @media (min-width: 760px) { .tab-dot { position: static; } }
 @media (max-width: 759px) { [role="tab"] { font-size: .85rem; } }
-.sheet__body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); }
+.sheet__body { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); }
 .panel:focus-visible { outline-offset: 4px; }
 .panel > h3:first-child, .panel > .notice:first-child + h3 { margin-top: 0; }
 .steps { padding: 0; margin: 0; list-style: none; counter-reset: s; }
@@ -273,7 +273,7 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 @media (max-width: 759px) {
   html { font-size: 93.75%; } /* 1rem = 15px */
   dialog.sheet { height: 96dvh; max-height: 96dvh; }
-  .sheet__inner { display: block; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .sheet__inner { display: block; overflow-y: auto; scrollbar-gutter: stable; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
   .sheet__head { position: static; padding: 4px 12px 10px; border-bottom: 0; }
   .sheet__grip { margin: 2px auto 6px; }
   .sheet__close { position: absolute; top: 8px; right: 8px; z-index: 5; width: 44px; height: 44px; min-height: 44px; padding: 0;
@@ -421,7 +421,8 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 
 /* Máy tính: hộp thoại rộng hơn, camera bên trái – bảng điểm luôn mở bên phải */
 @media (min-width: 1000px) {
-  dialog.sheet.sheet--practice { width: min(1320px, calc(100vw - 48px)); height: min(94vh, 1040px); max-height: 94vh; }
+  /* Mọi tab dùng chung một cỡ (theo tab Tự tập) để chuyển tab không bị nhảy khung */
+  dialog.sheet { width: min(1320px, calc(100vw - 48px)); height: min(94vh, 1040px); max-height: 94vh; }
   .practice.is-live { max-width: none; }
   .practice.is-live .live-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
   .practice.is-live .stage { margin: 0; justify-self: center; max-width: calc((94vh - 240px) * var(--ar, 1.3333)); }

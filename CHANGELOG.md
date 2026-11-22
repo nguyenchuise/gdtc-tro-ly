@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1] - 2026-11-22: Cửa sổ bài tập không nhảy khi chuyển tab
+
+### Sửa
+- Máy tính: 4 tab Hướng dẫn / Video / Sách / Tự tập dùng **chung một cỡ cửa sổ** (theo tab Tự tập),
+  luôn chừa chỗ thanh cuộn → chuyển tab không còn bị giật khung.
+- Link "Mở sách trang …" lớp 6: `#page=` là số trang in (trình đọc của NXB đếm từ 0 = bìa).
+
 ## [0.8.0] - 2026-11-22: Giao diện điện thoại gọn hơn, đổi camera trước/sau
 
 ### Thay đổi

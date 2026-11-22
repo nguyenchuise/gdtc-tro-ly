@@ -100,8 +100,6 @@ export function mountPractice(root, ex) {
       <p class="fine-print">Điểm chỉ để em tự luyện, không thay thầy cô chấm. Hình ảnh không lưu, không gửi đi.</p>
     </div>`;
 
-  const sheet = root.closest('dialog');
-  sheet?.classList.add('sheet--practice');
   const $ = (s) => root.querySelector(s);
   const stage = $('.stage'), video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d');
   const labelsBox = $('.float-labels'), status = $('.status'), board = $('.scoreboard');
@@ -500,7 +498,7 @@ export function mountPractice(root, ex) {
   document.addEventListener('visibilitychange', onHidden);
   renderResults();
 
-  return () => { stop(); sheet?.classList.remove('sheet--practice'); document.removeEventListener('visibilitychange', onHidden); };
+  return () => { stop(); document.removeEventListener('visibilitychange', onHidden); };
 }
 
 function drawSkeleton(g, lm, w, h, parts, repInfo) {
