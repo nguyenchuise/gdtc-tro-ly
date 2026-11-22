@@ -56,7 +56,8 @@ const data = JSON.parse(readFileSync(new URL('../data/exercises.json', import.me
 const chapterNo = new Map(data.curriculum.flatMap((g) => g.parts.flatMap((p) => p.chapters.map((c) => [c.id, leadingNumber(c.title)]))));
 const ex = data.exercises.map((e) => ({ ...e, _chapterNo: chapterNo.get(e.chapter), _chapterTitle: '', _partTitle: '' }));
 buildIndex(ex);
-assert.deepEqual(search(ex, 'squat').results.map((e) => e.id), ['g8-squat']);
+assert.ok(search(ex, 'nhảy cao').results.slice(0, 3).every((e) => e.chapter === 'g8-c2'));
+assert.equal(search(ex, 'đập cầu').results[0].grade, 8);
 assert.deepEqual(search(ex, 'hướng dẫn dang tay').results[0].id, 'g6-dang-tay');
 // Lớp 6 theo SGK: Chủ đề 2 Ném bóng (3 bài) + Chủ đề 2 Bóng đá ở phần tự chọn (4 bài)
 assert.equal(search(ex, 'chủ đề 2 lớp 6').results.length, 7);

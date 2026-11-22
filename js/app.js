@@ -111,7 +111,7 @@ function renderResults({ openSingle = false } = {}) {
   if (!results.length) {
     summary.textContent = 'Không tìm thấy bài nào.';
     box.innerHTML = `<div class="empty"><p><strong>Chưa thấy bài “${esc(state.q)}”.</strong></p>
-      <p>Thử từ ngắn hơn, ví dụ “squat”, “chạy”, “bóng rổ”.</p>
+      <p>Thử từ ngắn hơn, ví dụ “nhảy cao”, “chạy”, “bóng rổ”.</p>
       <button type="button" class="btn btn--ghost" data-clear>Xoá tìm kiếm</button></div>`;
     return;
   }

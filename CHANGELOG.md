@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.0] - 2026-11-22: Lớp 8 theo sách giáo khoa
+
+### Thay đổi
+- **Lớp 8 dựng lại theo SGK Giáo dục thể chất 8 – Kết nối tri thức với cuộc sống:** 3 phần, 8 chủ đề, 22 bài.
+  - Phần 1. Kiến thức chung: Sử dụng chế độ dinh dưỡng thích hợp với bản thân trong luyện tập TDTT.
+  - Phần 2. Vận động cơ bản: Chạy cự li ngắn (100 m), Nhảy cao kiểu bước qua, Chạy cự li trung bình, Bài tập thể dục (nhịp điệu).
+  - Phần 3. Thể thao tự chọn: Cầu lông, Bóng đá, Bóng rổ.
+- **Tự tập camera cho 21/22 bài** (mọi bài vận động); góc mục tiêu ước lượng từ hình minh hoạ.
+- Ảnh xem trước các trang và link sách gốc (sách lớp 8: số trang in = số ảnh, trình đọc NXB đếm từ 0).
+- Gợi ý tìm kiếm "Squat" (bài mẫu cũ, đã bỏ) đổi thành "Nhảy cao".
+
 ## [0.9.0] - 2026-11-22: Lớp 7 theo sách giáo khoa
 
 ### Thay đổi
