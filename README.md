@@ -6,7 +6,7 @@ Website tĩnh giúp học sinh THCS (lớp 6–9) hỏi bài Giáo dục thể c
 - **AI chạy trên máy học sinh** (MediaPipe Pose, tự host trong `mp/`) → 50 em dùng cùng lúc không tốn gì thêm.
 - **Không thu thập dữ liệu**: không đăng nhập, không lưu và không gửi video đi đâu.
 
-> ⚠️ Bản demo: 24 bài trong `data/exercises.json` là **mẫu tự viết, chưa đối chiếu SGK**. Cấu trúc Phần/Chủ đề là cấu trúc mẫu, cần đối chiếu mục lục sách giáo khoa. Chưa có mã video YouTube và ảnh trang sách nào: giao diện hiện “cửa sổ chờ”.
+> Nội dung: **89 bài lớp 6 – 9 theo SGK Giáo dục thể chất – Kết nối tri thức với cuộc sống** (NXB Giáo dục Việt Nam). Phần, chủ đề, bài đúng mục lục sách; tóm tắt viết lại ngắn gọn (không chép nguyên văn); ảnh trang sách hiển thị trực tiếp từ sách điện tử của NXB (không lưu trong repo). Mọi bài vận động có Tự tập với camera; góc chấm là **ước lượng từ hình minh hoạ**, cần chỉnh dần theo thực tế. Chưa có mã video YouTube: tab Video hiện “cửa sổ chờ”.
 
 ---
 
@@ -56,7 +56,7 @@ Mở `…/gdtc-tro-ly/#giao-vien`, nhập mã:
 Mỗi chỗ trống trên trang học sinh (“cửa sổ chờ”) đều có link **“Thầy cô: cập nhật nội dung này →”** dẫn thẳng tới trình soạn của đúng bài đó.
 
 ### Cách 2: Kéo thả ảnh vào đúng thư mục (tự ánh xạ, không cần token)
-Trên GitHub, mở `media/sach/` → **Add file → Upload files**, gõ tên thư mục là mã bài, ví dụ `media/sach/g8-squat/`, rồi thả ảnh `trang-24.jpg`, `trang-25.jpg`. Khi deploy, `tools/build-media-manifest.mjs` quét thư mục và sinh `data/media.json` → ảnh **tự hiện** ở tab “Sách giáo khoa” của bài, sắp theo số trang trong tên tệp. Không cần sửa JSON.
+Trên GitHub, mở `media/sach/` → **Add file → Upload files**, gõ tên thư mục là mã bài, ví dụ `media/sach/g8-xuat-phat-thap/`, rồi thả ảnh `trang-24.jpg`, `trang-25.jpg`. Khi deploy, `tools/build-media-manifest.mjs` quét thư mục và sinh `data/media.json` → ảnh **tự hiện** ở tab “Sách giáo khoa” của bài, sắp theo số trang trong tên tệp. Không cần sửa JSON.
 
 ### Cách 3: Sửa trực tiếp `data/exercises.json` trên GitHub
 Mở tệp → biểu tượng ✏️ → sửa → **Commit changes**. Trước khi deploy, workflow chạy `tools/validate-data.mjs`: nếu JSON sai (thiếu dấu phẩy, mã video không đủ 11 ký tự, ảnh không tồn tại…) workflow **dừng và báo lỗi bằng tiếng Việt**, còn trang cũ vẫn chạy bình thường.
@@ -109,7 +109,7 @@ Dạng cũ `"book": { "page": 12, "image": "..." }` vẫn được hỗ trợ.
 
 Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai · 13/14 khuỷu · 15/16 cổ tay · 23/24 hông · 25/26 gối · 27/28 cổ chân.
 
-> Các góc mục tiêu trong bản demo là ước lượng. Nên để thầy cô làm mẫu, xem bảng “Đo được” trên tab Tự tập, rồi chỉnh `target` cho khớp thực tế (Phase 2 sẽ tự động hoá việc này).
+> Các góc mục tiêu hiện là ước lượng từ hình trong sách. Nên để thầy cô làm mẫu, xem bảng “Đo được” trên tab Tự tập, rồi chỉnh `target` cho khớp thực tế (Phase 2 sẽ tự động hoá việc này).
 
 ## 4. Tự tập và chấm điểm (học sinh)
 
@@ -153,7 +153,7 @@ tools/                Sinh media.json, kiểm tra dữ liệu, test chấm đi�
 .github/workflows/pages.yml   Deploy GitHub Pages
 ```
 
-Đường dẫn trực tiếp: `#bai/g8-squat` (Hướng dẫn), `#bai/g8-squat/video`, `#bai/g8-squat/sach`, `#bai/g8-squat/tu-tap`, `#giao-vien/g8-squat`. Thầy cô có thể dán link này vào nhóm lớp.
+Đường dẫn trực tiếp: `#bai/g8-xuat-phat-thap` (Hướng dẫn), `#bai/g8-xuat-phat-thap/video`, `#bai/g8-xuat-phat-thap/sach`, `#bai/g8-xuat-phat-thap/tu-tap`, `#giao-vien/g8-xuat-phat-thap`. Thầy cô có thể dán link này vào nhóm lớp.
 
 ## 7. Quyền riêng tư
 

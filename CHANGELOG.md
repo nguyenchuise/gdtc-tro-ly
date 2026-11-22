@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.11.0] - 2026-11-22: Lớp 9 theo sách giáo khoa – đủ 4 khối
+
+### Thay đổi
+- **Lớp 9 dựng lại theo SGK Giáo dục thể chất 9 – Kết nối tri thức với cuộc sống:** 3 phần, 8 chủ đề, 19 bài.
+  - Phần 1. Kiến thức chung: Sử dụng các yếu tố tự nhiên và dinh dưỡng để rèn luyện sức khoẻ, phát triển thể chất.
+  - Phần 2. Vận động cơ bản: Chạy cự li ngắn (100 m), Nhảy cao kiểu nằm nghiêng, Chạy cự li trung bình, Bài tập thể dục (nhịp điệu).
+  - Phần 3. Thể thao tự chọn: Cầu lông, Bóng đá, Bóng rổ.
+- **Tự tập camera cho 18/19 bài**; ảnh xem trước các trang (sách lớp 9: số ảnh = trang in + 2) và link sách gốc.
+- Toàn bộ 89 bài lớp 6 – 9 đã theo SGK; không còn bài mẫu demo. README cập nhật.
+
 ## [0.10.0] - 2026-11-22: Lớp 8 theo sách giáo khoa
 
 ### Thay đổi

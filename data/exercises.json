@@ -1,5 +1,5 @@
 {
-  "_ghiChu": "Lớp 6, 7, 8: theo SGK Giáo dục thể chất – Kết nối tri thức với cuộc sống (tóm tắt, viết lại ngắn gọn; không chép nguyên văn; góc chấm điểm là ước lượng). Lớp 9: nội dung MẪU DEMO, chưa đối chiếu SGK.",
+  "_ghiChu": "Lớp 6 – 9: theo SGK Giáo dục thể chất – Kết nối tri thức với cuộc sống (tóm tắt, viết lại ngắn gọn; không chép nguyên văn; góc chấm điểm là ước lượng từ hình minh hoạ).",
   "schemaVersion": 1,
   "bookSeries": null,
   "curriculum": [
@@ -173,28 +173,55 @@
     },
     {
       "grade": 9,
+      "source": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
       "parts": [
         {
           "id": "g9-p1",
-          "title": "Phần 1. Vận động cơ bản",
+          "title": "Phần 1. Kiến thức chung",
           "chapters": [
             {
-              "id": "g9-c1",
-              "title": "Chủ đề 1. Bài tập thể lực"
-            },
-            {
-              "id": "g9-c2",
-              "title": "Chủ đề 2. Chạy cự li ngắn"
+              "id": "g9-kt",
+              "title": "Chủ đề: Sử dụng các yếu tố tự nhiên và dinh dưỡng để rèn luyện sức khoẻ, phát triển thể chất"
             }
           ]
         },
         {
           "id": "g9-p2",
-          "title": "Phần 2. Thể thao tự chọn",
+          "title": "Phần 2. Vận động cơ bản",
           "chapters": [
             {
+              "id": "g9-c1",
+              "title": "Chủ đề 1. Chạy cự li ngắn (100 m)"
+            },
+            {
+              "id": "g9-c2",
+              "title": "Chủ đề 2. Nhảy cao kiểu nằm nghiêng"
+            },
+            {
               "id": "g9-c3",
-              "title": "Chủ đề 3. Cầu lông"
+              "title": "Chủ đề 3. Chạy cự li trung bình"
+            },
+            {
+              "id": "g9-c4",
+              "title": "Chủ đề 4. Bài tập thể dục"
+            }
+          ]
+        },
+        {
+          "id": "g9-p3",
+          "title": "Phần 3. Thể thao tự chọn",
+          "chapters": [
+            {
+              "id": "g9-tc1",
+              "title": "Chủ đề 1. Cầu lông"
+            },
+            {
+              "id": "g9-tc2",
+              "title": "Chủ đề 2. Bóng đá"
+            },
+            {
+              "id": "g9-tc3",
+              "title": "Chủ đề 3. Bóng rổ"
             }
           ]
         }
@@ -8160,120 +8187,154 @@
       }
     },
     {
-      "demo": true,
-      "related": [
-        "g9-gap-than"
+      "id": "g9-tu-nhien-dinh-duong",
+      "grade": 9,
+      "chapter": "g9-kt",
+      "order": 1,
+      "title": "Sử dụng các yếu tố tự nhiên và dinh dưỡng để rèn luyện sức khoẻ, phát triển thể chất",
+      "topic": "Yếu tố tự nhiên và dinh dưỡng",
+      "keywords": "tam khong khi tam nuoc lanh tam nang dia hinh tu nhien dinh duong suc nhanh suc ben suc manh",
+      "steps": [
+        "Tắm không khí: sáng sớm, mỗi ngày một lần, 15 – 30 phút; thở đều và sâu.",
+        "Tắm nước lạnh: giảm nhiệt độ nước dần; lần đầu 1 – 2 phút, tăng dần 5 – 10 phút. Không tắm ngay sau khi vận động.",
+        "Tắm nắng: mùa hè 6 giờ 30 – 7 giờ 30, mùa đông 7 – 9 giờ; bắt đầu 5 – 10 phút, che mặt, đeo kính, uống đủ nước.",
+        "Môi trường nước và địa hình (dốc, đồi, núi) giúp phát triển sức nhanh, sức mạnh, sức bền.",
+        "Dinh dưỡng theo mục tiêu: sức nhanh cần nhiều carbohydrate; sức bền thêm chất béo; sức mạnh cần nhiều protein."
       ],
+      "commonErrors": [
+        "Phun nước lạnh đột ngột lên người.",
+        "Tập ở nơi nước sâu, không có người lớn.",
+        "Tắm nắng giữa trưa."
+      ],
+      "summary": [
+        "Không khí – nước – ánh nắng đều rèn được sức khoẻ.",
+        "Tăng dần thời gian, theo dõi sức khoẻ.",
+        "Ăn uống theo loại hình luyện tập."
+      ],
+      "related": [],
       "youtube": [],
+      "youtubeSearch": "sử dụng yếu tố tự nhiên và dinh dưỡng rèn luyện sức khoẻ lớp 9",
       "book": {
-        "series": null,
-        "pages": [],
-        "url": null
-      },
-      "scoring": {
-        "mode": "hold",
-        "holdSeconds": 5,
-        "camera": "side",
-        "rules": [
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=5",
+        "range": [
+          4,
+          10
+        ],
+        "remote": true,
+        "pages": [
           {
-            "label": "Thân thẳng (vai – hông – cổ chân)",
-            "oneOf": [
-              [
-                11,
-                23,
-                27
-              ],
-              [
-                12,
-                24,
-                28
-              ]
-            ],
-            "target": 178,
-            "tolerance": 10,
-            "range": 30
+            "page": 4,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-6-1775793528894.png",
+            "caption": ""
           },
           {
-            "label": "Khuỷu tay vuông góc",
-            "oneOf": [
-              [
-                11,
-                13,
-                15
-              ],
-              [
-                12,
-                14,
-                16
-              ]
-            ],
-            "target": 90,
-            "tolerance": 15,
-            "range": 40
+            "page": 5,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-7-1775793529189.png",
+            "caption": ""
+          },
+          {
+            "page": 6,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-8-1775793529450.png",
+            "caption": ""
+          },
+          {
+            "page": 7,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-9-1775793529733.png",
+            "caption": ""
+          },
+          {
+            "page": 8,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-10-1775793529977.png",
+            "caption": ""
+          },
+          {
+            "page": 9,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-11-1775793530236.png",
+            "caption": ""
+          },
+          {
+            "page": 10,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-12-1775793530488.png",
+            "caption": ""
           }
         ]
       },
-      "id": "g9-plank",
+      "scoring": null
+    },
+    {
+      "id": "g9-xuat-phat-thap",
       "grade": 9,
       "chapter": "g9-c1",
       "order": 1,
-      "title": "Plank chống cẳng tay",
-      "topic": "Thể lực",
-      "keywords": "plank chong cang tay co bung the luc",
+      "title": "Củng cố kĩ thuật xuất phát thấp và chạy lao sau xuất phát",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "cung co xuat phat thap chay lao luat quan ao giay so deo",
       "steps": [
-        "Nằm sấp, chống hai cẳng tay xuống đất, khuỷu tay dưới vai.",
-        "Nâng người lên, chỉ mũi chân và cẳng tay chạm đất.",
-        "Giữ vai – hông – cổ chân thành một đường thẳng.",
-        "Giữ 5 giây (tăng dần), thở đều."
+        "Nâng tốc độ phản ứng với hiệu lệnh xuất phát.",
+        "Chú ý tư thế chân, thân người và phối hợp tay – chân khi có hiệu lệnh.",
+        "Chạy lao: phát huy sức đạp sau, giữ góc ngả thân, tăng độ dài bước.",
+        "Đạt tốc độ cao nhất ở cuối giai đoạn chạy lao."
       ],
       "commonErrors": [
-        "Võng hông xuống.",
-        "Đẩy mông lên cao.",
-        "Nín thở."
+        "Phản ứng chậm với hiệu lệnh.",
+        "Đứng thẳng người quá sớm khi chạy lao."
       ],
       "summary": [
-        "Vai – hông – chân thẳng hàng.",
-        "Khuỷu tay dưới vai, 90°.",
-        "Thở đều."
+        "Mỗi vận động viên đeo hai số trước ngực và sau lưng.",
+        "Không được cắt, gấp số đeo.",
+        "Tập xuất phát theo nhiều hiệu lệnh."
       ],
-      "youtubeSearch": "hướng dẫn plank đúng kỹ thuật"
-    },
-    {
-      "demo": true,
       "related": [
-        "g9-plank"
+        "g9-giua-quang-ve-dich"
       ],
       "youtube": [],
+      "youtubeSearch": "củng cố xuất phát thấp chạy lao 100m lớp 9",
       "book": {
-        "series": null,
-        "pages": [],
-        "url": null
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=12",
+        "range": [
+          11,
+          15
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 11,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-13-1775793530852.png",
+            "caption": ""
+          },
+          {
+            "page": 12,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-14-1775793531095.png",
+            "caption": ""
+          },
+          {
+            "page": 13,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-15-1775793531361.png",
+            "caption": ""
+          },
+          {
+            "page": 14,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-16-1775793531618.png",
+            "caption": ""
+          },
+          {
+            "page": 15,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-17-1775793531905.png",
+            "caption": ""
+          }
+        ]
       },
       "scoring": {
         "mode": "hold",
-        "holdSeconds": 3,
+        "holdSeconds": 2,
         "camera": "side",
+        "pose": "Tư thế “Sẵn sàng”: hông nâng ngang vai, gối chân trước gập, hai tay chống thẳng.",
+        "estimated": true,
         "rules": [
           {
-            "label": "Gập thân sâu (vai – hông – gối)",
-            "oneOf": [
-              [
-                11,
-                23,
-                25
-              ],
-              [
-                12,
-                24,
-                26
-              ]
-            ],
-            "target": 50,
-            "tolerance": 15,
-            "range": 50
-          },
-          {
-            "label": "Gối thẳng",
+            "label": "Gối chân trước gập",
             "oneOf": [
               [
                 23,
@@ -8286,176 +8347,32 @@
                 28
               ]
             ],
-            "target": 178,
-            "tolerance": 12,
-            "range": 30
-          }
-        ]
-      },
-      "id": "g9-gap-than",
-      "grade": 9,
-      "chapter": "g9-c1",
-      "order": 2,
-      "title": "Đứng gập thân (dẻo)",
-      "topic": "Thể lực",
-      "keywords": "gap than deo dai keo gian dung gap nguoi",
-      "steps": [
-        "Đứng thẳng, hai chân khép.",
-        "Từ từ gập thân về trước, hai tay với xuống mũi chân.",
-        "Giữ hai gối thẳng.",
-        "Giữ 3 giây, không nhún."
-      ],
-      "commonErrors": [
-        "Co gối.",
-        "Nhún người liên tục.",
-        "Gập quá sức gây đau."
-      ],
-      "summary": [
-        "Gối thẳng.",
-        "Gập từ hông, tay với mũi chân.",
-        "Giữ yên, không nhún."
-      ],
-      "youtubeSearch": "bài tập đứng gập thân dẻo dai"
-    },
-    {
-      "demo": true,
-      "related": [
-        "g9-xuat-phat-thap"
-      ],
-      "youtube": [],
-      "book": {
-        "series": null,
-        "pages": [],
-        "url": null
-      },
-      "scoring": {
-        "mode": "reps",
-        "camera": "side",
-        "rules": [],
-        "reps": {
-          "label": "Góc gối (hông – gối – cổ chân)",
-          "oneOf": [
-            [
-              23,
-              25,
-              27
-            ],
-            [
-              24,
-              26,
-              28
-            ]
-          ],
-          "pick": "min",
-          "down": 70,
-          "up": 150,
-          "target": 10,
-          "depthTarget": 45,
-          "tolerance": 15,
-          "range": 40
-        }
-      },
-      "id": "g9-dap-sau",
-      "grade": 9,
-      "chapter": "g9-c2",
-      "order": 1,
-      "title": "Chạy đạp sau (gót chạm mông)",
-      "topic": "Chạy cự li ngắn",
-      "keywords": "chay dap sau got cham mong bo tro chay",
-      "steps": [
-        "Chạy tại chỗ, thân thẳng.",
-        "Co gối, đưa gót chân lên chạm hoặc gần chạm mông.",
-        "Đùi giữ gần thẳng đứng, đánh tay phối hợp.",
-        "Thực hiện 10 lần."
-      ],
-      "commonErrors": [
-        "Gót không lên cao.",
-        "Đùi đưa ra trước.",
-        "Gù lưng."
-      ],
-      "summary": [
-        "Gót chạm mông.",
-        "Đùi thẳng đứng.",
-        "Đánh tay phối hợp."
-      ],
-      "youtubeSearch": "chạy đạp sau gót chạm mông bổ trợ"
-    },
-    {
-      "demo": true,
-      "related": [
-        "g9-dap-sau"
-      ],
-      "youtube": [],
-      "book": {
-        "series": null,
-        "pages": [],
-        "url": null
-      },
-      "scoring": null,
-      "id": "g9-xuat-phat-thap",
-      "grade": 9,
-      "chapter": "g9-c2",
-      "order": 2,
-      "title": "Xuất phát thấp",
-      "topic": "Chạy cự li ngắn",
-      "keywords": "xuat phat thap bon do chay ngan",
-      "steps": [
-        "\"Vào chỗ\": quỳ gối chân sau, hai tay chống sau vạch, rộng bằng vai.",
-        "\"Sẵn sàng\": nâng hông cao hơn vai một chút, dồn trọng tâm về trước.",
-        "\"Chạy\": đạp mạnh hai chân, đánh tay, lao ra trước.",
-        "Những bước đầu ngắn, thân đổ trước, rồi đứng dần lên."
-      ],
-      "commonErrors": [
-        "Hông nâng quá cao hoặc quá thấp.",
-        "Đứng thẳng người ngay sau xuất phát."
-      ],
-      "summary": [
-        "Vào chỗ – Sẵn sàng – Chạy.",
-        "Hông cao hơn vai một chút.",
-        "Thân đổ trước ở những bước đầu."
-      ],
-      "youtubeSearch": "kỹ thuật xuất phát thấp chạy ngắn"
-    },
-    {
-      "demo": true,
-      "related": [
-        "g9-cau-long-di-chuyen"
-      ],
-      "youtube": [],
-      "book": {
-        "series": null,
-        "pages": [],
-        "url": null
-      },
-      "scoring": {
-        "mode": "hold",
-        "holdSeconds": 2,
-        "camera": "front",
-        "rules": [
-          {
-            "label": "Gối trái hơi khuỵu",
-            "joints": [
-              23,
-              25,
-              27
-            ],
-            "target": 155,
-            "tolerance": 12,
-            "range": 30
+            "pick": "min",
+            "target": 95,
+            "tolerance": 15,
+            "range": 35
           },
           {
-            "label": "Gối phải hơi khuỵu",
-            "joints": [
-              24,
-              26,
-              28
+            "label": "Gối chân sau",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
             ],
-            "target": 155,
-            "tolerance": 12,
-            "range": 30
+            "pick": "max",
+            "target": 125,
+            "tolerance": 15,
+            "range": 35
           },
           {
-            "label": "Tay cầm vợt hơi gập",
+            "label": "Tay chống thẳng",
             "oneOf": [
               [
                 11,
@@ -8468,70 +8385,2061 @@
                 16
               ]
             ],
-            "target": 110,
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-giua-quang-ve-dich",
+      "grade": 9,
+      "chapter": "g9-c1",
+      "order": 2,
+      "title": "Củng cố kĩ thuật chạy giữa quãng và về đích",
+      "topic": "Chạy cự li ngắn",
+      "keywords": "cung co chay giua quang ve dich danh dich phoi hop 100m",
+      "steps": [
+        "Duy trì tốc độ tối đa đạt được ở cuối chạy lao; chuyển tiếp liên tục, nhịp nhàng.",
+        "Giữ tần số, độ dài bước và tốc độ trên toàn cự li.",
+        "Về đích: giữ tốc độ tối đa qua vạch đích; xác định đúng thời điểm đánh đích.",
+        "Chọn kĩ thuật đánh đích (ngực hoặc vai) hợp với bản thân, thực hiện an toàn."
+      ],
+      "commonErrors": [
+        "Giảm tốc trước vạch đích.",
+        "Đánh đích quá sớm."
+      ],
+      "summary": [
+        "Giữ tốc độ đến hết vạch đích.",
+        "Đánh đích bằng ngực hoặc vai.",
+        "Phối hợp đủ 4 giai đoạn."
+      ],
+      "related": [
+        "g9-xuat-phat-thap"
+      ],
+      "youtube": [],
+      "youtubeSearch": "củng cố chạy giữa quãng về đích 100m lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=17",
+        "range": [
+          16,
+          19
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 16,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-18-1775793532206.png",
+            "caption": ""
+          },
+          {
+            "page": 17,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-19-1775793532493.png",
+            "caption": ""
+          },
+          {
+            "page": 18,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-20-1775793532740.png",
+            "caption": ""
+          },
+          {
+            "page": 19,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-21-1775793532999.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Động tác đánh đích: đổ người ra trước ở bước cuối, chân sau duỗi.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Thân đổ ra trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 125,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Chân sau duỗi thẳng",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 165,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 100,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-giam-nhay-chay-da",
+      "grade": 9,
+      "chapter": "g9-c2",
+      "order": 1,
+      "title": "Kĩ thuật giậm nhảy và chạy đà kết hợp giậm nhảy",
+      "topic": "Nhảy cao kiểu nằm nghiêng",
+      "keywords": "nhay cao kieu nam nghieng giam nhay chay da huong goc diem giam",
+      "steps": [
+        "Nhảy cao có 5 kiểu: bước qua, nằm nghiêng, cắt kéo, úp bụng, lưng qua xà.",
+        "Giậm nhảy như kiểu bước qua: điểm giậm chính xác, tiếp đất nhanh bằng gót rồi cả bàn chân.",
+        "Giậm nhảy phối hợp đá lăng và đánh tay; cuối giậm nhảy cơ thể hơi ngả về phía xà.",
+        "Chạy đà cùng bên với chân giậm, chếch với xà 30° – 40°.",
+        "Ba bước đà cuối: bước thứ ba ngắn nhất, hạ thấp trọng tâm để giậm nhảy."
+      ],
+      "commonErrors": [
+        "Chạy đà sai bên.",
+        "Bước cuối dài, không hạ trọng tâm."
+      ],
+      "summary": [
+        "Chạy đà chếch 30° – 40°.",
+        "Giậm ở 1/3 xà, cách một cánh tay.",
+        "Đá lăng cao ngang xà."
+      ],
+      "related": [
+        "g9-tren-khong-nam-nghieng",
+        "g9-phoi-hop-nam-nghieng"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật giậm nhảy chạy đà nhảy cao kiểu nằm nghiêng lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=21",
+        "range": [
+          20,
+          24
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 20,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-22-1775793533261.png",
+            "caption": ""
+          },
+          {
+            "page": 21,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-23-1775793533497.png",
+            "caption": ""
+          },
+          {
+            "page": 22,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-24-1775793533748.png",
+            "caption": ""
+          },
+          {
+            "page": 23,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-25-1775793534002.png",
+            "caption": ""
+          },
+          {
+            "page": 24,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-26-1775793534258.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Kết thúc giậm nhảy đá lăng: chân lăng đá cao, chân giậm duỗi, tay đánh lên.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Chân lăng đá lên cao",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 100,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Chân giậm duỗi",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Tay đánh lên ngang vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 90,
             "tolerance": 20,
             "range": 40
           }
         ]
+      }
+    },
+    {
+      "id": "g9-tren-khong-nam-nghieng",
+      "grade": 9,
+      "chapter": "g9-c2",
+      "order": 2,
+      "title": "Kĩ thuật trên không và rơi xuống cát (đệm)",
+      "topic": "Nhảy cao kiểu nằm nghiêng",
+      "keywords": "nhay cao nam nghieng tren khong qua xa roi xuong cat dem xoay nguoi",
+      "steps": [
+        "Rời đất: thân hơi nghiêng về phía xà, chân lăng và hai tay ở trên cao, chân giậm duỗi ở dưới.",
+        "Chân giậm co nhanh thu sát chân lăng; chân lăng duỗi thẳng, xoay bàn chân về phía xà.",
+        "Thân người nằm nghiêng trên xà, tay cùng bên chân giậm ép sát thân.",
+        "Qua xà: xoay nhanh thân úp xuống; chân giậm và hai tay duỗi ra chuẩn bị chạm cát.",
+        "Chạm cát: khuỵu gối giảm chấn; hai tay chống phối hợp khi xà cao."
+      ],
+      "commonErrors": [
+        "Không xoay người, rơi bằng lưng.",
+        "Chạm cát gối thẳng."
+      ],
+      "summary": [
+        "Nằm nghiêng qua xà.",
+        "Rơi bằng chân giậm và hai tay.",
+        "Tập mô phỏng tại chỗ trước."
+      ],
+      "related": [
+        "g9-giam-nhay-chay-da",
+        "g9-phoi-hop-nam-nghieng"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật trên không nhảy cao kiểu nằm nghiêng lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=26",
+        "range": [
+          25,
+          28
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 25,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-27-1775793534547.png",
+            "caption": ""
+          },
+          {
+            "page": 26,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-28-1775793534821.png",
+            "caption": ""
+          },
+          {
+            "page": 27,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-29-1775793535086.png",
+            "caption": ""
+          },
+          {
+            "page": 28,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-30-1775793535367.png",
+            "caption": ""
+          }
+        ]
       },
-      "id": "g9-cau-long-chuan-bi",
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Mô phỏng qua xà tại chỗ: đá chân lăng ra trước – lên cao rồi hạ xuống.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc hông khi đá lăng",
+          "pick": "min",
+          "down": 140,
+          "up": 165,
+          "target": 10,
+          "depthTarget": 110,
+          "tolerance": 15,
+          "range": 40,
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "g9-phoi-hop-nam-nghieng",
+      "grade": 9,
+      "chapter": "g9-c2",
+      "order": 3,
+      "title": "Phối hợp các giai đoạn kĩ thuật nhảy cao kiểu nằm nghiêng",
+      "topic": "Nhảy cao kiểu nằm nghiêng",
+      "keywords": "phoi hop nhay cao kieu nam nghieng luat so lan nhay do thanh tich",
+      "steps": [
+        "Chạy đà: giữ cự li và bước đà ổn định, nhịp điệu, tốc độ tăng dần.",
+        "Giậm nhảy: nhanh, mạnh, chính xác.",
+        "Qua xà: xoay người kịp thời khi cơ thể đạt độ cao thích hợp.",
+        "Rơi xuống: chủ động, đúng kĩ thuật để an toàn."
+      ],
+      "commonErrors": [
+        "Hỏng 3 lần liên tiếp: dừng thi đấu.",
+        "Chạy đà không ổn định số bước."
+      ],
+      "summary": [
+        "Mỗi mức xà nhảy tối đa 3 lần.",
+        "Thành tích tính bằng cm.",
+        "Nữ 7 – 9, nam 9 – 11 bước đà."
+      ],
+      "related": [
+        "g9-giam-nhay-chay-da",
+        "g9-tren-khong-nam-nghieng"
+      ],
+      "youtube": [],
+      "youtubeSearch": "phối hợp các giai đoạn nhảy cao kiểu nằm nghiêng lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=30",
+        "range": [
+          29,
+          32
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 29,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-31-1775793535662.png",
+            "caption": ""
+          },
+          {
+            "page": 30,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-32-1775793535936.png",
+            "caption": ""
+          },
+          {
+            "page": 31,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-33-1775793536176.png",
+            "caption": ""
+          },
+          {
+            "page": 32,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-34-1775793536424.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Kết thúc giậm nhảy (tại chỗ): chân lăng đá cao, chân giậm duỗi, tay đánh lên.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Chân lăng đá lên cao",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 100,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Chân giậm duỗi",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Tay đánh lên ngang vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 90,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-tb-xuat-phat",
       "grade": 9,
       "chapter": "g9-c3",
       "order": 1,
-      "title": "Tư thế chuẩn bị đánh cầu lông",
-      "topic": "Cầu lông",
-      "keywords": "cau long tu the chuan bi cam vot",
+      "title": "Củng cố kĩ thuật xuất phát và tăng tốc độ sau xuất phát",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "cung co xuat phat tang toc cu li trung binh nhom tuoi",
       "steps": [
-        "Đứng hai chân rộng hơn vai, gối hơi khuỵu.",
-        "Trọng tâm dồn lên nửa trước bàn chân.",
-        "Tay cầm vợt đưa lên trước, khuỷu tay hơi gập.",
-        "Mắt theo dõi quả cầu, sẵn sàng di chuyển."
+        "Tập trung chú ý vào hiệu lệnh; xuất phát đúng kĩ thuật, đúng hiệu lệnh.",
+        "Chủ động chiếm vị trí thuận lợi sau xuất phát.",
+        "Xuất phát và tăng tốc trên đường thẳng và từ đầu đường vòng.",
+        "Rèn sức chịu đựng, ý chí và khả năng giữ tốc độ trên toàn cự li."
       ],
       "commonErrors": [
-        "Đứng thẳng gối.",
-        "Hạ vợt xuống thấp."
+        "Xuất phát sai hiệu lệnh.",
+        "Chen lấn khi tăng tốc."
       ],
       "summary": [
-        "Gối khuỵu nhẹ.",
-        "Vợt đưa lên trước.",
-        "Sẵn sàng di chuyển."
+        "Thiếu niên: 16 – 17 tuổi; trẻ: 18 – 19 tuổi.",
+        "Tăng tốc 25 – 35 m.",
+        "Chạy vừa sức, đều nhịp thở."
       ],
-      "youtubeSearch": "tư thế chuẩn bị cầu lông cơ bản"
-    },
-    {
-      "demo": true,
       "related": [
-        "g9-cau-long-chuan-bi"
+        "g9-tb-giua-quang"
       ],
       "youtube": [],
+      "youtubeSearch": "củng cố xuất phát tăng tốc chạy cự li trung bình lớp 9",
       "book": {
-        "series": null,
-        "pages": [],
-        "url": null
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=34",
+        "range": [
+          33,
+          36
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 33,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-35-1775793536693.png",
+            "caption": ""
+          },
+          {
+            "page": 34,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-36-1775793536945.png",
+            "caption": ""
+          },
+          {
+            "page": 35,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-37-1775793537217.png",
+            "caption": ""
+          },
+          {
+            "page": 36,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-38-1775793537489.png",
+            "caption": ""
+          }
+        ]
       },
-      "scoring": null,
-      "id": "g9-cau-long-di-chuyen",
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Tư thế xuất phát cao: gối hơi khuỵu, thân hơi ngả trước, tay co.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trước hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Thân hơi ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 110,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-tb-giua-quang",
       "grade": 9,
       "chapter": "g9-c3",
       "order": 2,
-      "title": "Di chuyển ngang sân cầu lông",
-      "topic": "Cầu lông",
-      "keywords": "di chuyen ngang buoc dem cau long",
+      "title": "Củng cố kĩ thuật chạy giữa quãng và về đích",
+      "topic": "Chạy cự li trung bình",
+      "keywords": "cung co chay giua quang ve dich cuc diem duong vong",
       "steps": [
-        "Từ tư thế chuẩn bị, bước đệm sang ngang.",
-        "Bước chân cùng phía với hướng di chuyển trước.",
-        "Không bắt chéo chân.",
-        "Về lại giữa sân sau mỗi lần đánh."
+        "Giữ nhịp điệu bước chạy trên đường thẳng, đường vòng và khi về đích.",
+        "Duy trì tốc độ phù hợp với khả năng bản thân.",
+        "Khắc phục “cực điểm”: giảm tốc, thở sâu, thả lỏng, không dừng lại.",
+        "Sau khi về đích: chạy chậm, đi bộ, thả lỏng."
       ],
       "commonErrors": [
-        "Bắt chéo chân.",
-        "Đứng yên chờ cầu."
+        "Hết sức giữa đường.",
+        "Dừng ngay sau vạch đích."
       ],
       "summary": [
-        "Bước đệm, không bắt chéo.",
-        "Luôn về giữa sân."
+        "Phân phối sức đều.",
+        "Rèn sức bền thường xuyên.",
+        "Bổ sung dinh dưỡng khi tập sức bền."
       ],
-      "youtubeSearch": "cách di chuyển ngang trong cầu lông"
+      "related": [
+        "g9-tb-xuat-phat"
+      ],
+      "youtube": [],
+      "youtubeSearch": "củng cố chạy giữa quãng về đích cự li trung bình lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=37",
+        "range": [
+          36,
+          40
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 36,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-38-1775793537489.png",
+            "caption": ""
+          },
+          {
+            "page": 37,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-39-1775793537731.png",
+            "caption": ""
+          },
+          {
+            "page": 38,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-40-1775793538025.png",
+            "caption": ""
+          },
+          {
+            "page": 39,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-41-1775793538345.png",
+            "caption": ""
+          },
+          {
+            "page": 40,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-42-1775793538778.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Chạy tại chỗ nâng đùi vừa phải, thở đều theo nhịp bước.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc hông khi nâng đùi",
+          "pick": "min",
+          "down": 145,
+          "up": 165,
+          "target": 20,
+          "depthTarget": 125,
+          "tolerance": 15,
+          "range": 40,
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "g9-nhip-dieu-1",
+      "grade": 9,
+      "chapter": "g9-c4",
+      "order": 1,
+      "title": "Bài thể dục nhịp điệu (Phần 1)",
+      "topic": "Bài tập thể dục",
+      "keywords": "bai the duc nhip dieu giam chan tai cho thu chan tay cao bat tach chum van minh",
+      "steps": [
+        "Giậm chân tại chỗ (2 lần 8 nhịp): chống hông; tay đưa từ dưới sang ngang chếch cao chữ V.",
+        "Thu chân – tay cao: bước ngang rộng hơn vai, tay ngang; thu chân, một tay áp sát tai.",
+        "Bật tách chụm: bật tách gối khuỵu, tay dang ngang; bật chụm tay vỗ trên cao; bật tách tay chữ V.",
+        "Vặn mình: nâng gối ngang hông, thân xoay sang bên, hai tay co sau đầu."
+      ],
+      "commonErrors": [
+        "Tay chữ V không duỗi thẳng.",
+        "Nâng gối thấp khi vặn mình."
+      ],
+      "summary": [
+        "Tập từng động tác, đếm nhịp to rõ.",
+        "Phối hợp 2 – 4 động tác.",
+        "Tập trước gương để tự sửa."
+      ],
+      "related": [
+        "g9-nhip-dieu-2"
+      ],
+      "youtube": [],
+      "youtubeSearch": "bài thể dục nhịp điệu lớp 9 phần 1",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=42",
+        "range": [
+          41,
+          46
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 41,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-43-1775793539064.png",
+            "caption": ""
+          },
+          {
+            "page": 42,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-44-1775793539295.png",
+            "caption": ""
+          },
+          {
+            "page": 43,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-45-1775793539539.png",
+            "caption": ""
+          },
+          {
+            "page": 44,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-46-1775793539794.png",
+            "caption": ""
+          },
+          {
+            "page": 45,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-47-1775793540075.png",
+            "caption": ""
+          },
+          {
+            "page": 46,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-48-1775793540340.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "Bật tách chụm – nhịp 3: hai chân tách rộng hơn vai, hai tay chếch cao chữ V.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Tay trái chếch cao",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Tay phải chếch cao",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay trái thẳng",
+            "joints": [
+              11,
+              13,
+              15
+            ],
+            "target": 175,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay phải thẳng",
+            "joints": [
+              12,
+              14,
+              16
+            ],
+            "target": 175,
+            "tolerance": 15,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-nhip-dieu-2",
+      "grade": 9,
+      "chapter": "g9-c4",
+      "order": 2,
+      "title": "Bài thể dục nhịp điệu (Phần 2)",
+      "topic": "Bài tập thể dục",
+      "keywords": "bai the duc nhip dieu dat got buoc duoi day hong bat nhay nhac",
+      "steps": [
+        "Đặt gót: chân đặt gót ra trước, chân kia gối khuỵu; tay đưa ngang, tay kia hướng xuống bàn chân.",
+        "Bước đuổi: xoay người chếch, bước lên, gối hơi khuỵu; tay co trước ngực rồi duỗi chếch trước.",
+        "Đẩy hông: chân rộng hơn vai, chống hông, đẩy hông sang bên.",
+        "Bật nhảy: bật hai chân lên cao, hai tay vươn cao chữ V; tiếp đất nửa trước bàn chân.",
+        "Tập với nhạc nhịp 4/4 hoặc 2/4 khi đã thuần thục."
+      ],
+      "commonErrors": [
+        "Đẩy hông mà nghiêng vai.",
+        "Tiếp đất nặng, gối thẳng."
+      ],
+      "summary": [
+        "Phối hợp 8 động tác cả bài.",
+        "Chọn nhạc vui, vừa nhịp.",
+        "Tiếp đất nhẹ, gối hơi khuỵu."
+      ],
+      "related": [
+        "g9-nhip-dieu-1"
+      ],
+      "youtube": [],
+      "youtubeSearch": "bài thể dục nhịp điệu lớp 9 phần 2",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=47",
+        "range": [
+          46,
+          51
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 46,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-48-1775793540340.png",
+            "caption": ""
+          },
+          {
+            "page": 47,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-49-1775793540596.png",
+            "caption": ""
+          },
+          {
+            "page": 48,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-50-1775793541070.png",
+            "caption": ""
+          },
+          {
+            "page": 49,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-51-1775793541305.png",
+            "caption": ""
+          },
+          {
+            "page": 50,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-52-1775793541562.png",
+            "caption": ""
+          },
+          {
+            "page": 51,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-53-1775793541812.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "front",
+        "pose": "Bật nhảy: khuỵu gối rồi bật thẳng người, hai tay vươn cao.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc gối khi khuỵu lấy đà",
+          "pick": "min",
+          "down": 140,
+          "up": 165,
+          "target": 8,
+          "depthTarget": 125,
+          "tolerance": 15,
+          "range": 40,
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "g9-bat-nhay-cao-tay",
+      "grade": 9,
+      "chapter": "g9-tc1",
+      "order": 1,
+      "title": "Kĩ thuật bật nhảy đánh cầu cao tay bên phải",
+      "topic": "Cầu lông",
+      "keywords": "bat nhay danh cau cao tay ben phai cau long",
+      "steps": [
+        "TTCB: chân trái trước, chân phải sau chạm sân bằng nửa trước bàn chân; vợt phía trước, đầu vợt cao hơn trán.",
+        "Xoay người sang phải, chuyển trọng lượng sang chân phải, khuỵu gối hạ trọng tâm.",
+        "Đạp mạnh chân phải bật lên cao; trên không xoay hông và vai phải ra trước.",
+        "Tay phải vươn lên cao đánh cầu; rơi xuống chân trái trước rồi chân phải, về TTCB."
+      ],
+      "commonErrors": [
+        "Không khuỵu gối lấy đà.",
+        "Đánh cầu khi tay chưa duỗi."
+      ],
+      "summary": [
+        "Bật lên rồi mới đánh.",
+        "Chạm cầu ở điểm cao nhất.",
+        "Rơi xuống giữ thăng bằng."
+      ],
+      "related": [
+        "g9-bat-nhay-dap-cau",
+        "g9-bo-nho"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật bật nhảy đánh cầu cao tay cầu lông lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=53",
+        "range": [
+          52,
+          56
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 52,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-54-1775793542114.png",
+            "caption": ""
+          },
+          {
+            "page": 53,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-55-1775793542377.png",
+            "caption": ""
+          },
+          {
+            "page": 54,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-56-1775793542610.png",
+            "caption": ""
+          },
+          {
+            "page": 55,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-57-1775793542922.png",
+            "caption": ""
+          },
+          {
+            "page": 56,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-58-1775793543167.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Khuỵu gối lấy đà rồi bật nhảy lên (như bật nhảy đánh cầu).",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc gối khi khuỵu lấy đà",
+          "pick": "min",
+          "down": 130,
+          "up": 165,
+          "target": 10,
+          "depthTarget": 115,
+          "tolerance": 15,
+          "range": 40,
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "g9-bat-nhay-dap-cau",
+      "grade": 9,
+      "chapter": "g9-tc1",
+      "order": 2,
+      "title": "Kĩ thuật bật nhảy đập cầu thuận tay",
+      "topic": "Cầu lông",
+      "keywords": "bat nhay dap cau thuan tay cau long canh cung",
+      "steps": [
+        "TTCB như bật nhảy đánh cầu cao tay bên phải.",
+        "Xoay người sang phải, khuỵu gối hạ trọng tâm, đạp mạnh chân phải bật lên cao.",
+        "Trên không: toàn thân ưỡn căng hình cánh cung.",
+        "Xoay hông, vai ra trước, duỗi gối, gập nhanh thân để đập cầu; mặt vợt hơi úp, gập cổ tay."
+      ],
+      "commonErrors": [
+        "Chạm cầu sau đầu, cầu bay cao.",
+        "Không ưỡn thân lấy đà."
+      ],
+      "summary": [
+        "Ưỡn thân – gập nhanh – đập cầu.",
+        "Mặt vợt hơi úp.",
+        "Đập cầu vào khu vực đã định."
+      ],
+      "related": [
+        "g9-bat-nhay-cao-tay",
+        "g9-bo-nho"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật bật nhảy đập cầu thuận tay cầu lông lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=57",
+        "range": [
+          56,
+          60
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 56,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-58-1775793543167.png",
+            "caption": ""
+          },
+          {
+            "page": 57,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-59-1775793543415.png",
+            "caption": ""
+          },
+          {
+            "page": 58,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-60-1775793543666.png",
+            "caption": ""
+          },
+          {
+            "page": 59,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-61-1775793543901.png",
+            "caption": ""
+          },
+          {
+            "page": 60,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-62-1775793544169.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "Điểm đập cầu: tay vươn thẳng cao trước trán.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Cánh tay vươn cao",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 160,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay duỗi thẳng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Chân đứng vững",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 165,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-bo-nho",
+      "grade": 9,
+      "chapter": "g9-tc1",
+      "order": 3,
+      "title": "Kĩ thuật bỏ nhỏ",
+      "topic": "Cầu lông",
+      "keywords": "bo nho thuan tay trai tay cau long sat luoi",
+      "steps": [
+        "TTCB: chân rộng bằng vai, gối hơi khuỵu, thân hơi ngả trước, vợt phía trước cao hơn trán.",
+        "Bỏ nhỏ thuận tay: chân phải bước chếch phải lên một bước, tay vươn ra trước, lòng bàn tay ngửa.",
+        "Mặt vợt hơi nghiêng về sân đối phương, đánh nhẹ vào đế cầu để cầu sát mép lưới.",
+        "Bỏ nhỏ trái tay: chân phải bước chếch trái, lòng bàn tay úp; làm tương tự."
+      ],
+      "commonErrors": [
+        "Đánh mạnh, cầu bay xa.",
+        "Không bước lên, với tay đánh."
+      ],
+      "summary": [
+        "Cầu bay sát mép lưới.",
+        "Đánh nhẹ vào đế cầu.",
+        "Đánh xong về TTCB."
+      ],
+      "related": [
+        "g9-bat-nhay-cao-tay",
+        "g9-bat-nhay-dap-cau"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật bỏ nhỏ cầu lông lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=61",
+        "range": [
+          60,
+          64
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 60,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-62-1775793544169.png",
+            "caption": ""
+          },
+          {
+            "page": 61,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-63-1775793544411.png",
+            "caption": ""
+          },
+          {
+            "page": 62,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-64-1775793544688.png",
+            "caption": ""
+          },
+          {
+            "page": 63,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-65-1775793544974.png",
+            "caption": ""
+          },
+          {
+            "page": 64,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-66-1775793545304.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Bước lên bỏ nhỏ: chân phải bước dài, gối khuỵu, tay vươn ra trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối chân trước khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 120,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Tay vươn ra trước",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "closest",
+            "target": 85,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay hơi co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "max",
+            "target": 150,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-mu-giua-nem-bien",
+      "grade": 9,
+      "chapter": "g9-tc2",
+      "order": 1,
+      "title": "Kĩ thuật đá bóng bằng mu giữa bàn chân và tại chỗ ném biên",
+      "topic": "Bóng đá",
+      "keywords": "da bong mu giua ban chan nem bien tang bong",
+      "steps": [
+        "Bổ trợ: tâng bóng bằng mu giữa bàn chân, bóng nảy ngang gối.",
+        "Đá bằng mu giữa: chân trụ đặt ngang bóng, cách 10 – 15 cm, gối hơi khuỵu.",
+        "Chân đá đưa nhanh từ sau ra trước, bàn chân duỗi thẳng hướng xuống, mu giữa chạm giữa – sau bóng.",
+        "Ném biên: hai tay đưa bóng lên cao ra sau đầu, thân ngả sau; đạp chân, vươn người, ném qua đầu.",
+        "Khi bóng rời tay, hai chân không được rời mặt đất."
+      ],
+      "commonErrors": [
+        "Ném biên một tay hoặc nhấc chân.",
+        "Bàn chân không duỗi khi đá."
+      ],
+      "summary": [
+        "Mu giữa chạm giữa – sau bóng.",
+        "Ném biên: hai tay, qua đầu.",
+        "Hai chân chạm đất khi ném."
+      ],
+      "related": [
+        "g9-dung-bong-mu-giua",
+        "g9-dan-bong-mu-ngoai"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật đá bóng mu giữa bàn chân ném biên lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=66",
+        "range": [
+          65,
+          70
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 65,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-67-1775793545585.png",
+            "caption": ""
+          },
+          {
+            "page": 66,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-68-1775793545828.png",
+            "caption": ""
+          },
+          {
+            "page": 67,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-69-1775793546085.png",
+            "caption": ""
+          },
+          {
+            "page": 68,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-70-1775793546335.png",
+            "caption": ""
+          },
+          {
+            "page": 69,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-71-1775793546599.png",
+            "caption": ""
+          },
+          {
+            "page": 70,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-72-1775793546884.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Chuẩn bị ném biên: hai tay đưa bóng lên cao ra sau đầu, thân ngả ra sau.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Tay đưa lên cao",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 165,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay gập sau đầu",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 80,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Thân ngả ra sau",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "max",
+            "target": 190,
+            "tolerance": 12,
+            "range": 30
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-dung-bong-mu-giua",
+      "grade": 9,
+      "chapter": "g9-tc2",
+      "order": 2,
+      "title": "Kĩ thuật dừng bóng bổng bằng mu giữa bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "dung bong bong mu giua ban chan",
+      "steps": [
+        "TTCB: chân trước chân sau, chân trụ trước, chân dừng bóng sau; mắt quan sát bóng.",
+        "Khi bóng đến: chuyển trọng lượng lên chân trụ, chân dừng bóng đưa ra trước, lên cao.",
+        "Gối hơi co, bàn chân hơi duỗi; mu giữa tiếp xúc phía trước, hơi chếch dưới bóng.",
+        "Khi chạm bóng, hạ nhanh đùi và cẳng chân xuống – ra sau để dừng bóng."
+      ],
+      "commonErrors": [
+        "Chân cứng, bóng bật xa.",
+        "Đón bóng quá muộn."
+      ],
+      "summary": [
+        "Đón – hạ chân – dừng bóng.",
+        "Di chuyển đến điểm bóng rơi.",
+        "Mắt luôn nhìn bóng."
+      ],
+      "related": [
+        "g9-mu-giua-nem-bien",
+        "g9-dan-bong-mu-ngoai"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật dừng bóng bổng mu giữa bàn chân lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=71",
+        "range": [
+          70,
+          74
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 70,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-72-1775793546884.png",
+            "caption": ""
+          },
+          {
+            "page": 71,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-73-1775793547122.png",
+            "caption": ""
+          },
+          {
+            "page": 72,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-74-1775793547405.png",
+            "caption": ""
+          },
+          {
+            "page": 73,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-75-1775793547671.png",
+            "caption": ""
+          },
+          {
+            "page": 74,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-76-1775793547913.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Đưa chân dừng bóng ra trước lên cao, gối hơi co, chân trụ đứng vững.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Đùi chân đón bóng nâng",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 120,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Gối chân đón bóng hơi co",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 130,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Chân trụ đứng vững",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 165,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-dan-bong-mu-ngoai",
+      "grade": 9,
+      "chapter": "g9-tc2",
+      "order": 3,
+      "title": "Kĩ thuật dẫn bóng bằng mu ngoài bàn chân",
+      "topic": "Bóng đá",
+      "keywords": "dan bong mu ngoai ban chan luat bong da 7 nguoi qua phat",
+      "steps": [
+        "TTCB: chân trước chân sau, chân trụ đặt ngang bóng, cách 15 – 20 cm.",
+        "Chân dẫn bóng đưa ra trước, bàn chân hướng xuống và hơi chếch vào trong.",
+        "Dùng mu ngoài đá nhẹ phía sau, giữa bóng để bóng lăn 0,5 – 1 m; lặp lại.",
+        "Phối hợp chuyền, dừng, dẫn bóng và đá vào cầu môn."
+      ],
+      "commonErrors": [
+        "Đá bóng quá mạnh, mất kiểm soát.",
+        "Chỉ nhìn bóng."
+      ],
+      "summary": [
+        "Bóng 7 người: mọi quả phạt là trực tiếp.",
+        "Cầu thủ đối phương đứng cách bóng 6 m.",
+        "Phải mặc bọc ống quyển."
+      ],
+      "related": [
+        "g9-mu-giua-nem-bien",
+        "g9-dung-bong-mu-giua"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật dẫn bóng mu ngoài bàn chân lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=76",
+        "range": [
+          75,
+          79
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 75,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-77-1775793548169.png",
+            "caption": ""
+          },
+          {
+            "page": 76,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-78-1775793548410.png",
+            "caption": ""
+          },
+          {
+            "page": 77,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-79-1775793548677.png",
+            "caption": ""
+          },
+          {
+            "page": 78,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-80-1775793548912.png",
+            "caption": ""
+          },
+          {
+            "page": 79,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-81-1775793549149.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "TTCB dẫn bóng: chân trước chân sau, gối hơi khuỵu, thân hơi ngả trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 10,
+            "range": 30
+          },
+          {
+            "label": "Thân hơi ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 155,
+            "tolerance": 10,
+            "range": 30
+          },
+          {
+            "label": "Tay co tự nhiên",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 120,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-dot-pha-buoc-thuan",
+      "grade": 9,
+      "chapter": "g9-tc3",
+      "order": 1,
+      "title": "Kĩ thuật đột phá bước thuận",
+      "topic": "Bóng rổ",
+      "keywords": "dot pha buoc thuan dan bong bong ro",
+      "steps": [
+        "TTCB: hai chân rộng bằng vai, gối hơi khuỵu, thân hơi ngả trước, hai tay cầm bóng trước bụng.",
+        "Sang phải: nửa trước bàn chân trái làm trụ, chân phải bước nhanh ra trước, chếch phải.",
+        "Hai tay đưa bóng sang phải, thân hướng chếch phải; khi chân phải chạm đất, tay phải dẫn bóng.",
+        "Chân trái bước tiếp ra trước; tay phải đón bóng nảy lên và tiếp tục dẫn bóng.",
+        "Sang trái: đổi chân trụ, đổi tay dẫn bóng và đổi hướng."
+      ],
+      "commonErrors": [
+        "Chân trụ rời đất trước khi bóng rời tay: chạy bước.",
+        "Đột phá chậm, dễ bị chặn."
+      ],
+      "summary": [
+        "Bước đầu là chân cùng bên hướng đột phá.",
+        "Bóng rời tay trước khi chân trụ nhấc.",
+        "Nhanh, bất ngờ."
+      ],
+      "related": [
+        "g9-dot-pha-buoc-cheo",
+        "g9-chuyen-mot-tay-tren-vai"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật đột phá bước thuận bóng rổ lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=81",
+        "range": [
+          80,
+          84
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 80,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-82-1775793549444.png",
+            "caption": ""
+          },
+          {
+            "page": 81,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-83-1775793549714.png",
+            "caption": ""
+          },
+          {
+            "page": 82,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-84-1775793549971.png",
+            "caption": ""
+          },
+          {
+            "page": 83,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-85-1775793550339.png",
+            "caption": ""
+          },
+          {
+            "page": 84,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-86-1775793550586.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "TTCB đột phá: hai chân rộng bằng vai, gối hơi khuỵu, cầm bóng trước bụng.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trái hơi khuỵu",
+            "joints": [
+              23,
+              25,
+              27
+            ],
+            "target": 145,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Gối phải hơi khuỵu",
+            "joints": [
+              24,
+              26,
+              28
+            ],
+            "target": 145,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co ôm bóng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 100,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-dot-pha-buoc-cheo",
+      "grade": 9,
+      "chapter": "g9-tc3",
+      "order": 2,
+      "title": "Kĩ thuật đột phá bước chéo",
+      "topic": "Bóng rổ",
+      "keywords": "dot pha buoc cheo dan bong bong ro",
+      "steps": [
+        "TTCB: như đột phá bước thuận.",
+        "Sang phải: nửa trước bàn chân phải làm trụ, chân trái bước nhanh ra trước, chếch sang phải.",
+        "Hai tay đưa bóng sang phải; khi chân trái chạm đất, tay phải dẫn bóng.",
+        "Chân phải bước tiếp ra trước chếch phải; tay phải đón bóng và tiếp tục dẫn.",
+        "Sang trái: đổi chân trụ, đổi tay dẫn bóng và đổi hướng."
+      ],
+      "commonErrors": [
+        "Bước chéo ngắn, không vượt qua người phòng thủ.",
+        "Nhấc chân trụ trước khi dẫn bóng."
+      ],
+      "summary": [
+        "Bước đầu là chân khác bên hướng đột phá.",
+        "Xoay người che bóng.",
+        "Phối hợp với hai bước ném rổ."
+      ],
+      "related": [
+        "g9-dot-pha-buoc-thuan",
+        "g9-chuyen-mot-tay-tren-vai"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật đột phá bước chéo bóng rổ lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=86",
+        "range": [
+          85,
+          89
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 85,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-87-1775793550833.png",
+            "caption": ""
+          },
+          {
+            "page": 86,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-88-1775793551092.png",
+            "caption": ""
+          },
+          {
+            "page": 87,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-89-1775793551361.png",
+            "caption": ""
+          },
+          {
+            "page": 88,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-90-1775793551595.png",
+            "caption": ""
+          },
+          {
+            "page": 89,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-91-1775793551858.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "TTCB đột phá: hai chân rộng bằng vai, gối hơi khuỵu, cầm bóng trước bụng.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trái hơi khuỵu",
+            "joints": [
+              23,
+              25,
+              27
+            ],
+            "target": 145,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Gối phải hơi khuỵu",
+            "joints": [
+              24,
+              26,
+              28
+            ],
+            "target": 145,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co ôm bóng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 100,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "g9-chuyen-mot-tay-tren-vai",
+      "grade": 9,
+      "chapter": "g9-tc3",
+      "order": 3,
+      "title": "Kĩ thuật tại chỗ chuyền bóng một tay trên vai",
+      "topic": "Bóng rổ",
+      "keywords": "chuyen bong mot tay tren vai bong ro tai cho",
+      "steps": [
+        "TTCB: hai chân rộng bằng vai, gối hơi khuỵu, hai tay cầm bóng trước ngực.",
+        "Đưa bóng lên trên vai phải, trọng lượng dồn chân phải, thân nghiêng phải và hơi ngả sau.",
+        "Bàn tay phải hơi ngửa đỡ dưới, chếch sau bóng.",
+        "Đạp chân phải, chuyển trọng lượng sang chân trái, xoay người; vươn tay ra trước, chếch lên cao.",
+        "Gập cổ tay, miết ngón tay khi bóng rời tay; chân phải bước lên giữ thăng bằng."
+      ],
+      "commonErrors": [
+        "Chuyền bằng sức tay, không xoay người.",
+        "Khuỷu tay chĩa ra ngoài."
+      ],
+      "summary": [
+        "Bóng trên vai, tay đỡ dưới.",
+        "Đạp chân – xoay người – vươn tay.",
+        "Phối hợp dẫn, chuyền và ném rổ."
+      ],
+      "related": [
+        "g9-dot-pha-buoc-thuan",
+        "g9-dot-pha-buoc-cheo"
+      ],
+      "youtube": [],
+      "youtubeSearch": "kĩ thuật chuyền bóng một tay trên vai bóng rổ lớp 9",
+      "book": {
+        "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
+        "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-9.4700478660#page=90",
+        "range": [
+          89,
+          93
+        ],
+        "remote": true,
+        "pages": [
+          {
+            "page": 89,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-91-1775793551858.png",
+            "caption": ""
+          },
+          {
+            "page": 90,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-92-1775793552113.png",
+            "caption": ""
+          },
+          {
+            "page": 91,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-93-1775793552407.png",
+            "caption": ""
+          },
+          {
+            "page": 92,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-94-1775793552644.png",
+            "caption": ""
+          },
+          {
+            "page": 93,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4700478660-page-95-1775793552884.png",
+            "caption": ""
+          }
+        ]
+      },
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Lấy đà chuyền bóng: bóng trên vai, khuỷu gập, thân hơi ngả sau.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Cánh tay đưa bóng lên vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 110,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay gập",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 80,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Gối hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 155,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
     }
   ]
 }
