@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.0] - 2026-11-22: Lớp 7 theo sách giáo khoa
+
+### Thay đổi
+- **Lớp 7 dựng lại theo SGK Giáo dục thể chất 7 – Kết nối tri thức với cuộc sống:** 3 phần, 8 chủ đề, 23 bài,
+  tên phần/chủ đề/bài đúng mục lục sách.
+  - Phần 1. Kiến thức chung: Lựa chọn và sử dụng các yếu tố của môi trường tự nhiên trong luyện tập.
+  - Phần 2. Vận động cơ bản: Chạy cự li ngắn (60 m), Nhảy xa kiểu ngồi, Chạy cự li trung bình, Bài tập thể dục.
+  - Phần 3. Thể thao tự chọn: Cầu lông, Bóng đá, Bóng rổ.
+- **Tự tập camera cho 22/23 bài** (mọi bài vận động). Đếm lần cho: chạy nâng cao đùi, bật nhảy hai chân, chạy tại chỗ,
+  bật nhảy tách – chụm chân (cầu lông), tâng bóng bằng đùi; các bài khác giữ tư thế chính trong sách 2 giây.
+  Góc mục tiêu là ước lượng từ hình minh hoạ.
+- Mỗi bài có tóm tắt viết lại ngắn gọn, số trang SGK, ảnh xem trước các trang (tải từ sách điện tử NXB) và link sách gốc.
+
 ## [0.8.1] - 2026-11-22: Cửa sổ bài tập không nhảy khi chuyển tab
 
 ### Sửa
