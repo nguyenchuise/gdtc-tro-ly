@@ -91,6 +91,7 @@ pre code { background: none; padding: 0; color: inherit; }
 .btn--danger { background: var(--bad); color: #fff; }
 .btn--danger-text { color: var(--bad); border-color: #f3c4bf; }
 .btn--glass { background: rgba(255, 255, 255, .9); color: var(--ink); }
+.btn--glass .flip-text { margin-left: 4px; }
 .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; flex: none; border-radius: 999px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; }
 .icon-btn:hover { background: var(--brand-50); }
 .link-btn.is-closed .icon { transform: rotate(-90deg); }
@@ -267,6 +268,28 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 }
 @keyframes pop { from { transform: scale(.97); opacity: 0; } to { transform: none; opacity: 1; } }
 
+/* Điện thoại: chữ nhỏ hơn một bậc; cả hộp thoại cuộn chung (tiêu đề + tab không đứng yên chiếm chỗ),
+   chỉ nút Đóng nổi cố định ở góc. */
+@media (max-width: 759px) {
+  html { font-size: 93.75%; } /* 1rem = 15px */
+  dialog.sheet { height: 96dvh; max-height: 96dvh; }
+  .sheet__inner { display: block; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .sheet__head { position: static; padding: 4px 12px 10px; border-bottom: 0; }
+  .sheet__grip { margin: 2px auto 6px; }
+  .sheet__close { position: absolute; top: 8px; right: 8px; z-index: 5; width: 44px; height: 44px; min-height: 44px; padding: 0;
+    background: rgba(255, 255, 255, .94); box-shadow: 0 2px 10px rgba(15, 40, 28, .18); }
+  .crumbs { font-size: .8rem; margin-bottom: 2px; }
+  #lesson-title { font-size: 1.05rem; line-height: 1.3; margin-bottom: 8px; }
+  .tabs { padding: 3px; }
+  [role="tab"] { min-height: 46px; gap: 0; font-size: .8rem; }
+  [role="tab"] svg { width: 18px; height: 18px; }
+  .sheet__body { overflow: visible; padding: 12px 12px calc(20px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
+  .goal-card { padding: 10px 12px; gap: 10px; }
+  .goal-card__icon { width: 36px; height: 36px; }
+  .tip { font-size: .9rem; }
+  .stage-controls .btn { min-height: 40px; padding: 0 12px; font-size: .85rem; }
+}
+
 /* ---------- Cửa sổ chờ ---------- */
 .waiting { border: 2px dashed var(--brand-100); background: linear-gradient(180deg, #fbfefc, var(--brand-50)); border-radius: var(--radius); padding: 24px 18px; text-align: center; }
 .waiting__icon { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 10px; background: #fff; color: var(--brand); box-shadow: var(--shadow); }
@@ -375,7 +398,7 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 .practice.is-live .status:empty { display: none; }
 @media (max-width: 759px) {
   .practice.is-live .advice { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: 0; padding: 0; }
-  .practice.is-live .stage { max-height: 70vh; }
+  .practice.is-live .stage { max-width: calc(78dvh * var(--ar, 1.3333)); margin-inline: auto; }
 }
 .rules-title { margin: 14px 0 4px; font-size: 1rem; font-weight: 600; color: var(--ink-2); }
 
@@ -401,7 +424,7 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
   dialog.sheet.sheet--practice { width: min(1320px, calc(100vw - 48px)); height: min(94vh, 1040px); max-height: 94vh; }
   .practice.is-live { max-width: none; }
   .practice.is-live .live-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
-  .practice.is-live .stage { margin: 0; justify-self: center; max-width: calc((94vh - 240px) * 4 / 3); }
+  .practice.is-live .stage { margin: 0; justify-self: center; max-width: calc((94vh - 240px) * var(--ar, 1.3333)); }
   .practice.is-live .scoreboard { position: sticky; top: 0; background: #f7faf8; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; }
   .practice.is-live .scoreboard .advice { margin-top: 12px; }
   .practice.is-live .rules th, .practice.is-live .rules td { padding: 7px 6px; }

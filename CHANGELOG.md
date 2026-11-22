@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.0] - 2026-11-22: Giao diện điện thoại gọn hơn, đổi camera trước/sau
+
+### Thay đổi
+- **Điện thoại:** cả cửa sổ bài tập cuộn chung (tiêu đề và thanh tab không còn đứng yên chiếm nửa màn hình);
+  chỉ nút Đóng nổi cố định ở góc. Khi bật camera, khung camera tự cuộn lên đầu màn hình.
+- **Điện thoại:** chữ nhỏ hơn một bậc (1rem = 15px), tiêu đề, tab, thẻ mục tiêu gọn hơn. Nút vẫn ≥ 44px.
+- **Khung camera giữ đúng tỉ lệ của camera** (dọc hoặc ngang), vừa màn hình, không cắt hình.
+- **Đổi camera:** nút có chữ "Camera sau" / "Camera trước", chỉ hiện khi máy có từ 2 camera.
+  Mặc định camera trước; chỉ đổi khi bấm (thầy cô hoặc bạn quay giúp). Camera sau không lật gương.
+
 ## [0.7.0] - 2026-11-22: Tự tập – xem camera và bảng từng bộ phận cùng lúc
 
 ### Thay đổi

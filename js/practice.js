@@ -68,7 +68,7 @@ export function mountPractice(root, ex) {
         <p class="stage-advice" aria-hidden="true"></p>
         ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
-          <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden>${icon('flip')}<span class="visually-hidden">Đổi camera</span></button>
+          <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
         </div>
       </div>
@@ -146,8 +146,15 @@ export function mountPractice(root, ex) {
     source = 'camera';
     video.srcObject = stream;
     stage.classList.toggle('mirror', facing === 'user');
-    $('[data-act="flip"]').hidden = false;
+    // Nút đổi camera chỉ hiện khi máy có từ 2 camera; mặc định camera trước, chỉ đổi khi bấm.
+    const flip = $('[data-act="flip"]');
+    const cams = (await navigator.mediaDevices.enumerateDevices().catch(() => [])).filter((d) => d.kind === 'videoinput').length;
+    flip.hidden = cams < 2;
+    const next = facing === 'user' ? 'Camera sau' : 'Camera trước';
+    flip.querySelector('.flip-text').textContent = next;
+    flip.setAttribute('aria-label', `Đổi sang ${next.toLowerCase()}`);
     await begin();
+    if (facing === 'environment') setStatus('Đang dùng camera sau: hướng máy về phía bạn đang tập, thấy cả người.');
   }
 
   async function startFile(file) {
@@ -196,7 +203,7 @@ export function mountPractice(root, ex) {
 
   function process(lm) {
     const w = video.videoWidth, h = video.videoHeight;
-    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; stage.style.aspectRatio = `${w} / ${h}`; }
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; stage.style.aspectRatio = `${w} / ${h}`; stage.style.setProperty('--ar', (w / h).toFixed(4)); }
     ctx.clearRect(0, 0, w, h);
     const tSec = source === 'file' ? video.currentTime : performance.now() / 1000;
     if (!lm) {

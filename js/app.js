@@ -390,6 +390,9 @@ async function showTab(tabId, { focus = false, updateHash = true } = {}) {
   panel.tabIndex = 0;
   body.replaceChildren(panel);
   body.scrollTop = 0;
+  // Điện thoại: cả hộp thoại cuộn chung → đổi tab thì đưa thanh tab về đầu màn hình nếu đã cuộn qua.
+  const inner = dlg.querySelector('.sheet__inner'), tabsEl = dlg.querySelector('.tabs');
+  if (inner && tabsEl && inner.scrollTop > tabsEl.offsetTop) inner.scrollTop = Math.max(0, tabsEl.offsetTop - 8);
   if (tab.id === 'huong-dan') {
     panel.innerHTML = panelGuide(ex);
     if (ex.scoring) {
