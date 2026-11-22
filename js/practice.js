@@ -7,6 +7,7 @@ import {
   loadPoseLandmarker, evaluateRules, measure, adviceFor, HoldTimer, RepCounter, CONNECTIONS, PASS_SCORE,
 } from './pose-scoring.js';
 import { esc } from './util.js';
+import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 
 const PART = {
   11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -41,6 +42,14 @@ export function mountPractice(root, ex) {
           ${sc.pose ? `<p class="goal-card__pose">${esc(sc.pose)}</p>` : ''}
           <p class="goal-card__sub">Mỗi bộ phận đạt từ ${PASS_SCORE}% là được.</p></div>
       </div>
+      <section class="figure-card figure-card--pre" aria-label="Tư thế mẫu">
+        <div class="figure-card__img" data-fig="pre"></div>
+        <div class="figure-card__body">
+          <h4 class="figure-card__title">Tư thế mẫu ${sc.camera === 'front' ? '(nhìn thẳng)' : '(nhìn nghiêng)'}</h4>
+          <p class="figure-card__hint">Làm theo hình. Số trên hình là bộ phận máy chấm:</p>
+          <div data-fig-legend></div>
+        </div>
+      </section>
       <p class="tip">${cameraTip(sc)}</p>
 
       <div class="source-buttons">
@@ -66,6 +75,9 @@ export function mountPractice(root, ex) {
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
         <p class="stage-advice" aria-hidden="true"></p>
+        <button type="button" class="stage-figure" data-act="fig-toggle" aria-label="Thu nhỏ hình mẫu" aria-pressed="false">
+          <span class="stage-figure__img" data-fig="inset"></span><span class="stage-figure__label">Hình mẫu</span>
+        </button>
         ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
@@ -74,6 +86,10 @@ export function mountPractice(root, ex) {
       </div>
 
       <div class="scoreboard" hidden>
+        <section class="figure-card figure-card--live" aria-label="Tư thế mẫu">
+          <div class="figure-card__img" data-fig="live"></div>
+          <div class="figure-card__body"><h4 class="figure-card__title">Tư thế mẫu</h4><div data-fig-legend></div></div>
+        </section>
         <div class="stats">
           ${isReps ? `
             <div class="stat"><span class="stat__value" data-k="reps">0/${sc.reps.target}</span><span class="stat__label">Lần đạt</span></div>
@@ -101,6 +117,21 @@ export function mountPractice(root, ex) {
     </div>`;
 
   const $ = (s) => root.querySelector(s);
+  // Hình nộm tư thế mẫu (vẽ từ chính các góc chấm điểm)
+  let stopFig = () => {};
+  try {
+    const model = figureModel(sc);
+    const figs = [...root.querySelectorAll('[data-fig]')].map((box) => {
+      const f = createFigure(model, { numbers: box.dataset.fig !== 'inset' });
+      box.append(f.el);
+      return f;
+    });
+    root.querySelectorAll('[data-fig-legend]').forEach((b) => { b.innerHTML = figureLegend(model, sc); });
+    stopFig = animateFigures(model, figs);
+  } catch (err) {
+    console.warn('Không vẽ được hình mẫu', err);
+    root.querySelectorAll('.figure-card, .stage-figure').forEach((e) => e.remove());
+  }
   const stage = $('.stage'), video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d');
   const labelsBox = $('.float-labels'), status = $('.status'), board = $('.scoreboard');
   const setStatus = (t) => { status.textContent = t; status.classList.toggle('is-loading', /^Đang/.test(t)); };
@@ -393,7 +424,7 @@ export function mountPractice(root, ex) {
   function stageObstacles(mirror) {
     const box = stage.getBoundingClientRect();
     if (!box.width) return [];
-    return ['.hud', '.stage-controls', '.stage-parts'].map((sel) => root.querySelector(sel)?.getBoundingClientRect())
+    return ['.hud', '.stage-controls', '.stage-parts', '.stage-figure'].map((sel) => root.querySelector(sel)?.getBoundingClientRect())
       .filter((r) => r && r.width > 0).map((r) => {
       const cx = (r.left + r.width / 2 - box.left) / box.width;
       return { x: mirror ? 1 - cx : cx, y: (r.top + r.height / 2 - box.top) / box.height, w: r.width / box.width + 0.02, h: r.height / box.height + 0.02 };
@@ -489,6 +520,11 @@ export function mountPractice(root, ex) {
     else if (act === 'again') {
       if (running) newAttempt(); else startCamera();
       stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (act === 'fig-toggle') {
+      const b = e.target.closest('.stage-figure');
+      const min = b.classList.toggle('is-min');
+      b.setAttribute('aria-pressed', String(min));
+      b.setAttribute('aria-label', min ? 'Hiện hình mẫu' : 'Thu nhỏ hình mẫu');
     } else if (act === 'flip') { facing = facing === 'user' ? 'environment' : 'user'; startCamera(); }
   });
   root.addEventListener('change', (e) => {
@@ -498,7 +534,7 @@ export function mountPractice(root, ex) {
   document.addEventListener('visibilitychange', onHidden);
   renderResults();
 
-  return () => { stop(); document.removeEventListener('visibilitychange', onHidden); };
+  return () => { stop(); stopFig(); document.removeEventListener('visibilitychange', onHidden); };
 }
 
 function drawSkeleton(g, lm, w, h, parts, repInfo) {

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.0] - 2026-11-22: Hình nộm tư thế mẫu ở tab Tự tập
+
+### Thêm
+- **Hình nộm tư thế mẫu** cho cả 88 bài có camera, **vẽ tự động từ chính các góc máy dùng để chấm** (`js/pose-figure.js`),
+  nên hình luôn khớp với cách chấm. Bài giữ tư thế: hình chuyển từ đứng sang tư thế mẫu rồi giữ yên (như ảnh GIF);
+  bài đếm lần: hình lặp động tác lên – xuống. Tắt chuyển động khi máy bật "giảm chuyển động".
+- Chấm cam đánh số trên hình = bộ phận được chấm, kèm chú thích "① Tay trái ngang vai ~90°".
+- **Trước khi bật camera:** thẻ "Tư thế mẫu" ngay trên nút Bật camera.
+- **Đang tập – máy tính:** hình mẫu ở đầu cột bên phải, cạnh camera. **Điện thoại:** hình mẫu nhỏ ở góc khung camera,
+  bấm để thu nhỏ / hiện lại.
+- Gợi ý vẽ riêng (`scoring.figure`) cho tư thế khó suy ra từ góc: xuất phát thấp lớp 8, 9.
+
 ## [0.11.0] - 2026-11-22: Lớp 9 theo sách giáo khoa – đủ 4 khối
 
 ### Thay đổi
