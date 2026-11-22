@@ -177,12 +177,34 @@
       "youtubeSearch": "dinh dưỡng trong luyện tập thể dục thể thao lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 4,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-5-1775787838591.png",
+            "caption": ""
+          },
+          {
+            "page": 5,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-6-1775787838940.png",
+            "caption": ""
+          },
+          {
+            "page": 6,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-7-1775787839295.png",
+            "caption": ""
+          },
+          {
+            "page": 7,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-8-1775787839651.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=5",
         "range": [
           4,
           7
-        ]
+        ],
+        "remote": true
       },
       "scoring": null
     },
@@ -218,12 +240,39 @@
       "youtubeSearch": "động tác bổ trợ chạy cự li ngắn chạy bước nhỏ nâng cao đùi đạp sau lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 8,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-9-1775787840042.png",
+            "caption": ""
+          },
+          {
+            "page": 9,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-10-1775787840534.png",
+            "caption": ""
+          },
+          {
+            "page": 10,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-11-1775787840930.png",
+            "caption": ""
+          },
+          {
+            "page": 11,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-12-1775787841309.png",
+            "caption": ""
+          },
+          {
+            "page": 12,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-13-1775787841697.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=9",
         "range": [
           8,
           12
-        ]
+        ],
+        "remote": true
       },
       "scoring": {
         "mode": "reps",
@@ -250,7 +299,8 @@
           "depthTarget": 90,
           "tolerance": 15,
           "range": 40
-        }
+        },
+        "pose": "Chạy nâng cao đùi tại chỗ: đùi nâng gần vuông góc với thân."
       }
     },
     {
@@ -286,14 +336,96 @@
       "youtubeSearch": "kĩ thuật chạy giữa quãng chạy cự li ngắn lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 13,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-14-1775787842040.png",
+            "caption": ""
+          },
+          {
+            "page": 14,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-15-1775787842391.png",
+            "caption": ""
+          },
+          {
+            "page": 15,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-16-1775787842732.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=14",
         "range": [
           13,
           15
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Dừng hình một bước chạy: đùi trước nâng, tay co đánh tay.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Khuỷu tay co khoảng 90°",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Đùi chân trước nâng lên",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 125,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Gối chân trước gập",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 100,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-xuat-phat-cao",
@@ -327,14 +459,106 @@
       "youtubeSearch": "xuất phát cao chạy lao sau xuất phát lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 16,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-17-1775787843069.png",
+            "caption": ""
+          },
+          {
+            "page": 17,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-18-1775787843392.png",
+            "caption": ""
+          },
+          {
+            "page": 18,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-19-1775787843736.png",
+            "caption": ""
+          },
+          {
+            "page": 19,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-20-1775787844061.png",
+            "caption": ""
+          },
+          {
+            "page": 20,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-21-1775787844424.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=17",
         "range": [
           16,
           20
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Tư thế “Sẵn sàng”: khuỵu gối, thân ngả trước, tay co.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối chân trước khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 140,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Thân ngả ra trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 135,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 100,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-chay-ve-dich",
@@ -367,14 +591,101 @@
       "youtubeSearch": "kĩ thuật chạy về đích chạy cự li ngắn 60m lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 20,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-21-1775787844424.png",
+            "caption": ""
+          },
+          {
+            "page": 21,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-22-1775787844751.png",
+            "caption": ""
+          },
+          {
+            "page": 22,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-23-1775787845093.png",
+            "caption": ""
+          },
+          {
+            "page": 23,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-24-1775787845440.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=21",
         "range": [
           20,
           23
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Bước cuối về đích: gập thân ra trước, chân sau duỗi.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Thân gập ra trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 125,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Chân sau duỗi thẳng",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 165,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 100,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-nem-bong-bo-tro",
@@ -408,14 +719,106 @@
       "youtubeSearch": "động tác bổ trợ kĩ thuật ném bóng lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 24,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-25-1775787845755.png",
+            "caption": ""
+          },
+          {
+            "page": 25,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-26-1775787846125.png",
+            "caption": ""
+          },
+          {
+            "page": 26,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-27-1775787846489.png",
+            "caption": ""
+          },
+          {
+            "page": 27,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-28-1775787846796.png",
+            "caption": ""
+          },
+          {
+            "page": 28,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-29-1775787847150.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=25",
         "range": [
           24,
           28
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Chuẩn bị ném một tay trên cao: tay cầm bóng cao ngang đầu.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Cánh tay cầm bóng đưa cao",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 140,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay gập",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 80,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Chân đứng vững",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-ra-suc-cuoi-cung",
@@ -448,14 +851,109 @@
       "youtubeSearch": "kĩ thuật ra sức cuối cùng ném bóng lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 28,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-29-1775787847150.png",
+            "caption": ""
+          },
+          {
+            "page": 29,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-30-1775787847719.png",
+            "caption": ""
+          },
+          {
+            "page": 30,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-31-1775787848071.png",
+            "caption": ""
+          },
+          {
+            "page": 31,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-32-1775787848413.png",
+            "caption": ""
+          },
+          {
+            "page": 32,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-33-1775787848784.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=29",
         "range": [
           28,
           32
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "TTCB ra sức cuối cùng: tay cầm bóng duỗi thẳng phía sau, tay kia ra trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Vai trái mở ngang",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 90,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Vai phải mở ngang",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 90,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Tay cầm bóng duỗi thẳng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Gối trước hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 155,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-chay-da-nem-bong",
@@ -488,14 +986,106 @@
       "youtubeSearch": "chạy đà ném bóng bốn bước cuối lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 32,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-33-1775787848784.png",
+            "caption": ""
+          },
+          {
+            "page": 33,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-34-1775787849182.png",
+            "caption": ""
+          },
+          {
+            "page": 34,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-35-1775787849542.png",
+            "caption": ""
+          },
+          {
+            "page": 35,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-36-1775787849898.png",
+            "caption": ""
+          },
+          {
+            "page": 36,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-37-1775787850206.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=33",
         "range": [
           32,
           36
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Bước 4 của chạy đà: thân ngả sau, tay cầm bóng duỗi ở phía sau.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Tay ném đưa ra sau, ngang vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 100,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Tay ném duỗi thẳng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Gối chân trước hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-chay-trung-binh-bo-tro",
@@ -528,14 +1118,64 @@
       "youtubeSearch": "chạy cự li trung bình thở nhịp đơn nhịp kép lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 37,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-38-1775787850588.png",
+            "caption": ""
+          },
+          {
+            "page": 38,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-39-1775787850970.png",
+            "caption": ""
+          },
+          {
+            "page": 39,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-40-1775787851353.png",
+            "caption": ""
+          },
+          {
+            "page": 40,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-41-1775787851709.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=38",
         "range": [
           37,
           40
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Chạy tại chỗ, nâng đùi vừa phải, thở đều theo nhịp.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc hông khi nâng đùi",
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ],
+          "pick": "min",
+          "down": 145,
+          "up": 165,
+          "target": 20,
+          "depthTarget": 125,
+          "tolerance": 15,
+          "range": 40
+        }
+      }
     },
     {
       "id": "g6-chay-trung-binh-giua-quang",
@@ -568,14 +1208,96 @@
       "youtubeSearch": "kĩ thuật chạy giữa quãng đường vòng chạy cự li trung bình lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 41,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-42-1775787852108.png",
+            "caption": ""
+          },
+          {
+            "page": 42,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-43-1775787852446.png",
+            "caption": ""
+          },
+          {
+            "page": 43,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-44-1775787852762.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=42",
         "range": [
           41,
           43
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Dừng hình một bước chạy giữa quãng: đùi nâng vừa phải, tay co.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Khuỷu tay co khoảng 90°",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Đùi chân trước nâng vừa",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 140,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Gối chân trước gập",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 115,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-chay-trung-binh-xuat-phat",
@@ -608,14 +1330,101 @@
       "youtubeSearch": "xuất phát chạy về đích chạy cự li trung bình lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 44,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-45-1775787853096.png",
+            "caption": ""
+          },
+          {
+            "page": 45,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-46-1775787853400.png",
+            "caption": ""
+          },
+          {
+            "page": 46,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-47-1775787853724.png",
+            "caption": ""
+          },
+          {
+            "page": 47,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-48-1775787854059.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=45",
         "range": [
           44,
           47
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Tư thế xuất phát cao: gối hơi khuỵu, thân hơi ngả trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trước hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Thân hơi ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 110,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-dang-tay",
@@ -639,8 +1448,7 @@
       ],
       "summary": [
         "Tập từng nhịp, rồi ghép 3 – 4 nhịp.",
-        "Đếm nhịp to, rõ.",
-        "Chấm điểm bằng camera: nhịp 3 – dang ngang."
+        "Đếm nhịp to, rõ."
       ],
       "related": [
         "g6-tay-dua-cao",
@@ -650,12 +1458,39 @@
       "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 1 đến 11",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 48,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-49-1775787854368.png",
+            "caption": ""
+          },
+          {
+            "page": 49,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-50-1775787854680.png",
+            "caption": ""
+          },
+          {
+            "page": 50,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-51-1775787855001.png",
+            "caption": ""
+          },
+          {
+            "page": 51,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-52-1775787855316.png",
+            "caption": ""
+          },
+          {
+            "page": 52,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-53-1775787855621.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=49",
         "range": [
           48,
           52
-        ]
+        ],
+        "remote": true
       },
       "scoring": {
         "mode": "hold",
@@ -706,7 +1541,8 @@
             "tolerance": 15,
             "range": 40
           }
-        ]
+        ],
+        "pose": "Nhịp 3: hai tay dang ngang, lòng bàn tay sấp."
       }
     },
     {
@@ -729,8 +1565,7 @@
       ],
       "summary": [
         "Biết tự sửa sai về tư thế.",
-        "Tập chậm trước, nhanh sau.",
-        "Chấm điểm bằng camera: nhịp 17 – tay thẳng lên cao."
+        "Tập chậm trước, nhanh sau."
       ],
       "related": [
         "g6-dang-tay",
@@ -740,12 +1575,34 @@
       "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 12 đến 23",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 53,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-54-1775787855937.png",
+            "caption": ""
+          },
+          {
+            "page": 54,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-55-1775787856241.png",
+            "caption": ""
+          },
+          {
+            "page": 55,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-56-1775787856581.png",
+            "caption": ""
+          },
+          {
+            "page": 56,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-57-1775787856926.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=54",
         "range": [
           53,
           56
-        ]
+        ],
+        "remote": true
       },
       "scoring": {
         "mode": "hold",
@@ -796,7 +1653,8 @@
             "tolerance": 15,
             "range": 40
           }
-        ]
+        ],
+        "pose": "Nhịp 17: hai tay đưa thẳng lên cao, mắt nhìn theo tay."
       }
     },
     {
@@ -830,14 +1688,106 @@
       "youtubeSearch": "bài thể dục liên hoàn lớp 6 nhịp 24 đến 30",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 57,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-58-1775787857251.png",
+            "caption": ""
+          },
+          {
+            "page": 58,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-59-1775787857574.png",
+            "caption": ""
+          },
+          {
+            "page": 59,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-60-1775787857917.png",
+            "caption": ""
+          },
+          {
+            "page": 60,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-61-1775787858249.png",
+            "caption": ""
+          },
+          {
+            "page": 61,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-62-1775787858668.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=58",
         "range": [
           57,
           61
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Nhịp 29: gối khuỵu, hai tay đưa thẳng ra trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Tay đưa ra trước, ngang vai",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "closest",
+            "target": 90,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Tay duỗi thẳng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "max",
+            "target": 175,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Gối khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 130,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-cau-long-bo-tro",
@@ -870,14 +1820,100 @@
       "youtubeSearch": "cầu lông lớp 6 cách cầm vợt di chuyển đơn bước",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 62,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-63-1775787859001.png",
+            "caption": ""
+          },
+          {
+            "page": 63,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-64-1775787859340.png",
+            "caption": ""
+          },
+          {
+            "page": 64,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-65-1775787859665.png",
+            "caption": ""
+          },
+          {
+            "page": 65,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-66-1775787859972.png",
+            "caption": ""
+          },
+          {
+            "page": 66,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-67-1775787860280.png",
+            "caption": ""
+          },
+          {
+            "page": 67,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-68-1775787860588.png",
+            "caption": ""
+          },
+          {
+            "page": 68,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-69-1775787860913.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=63",
         "range": [
           62,
           68
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "TTCB cầu lông: hai chân rộng bằng vai, gối hơi khuỵu, vợt phía trước.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trái hơi khuỵu",
+            "joints": [
+              23,
+              25,
+              27
+            ],
+            "target": 160,
+            "tolerance": 8,
+            "range": 30
+          },
+          {
+            "label": "Gối phải hơi khuỵu",
+            "joints": [
+              24,
+              26,
+              28
+            ],
+            "target": 160,
+            "tolerance": 8,
+            "range": 30
+          },
+          {
+            "label": "Tay cầm vợt co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 110,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-cau-long-thap-tay",
@@ -910,14 +1946,106 @@
       "youtubeSearch": "kĩ thuật đánh cầu thấp tay cầu lông lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 68,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-69-1775787860913.png",
+            "caption": ""
+          },
+          {
+            "page": 69,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-70-1775787861253.png",
+            "caption": ""
+          },
+          {
+            "page": 70,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-71-1775787861596.png",
+            "caption": ""
+          },
+          {
+            "page": 71,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-72-1775787861977.png",
+            "caption": ""
+          },
+          {
+            "page": 72,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-73-1775787862317.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=69",
         "range": [
           68,
           72
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Bước lên đánh cầu thấp tay: gối trước khuỵu sâu, chân sau duỗi.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối chân trước khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 115,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Chân sau duỗi thẳng",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          },
+          {
+            "label": "Thân hơi ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 140,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-cau-long-phat-cau",
@@ -950,14 +2078,101 @@
       "youtubeSearch": "kĩ thuật phát cầu trái tay cầu lông lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 73,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-74-1775787862636.png",
+            "caption": ""
+          },
+          {
+            "page": 74,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-75-1775787862968.png",
+            "caption": ""
+          },
+          {
+            "page": 75,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-76-1775787863287.png",
+            "caption": ""
+          },
+          {
+            "page": 76,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-77-1775787863645.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=74",
         "range": [
           73,
           76
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "TTCB phát cầu trái tay: vợt trước bụng, khuỷu co, đứng thẳng.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Khuỷu tay cầm vợt co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 90,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Cánh tay hạ trước thân",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 35,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Chân đứng vững",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 170,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-bong-da-bo-tro",
@@ -990,14 +2205,69 @@
       "youtubeSearch": "bài tập bổ trợ bóng đá lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 77,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-78-1775787863981.png",
+            "caption": ""
+          },
+          {
+            "page": 78,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-79-1775787864383.png",
+            "caption": ""
+          },
+          {
+            "page": 79,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-80-1775787864702.png",
+            "caption": ""
+          },
+          {
+            "page": 80,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-81-1775787865048.png",
+            "caption": ""
+          },
+          {
+            "page": 81,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-82-1775787865440.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=78",
         "range": [
           77,
           81
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Tại chỗ bật cao bằng hai chân: khuỵu gối rồi bật lên.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc gối khi khuỵu lấy đà",
+          "oneOf": [
+            [
+              23,
+              25,
+              27
+            ],
+            [
+              24,
+              26,
+              28
+            ]
+          ],
+          "pick": "min",
+          "down": 130,
+          "up": 165,
+          "target": 10,
+          "depthTarget": 115,
+          "tolerance": 15,
+          "range": 40
+        }
+      }
     },
     {
       "id": "g6-da-bong-long-ban-chan",
@@ -1030,14 +2300,64 @@
       "youtubeSearch": "kĩ thuật đá bóng bằng lòng bàn chân lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 82,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-83-1775787865759.png",
+            "caption": ""
+          },
+          {
+            "page": 83,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-84-1775787866133.png",
+            "caption": ""
+          },
+          {
+            "page": 84,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-85-1775787866482.png",
+            "caption": ""
+          },
+          {
+            "page": 85,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-86-1775787866818.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=83",
         "range": [
           82,
           85
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Vung chân thuận đá (không bóng) từ sau ra trước.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc hông khi vung chân",
+          "oneOf": [
+            [
+              11,
+              23,
+              25
+            ],
+            [
+              12,
+              24,
+              26
+            ]
+          ],
+          "pick": "min",
+          "down": 150,
+          "up": 170,
+          "target": 10,
+          "depthTarget": 140,
+          "tolerance": 15,
+          "range": 40
+        }
+      }
     },
     {
       "id": "g6-dung-bong",
@@ -1070,14 +2390,101 @@
       "youtubeSearch": "kĩ thuật dừng bóng bằng lòng bàn chân lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 86,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-87-1775787867149.png",
+            "caption": ""
+          },
+          {
+            "page": 87,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-88-1775787867525.png",
+            "caption": ""
+          },
+          {
+            "page": 88,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-89-1775787867852.png",
+            "caption": ""
+          },
+          {
+            "page": 89,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-90-1775787868203.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=87",
         "range": [
           86,
           89
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Đưa lòng bàn chân ra trước đón bóng, chân trụ hơi khuỵu.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Đùi chân đón bóng đưa ra trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 145,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Gối chân đón bóng hơi co",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 140,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Chân trụ hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "max",
+            "target": 160,
+            "tolerance": 12,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "id": "g6-dan-bong",
@@ -1110,14 +2517,96 @@
       "youtubeSearch": "kĩ thuật dẫn bóng bằng lòng bàn chân lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 90,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-91-1775787868537.png",
+            "caption": ""
+          },
+          {
+            "page": 91,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-92-1775787868858.png",
+            "caption": ""
+          },
+          {
+            "page": 92,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-93-1775787869185.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=91",
         "range": [
           90,
           92
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "TTCB dẫn bóng: gối hơi khuỵu, thân hơi ngả trước, tay co tự nhiên.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 10,
+            "range": 30
+          },
+          {
+            "label": "Thân hơi ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 155,
+            "tolerance": 10,
+            "range": 30
+          },
+          {
+            "label": "Tay co tự nhiên",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "closest",
+            "target": 120,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-bong-ro-bo-tro",
@@ -1150,14 +2639,93 @@
       "youtubeSearch": "bài tập bổ trợ bóng rổ bước trượt ngang lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 93,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-94-1775787869522.png",
+            "caption": ""
+          },
+          {
+            "page": 94,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-95-1775787869866.png",
+            "caption": ""
+          },
+          {
+            "page": 95,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-96-1775787870182.png",
+            "caption": ""
+          },
+          {
+            "page": 96,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-97-1775787870508.png",
+            "caption": ""
+          },
+          {
+            "page": 97,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-98-1775787870862.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=94",
         "range": [
           93,
           97
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "front",
+        "pose": "Tư thế bước trượt ngang: chân rộng, gối khuỵu, hai tay dang rộng hơi co.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối trái khuỵu",
+            "joints": [
+              23,
+              25,
+              27
+            ],
+            "target": 135,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Gối phải khuỵu",
+            "joints": [
+              24,
+              26,
+              28
+            ],
+            "target": 135,
+            "tolerance": 15,
+            "range": 40
+          },
+          {
+            "label": "Tay trái dang rộng",
+            "joints": [
+              23,
+              11,
+              13
+            ],
+            "target": 45,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Tay phải dang rộng",
+            "joints": [
+              24,
+              12,
+              14
+            ],
+            "target": 45,
+            "tolerance": 20,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-dan-bong-ro",
@@ -1190,14 +2758,96 @@
       "youtubeSearch": "kĩ thuật dẫn bóng rổ lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 98,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-99-1775787871194.png",
+            "caption": ""
+          },
+          {
+            "page": 99,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-100-1775787871530.png",
+            "caption": ""
+          },
+          {
+            "page": 100,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-101-1775787871860.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=99",
         "range": [
           98,
           100
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Tư thế dẫn bóng: gối khuỵu, thân ngả trước, tay dẫn bóng co.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Gối khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 140,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Thân ngả trước",
+            "oneOf": [
+              [
+                11,
+                23,
+                25
+              ],
+              [
+                12,
+                24,
+                26
+              ]
+            ],
+            "pick": "min",
+            "target": 145,
+            "tolerance": 15,
+            "range": 35
+          },
+          {
+            "label": "Khuỷu tay dẫn bóng co",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 120,
+            "tolerance": 25,
+            "range": 40
+          }
+        ]
+      }
     },
     {
       "id": "g6-chuyen-bat-bong-ro",
@@ -1230,14 +2880,69 @@
       "youtubeSearch": "kĩ thuật chuyền bắt bóng hai tay trước ngực bóng rổ lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 101,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-102-1775787872194.png",
+            "caption": ""
+          },
+          {
+            "page": 102,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-103-1775787872523.png",
+            "caption": ""
+          },
+          {
+            "page": 103,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-104-1775787872873.png",
+            "caption": ""
+          },
+          {
+            "page": 104,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-105-1775787873207.png",
+            "caption": ""
+          },
+          {
+            "page": 105,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-106-1775787873534.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=102",
         "range": [
           101,
           105
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "reps",
+        "camera": "side",
+        "pose": "Chuyền bóng trước ngực: co tay ôm bóng rồi duỗi thẳng đẩy ra.",
+        "estimated": true,
+        "rules": [],
+        "reps": {
+          "label": "Góc khuỷu tay khi chuyền",
+          "oneOf": [
+            [
+              11,
+              13,
+              15
+            ],
+            [
+              12,
+              14,
+              16
+            ]
+          ],
+          "pick": "max",
+          "down": 90,
+          "up": 155,
+          "target": 10,
+          "depthTarget": 75,
+          "tolerance": 15,
+          "range": 40
+        }
+      }
     },
     {
       "id": "g6-nem-ro",
@@ -1271,14 +2976,106 @@
       "youtubeSearch": "kĩ thuật ném rổ một tay trên vai lớp 6",
       "book": {
         "series": "Kết nối tri thức với cuộc sống (NXB Giáo dục Việt Nam)",
-        "pages": [],
+        "pages": [
+          {
+            "page": 106,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-107-1775787873852.png",
+            "caption": ""
+          },
+          {
+            "page": 107,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-108-1775787874215.png",
+            "caption": ""
+          },
+          {
+            "page": 108,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-109-1775787874549.png",
+            "caption": ""
+          },
+          {
+            "page": 109,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-110-1775787874871.png",
+            "caption": ""
+          },
+          {
+            "page": 110,
+            "image": "https://taphuan.nxbgd.vn/storage/upload/taphuan/4699941149-page-111-1775787875185.png",
+            "caption": ""
+          }
+        ],
         "url": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgk-giao-duc-the-chat-6.4699941149#page=107",
         "range": [
           106,
           110
-        ]
+        ],
+        "remote": true
       },
-      "scoring": null
+      "scoring": {
+        "mode": "hold",
+        "holdSeconds": 2,
+        "camera": "side",
+        "pose": "Tư thế ném rổ: bóng trên vai, khuỷu gập dưới bóng, gối hơi khuỵu.",
+        "estimated": true,
+        "rules": [
+          {
+            "label": "Cánh tay ném đưa cao",
+            "oneOf": [
+              [
+                23,
+                11,
+                13
+              ],
+              [
+                24,
+                12,
+                14
+              ]
+            ],
+            "pick": "max",
+            "target": 150,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Khuỷu tay gập dưới bóng",
+            "oneOf": [
+              [
+                11,
+                13,
+                15
+              ],
+              [
+                12,
+                14,
+                16
+              ]
+            ],
+            "pick": "min",
+            "target": 90,
+            "tolerance": 20,
+            "range": 40
+          },
+          {
+            "label": "Gối hơi khuỵu",
+            "oneOf": [
+              [
+                23,
+                25,
+                27
+              ],
+              [
+                24,
+                26,
+                28
+              ]
+            ],
+            "pick": "min",
+            "target": 150,
+            "tolerance": 15,
+            "range": 35
+          }
+        ]
+      }
     },
     {
       "demo": true,

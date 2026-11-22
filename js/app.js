@@ -313,28 +313,31 @@ function panelBook(e, root) {
     : waitingPanel('summary', e);
   const imageSide = pages.length
     ? `<figure class="book-viewer">
-        <div class="book-viewer__frame"><img src="${esc(pages[0].image)}" alt="Trang sách${pages[0].page ? ` ${pages[0].page}` : ''}: ${esc(e.title)}" decoding="async"></div>
+        <div class="book-viewer__frame"><img src="${esc(pages[0].image)}" alt="Trang sách${pages[0].page ? ` ${pages[0].page}` : ''}: ${esc(e.title)}" decoding="async" loading="lazy" referrerpolicy="no-referrer"></div>
         <figcaption><span class="book-viewer__cap">${pageCap(pages[0])}</span>
           <a class="btn btn--ghost btn--small book-viewer__full" href="${esc(pages[0].image)}" target="_blank" rel="noopener">Phóng to ↗</a></figcaption>
         ${pages.length > 1 ? `<div class="book-pages" role="group" aria-label="Chọn trang">${pages.map((p, i) =>
           `<button type="button" class="chip chip--sm" data-page="${i}" aria-pressed="${i === 0}">${p.page ? `Trang ${p.page}` : `Ảnh ${i + 1}`}</button>`).join('')}</div>` : ''}
+        ${b.remote ? '<p class="muted small book-viewer__src">Ảnh hiển thị trực tiếp từ sách điện tử của NXB Giáo dục Việt Nam.</p>' : ''}
        </figure>`
     : b.url && b.range
-      ? `<div class="waiting book-link" role="note">
-          <div class="waiting__icon">${svg('book', 30)}</div>
-          <h3>SGK trang ${b.range[0]}${b.range[1] > b.range[0] ? `–${b.range[1]}` : ''}</h3>
-          <p>Xem hình minh hoạ trong sách điện tử của NXB Giáo dục.</p>
-          <p><a class="btn btn--primary" href="${esc(b.url)}" target="_blank" rel="noopener">${svg('book', 20)}<span>Mở sách trang ${b.range[0]}</span></a></p>
-          <p class="muted small">Hoặc mở sách giấy đến trang ${b.range[0]}.</p>
-        </div>`
+      ? bookLinkPanel(b)
       : waitingPanel('book', e, b.url ? `<p><a class="btn btn--ghost" href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : '');
   root.innerHTML = `
     ${series ? `<p class="muted small book-series">Bộ sách: ${esc(series)}</p>` : ''}
     <div class="book-split">
       <section class="book-split__text" aria-labelledby="sum-title"><h3 id="sum-title">Ý chính</h3>${summary}
-        ${b.url && pages.length ? `<p><a href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : ''}</section>
+        ${b.url && pages.length ? `<p class="small book-open"><a href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách gốc để xem thêm trang ↗</a></p>` : ''}</section>
       <section class="book-split__image" aria-label="Trang sách giáo khoa">${imageSide}</section>
     </div>`;
+  // Ảnh trang sách lấy từ máy chủ NXB: nếu không tải được (mạng trường chặn, máy chủ lỗi) → hiện nút mở sách.
+  const viewerImg = root.querySelector('.book-viewer img');
+  if (viewerImg && b.remote && b.url && b.range) {
+    viewerImg.addEventListener('error', () => {
+      const fig = root.querySelector('.book-viewer');
+      if (fig) fig.outerHTML = bookLinkPanel(b, 'Chưa tải được ảnh trang sách. Em mở sách điện tử của NXB Giáo dục nhé.');
+    }, { once: true });
+  }
   root.addEventListener('click', (ev) => {
     const pg = ev.target.closest('[data-page]');
     if (!pg) return;
@@ -345,6 +348,15 @@ function panelBook(e, root) {
     root.querySelector('.book-viewer__full').href = p.image;
     $$('[data-page]', root).forEach((x) => x.setAttribute('aria-pressed', String(x === pg)));
   });
+}
+function bookLinkPanel(b, note = 'Xem hình minh hoạ trong sách điện tử của NXB Giáo dục.') {
+  return `<div class="waiting book-link" role="note">
+    <div class="waiting__icon">${svg('book', 30)}</div>
+    <h3>SGK trang ${b.range[0]}${b.range[1] > b.range[0] ? `–${b.range[1]}` : ''}</h3>
+    <p>${note}</p>
+    <p><a class="btn btn--primary" href="${esc(b.url)}" target="_blank" rel="noopener">${svg('book', 20)}<span>Mở sách trang ${b.range[0]}</span></a></p>
+    <p class="muted small">Hoặc mở sách giấy đến trang ${b.range[0]}.</p>
+  </div>`;
 }
 const pageCap = (p) => [p.page ? `Trang ${p.page}` : '', p.caption].filter(Boolean).join(' — ') || 'Ảnh trang sách';
 

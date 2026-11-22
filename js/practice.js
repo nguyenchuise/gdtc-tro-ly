@@ -38,6 +38,7 @@ export function mountPractice(root, ex) {
       <div class="goal-card">
         <span class="goal-card__icon" aria-hidden="true">${icon('target')}</span>
         <div><p class="goal-card__title">${goalText}</p>
+          ${sc.pose ? `<p class="goal-card__pose">${esc(sc.pose)}</p>` : ''}
           <p class="goal-card__sub">Mỗi bộ phận đạt từ ${PASS_SCORE}% là được.</p></div>
       </div>
       <p class="tip">${cameraTip(sc)}</p>

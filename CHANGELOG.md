@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0] - 2026-11-22: Lớp 6 – tự tập camera mọi bài, xem trước trang sách
+
+### Thay đổi
+- **Tự tập với camera cho 24/25 bài lớp 6** (mọi bài vận động, đủ 7 chủ đề vận động). Mỗi bài chấm một tư thế chính
+  lấy từ hình trong sách, ghi rõ ở thẻ mục tiêu (ví dụ "Tư thế ném rổ: bóng trên vai, khuỷu gập dưới bóng…").
+  Bài có động tác lặp (chạy tại chỗ, bật cao, vung chân đá, chuyền bóng) thì đếm số lần.
+  Góc mục tiêu là **ước lượng từ hình minh hoạ** (`"estimated": true`), cần thử với học sinh thật và chỉnh dần.
+- Bài lý thuyết "Chế độ dinh dưỡng" không có động tác nên không có Tự tập.
+- **Tab Sách:** hiện **ảnh xem trước các trang của bài** (chọn Trang 106, 107…), ảnh tải trực tiếp từ sách điện tử
+  của NXB Giáo dục (không sao chép, không lưu trong repo). Nếu không tải được ảnh → tự hiện nút "Mở sách trang …".
+  Link sách gốc thành tuỳ chọn nhỏ "Mở sách gốc để xem thêm trang ↗".
+
 ## [0.5.0] - 2026-11-22: Lớp 6 theo sách giáo khoa
 
 ### Thay đổi

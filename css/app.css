@@ -298,7 +298,9 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 .summary-list li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-ink); color: #fff; font-size: .8rem; font-weight: 700; display: grid; place-items: center; }
 .book-viewer { margin: 0; }
 .book-viewer__frame { background: #f0f2f1; border: 1px solid var(--line); border-radius: var(--radius-md); overflow: auto; max-height: 70vh; }
-.book-viewer__frame img { display: block; width: 100%; }
+.book-viewer__frame img { display: block; width: 100%; height: auto; aspect-ratio: auto 1093 / 1536; background: #fff; }
+.book-viewer__src { margin: 6px 0 0; }
+.book-open { margin-top: 12px; }
 .book-viewer figcaption { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; color: var(--muted); }
 .book-pages { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 @media (min-width: 760px) {
@@ -319,6 +321,7 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
 .goal-card__icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: rgba(255, 255, 255, .15); color: var(--lime); flex: none; }
 .goal-card__title { margin: 0; font-size: 1rem; font-weight: 500; }
 .goal-card__sub { margin: 0; color: #cfeee0; font-size: .92rem; }
+.goal-card__pose { margin: 2px 0 4px; color: #fff; font-size: .95rem; line-height: 1.45; }
 .source-buttons { display: grid; gap: 8px; margin: 12px 0 6px; }
 .source-buttons > .btn { width: 100%; }
 .source-buttons__alt { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
