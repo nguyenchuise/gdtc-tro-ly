@@ -54,6 +54,7 @@ export function mountPractice(root, ex) {
       </div>
       <p class="status" role="status" aria-live="polite"></p>
 
+      <div class="live-grid">
       <div class="stage" hidden>
         <video playsinline muted aria-label="Hình của em"></video>
         <canvas aria-hidden="true"></canvas>
@@ -65,6 +66,7 @@ export function mountPractice(root, ex) {
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
         <p class="stage-advice" aria-hidden="true"></p>
+        ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden>${icon('flip')}<span class="visually-hidden">Đổi camera</span></button>
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
@@ -83,20 +85,23 @@ export function mountPractice(root, ex) {
             <div class="stat"><span class="stat__value" data-k="hold">0.0s</span><span class="stat__label">Đã giữ / ${sc.holdSeconds}s</span></div>`}
         </div>
         <p class="advice" aria-live="polite"></p>
-        <details class="rules-details">
-          <summary>Xem chi tiết từng bộ phận</summary>
+        <div class="rules-details">
+          <h4 class="rules-title">Từng bộ phận</h4>
           <div class="table-wrap"><table class="rules">
             <caption class="visually-hidden">Kết quả từng bộ phận</caption>
             <thead><tr><th scope="col">Bộ phận</th><th scope="col">Đo được</th><th scope="col">Cần</th><th scope="col">Đạt</th></tr></thead>
             <tbody></tbody>
           </table></div>
-        </details>
+        </div>
+      </div>
       </div>
 
       <section class="results" aria-live="polite" aria-label="Kết quả"></section>
       <p class="fine-print">Điểm chỉ để em tự luyện, không thay thầy cô chấm. Hình ảnh không lưu, không gửi đi.</p>
     </div>`;
 
+  const sheet = root.closest('dialog');
+  sheet?.classList.add('sheet--practice');
   const $ = (s) => root.querySelector(s);
   const stage = $('.stage'), video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d');
   const labelsBox = $('.float-labels'), status = $('.status'), board = $('.scoreboard');
@@ -255,7 +260,7 @@ export function mountPractice(root, ex) {
     drawSkeleton(ctx, lm, w, h, parts, repInfo);
     renderFloating(lm, parts, repInfo);
     const now = performance.now();
-    if (now - lastTableAt > 300) { lastTableAt = now; renderTable(parts, repInfo); }
+    if (now - lastTableAt > 300) { lastTableAt = now; renderTable(parts, repInfo); placeMini(lm); }
   }
 
   // ------------------------------------------------ Hoàn thành một lượt → chụp ảnh, ghi kết quả
@@ -383,8 +388,8 @@ export function mountPractice(root, ex) {
   function stageObstacles(mirror) {
     const box = stage.getBoundingClientRect();
     if (!box.width) return [];
-    return ['.hud', '.stage-controls'].map((sel) => {
-      const r = root.querySelector(sel).getBoundingClientRect();
+    return ['.hud', '.stage-controls', '.stage-parts'].map((sel) => root.querySelector(sel)?.getBoundingClientRect())
+      .filter((r) => r && r.width > 0).map((r) => {
       const cx = (r.left + r.width / 2 - box.left) / box.width;
       return { x: mirror ? 1 - cx : cx, y: (r.top + r.height / 2 - box.top) / box.height, w: r.width / box.width + 0.02, h: r.height / box.height + 0.02 };
     });
@@ -406,6 +411,22 @@ export function mountPractice(root, ex) {
     });
   }
 
+  /** Bảng nhỏ trên camera: đặt ở góc trên không che người; cả hai góc đều che → làm mờ để vẫn thấy dáng tập. */
+  function placeMini(lm) {
+    const mini = root.querySelector('.stage-parts');
+    if (!mini || !mini.offsetWidth) return;
+    const sw = stage.clientWidth, sh = stage.clientHeight;
+    const mirror = stage.classList.contains('mirror');
+    const pts = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26].map((i) => lm[i])
+      .filter((q) => q && (q.visibility ?? 1) >= 0.5).map((q) => [(mirror ? 1 - q.x : q.x) * sw, q.y * sh]);
+    const w = mini.offsetWidth + 16, h = mini.offsetHeight + 16, top = mini.offsetTop - 8;
+    const hits = (x0) => pts.filter(([x, y]) => x >= x0 && x <= x0 + w && y >= top && y <= top + h).length;
+    const left = hits(0), right = hits(sw - w);
+    const useRight = right < left;
+    mini.classList.toggle('stage-parts--right', useRight);
+    mini.classList.toggle('is-faded', Math.min(left, right) > 0);
+  }
+
   function renderTable(parts, repInfo) {
     const rows = parts.map((p) => {
       const res = p.score == null ? '<span class="pill pill--muted">Chưa thấy</span>'
@@ -418,6 +439,13 @@ export function mountPractice(root, ex) {
         <td><span class="pill">${counter.state === 'down' ? 'Xuống' : 'Lên'}</span></td></tr>`);
     }
     root.querySelector('tbody').innerHTML = rows.join('');
+    const mini = root.querySelector('.stage-parts');
+    if (mini) {
+      mini.innerHTML = parts.map((p) => {
+        const t = p.score == null ? 'muted' : p.score >= PASS_SCORE ? 'ok' : 'bad';
+        return `<li class="sp--${t}"><span>${esc(p.label)}</span><b>${p.score == null ? '—' : `${Math.round(p.score)}%`}</b></li>`;
+      }).join('');
+    }
   }
 
   function setVal(k, v) { const n = root.querySelector(`[data-k="${k}"]`); if (n && n.textContent !== v) n.textContent = v; }
@@ -465,7 +493,7 @@ export function mountPractice(root, ex) {
   document.addEventListener('visibilitychange', onHidden);
   renderResults();
 
-  return () => { stop(); document.removeEventListener('visibilitychange', onHidden); };
+  return () => { stop(); sheet?.classList.remove('sheet--practice'); document.removeEventListener('visibilitychange', onHidden); };
 }
 
 function drawSkeleton(g, lm, w, h, parts, repInfo) {

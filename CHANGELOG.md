@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.7.0] - 2026-11-22: Tự tập – xem camera và bảng từng bộ phận cùng lúc
+
+### Thay đổi
+- Bảng "Từng bộ phận" **luôn mở** (bỏ nút thu gọn "Xem chi tiết từng bộ phận").
+- **Máy tính (≥ 1000px):** ở tab Tự tập, hộp thoại rộng ra (tối đa 1320px); khi đang tập, **camera bên trái,
+  bảng điểm + gợi ý + bảng từng bộ phận bên phải**, nhìn được cùng lúc, không phải cuộn.
+- **Điện thoại:** bảng nhỏ **ngay trong khung camera** (không nền, chữ trắng viền bóng, chấm màu + %).
+  Tự chọn góc trên trái hoặc phải để không che người; nếu cả hai góc đều che thì tự làm mờ.
+  Bảng đầy đủ (đo được / cần / đạt) nằm ngay dưới khung camera.
+
 ## [0.6.0] - 2026-11-22: Lớp 6 – tự tập camera mọi bài, xem trước trang sách
 
 ### Thay đổi

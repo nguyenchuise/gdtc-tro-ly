@@ -377,7 +377,36 @@ dialog.sheet::backdrop { background: rgba(6, 24, 16, .55); backdrop-filter: blur
   .practice.is-live .advice { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); margin: 0; padding: 0; }
   .practice.is-live .stage { max-height: 70vh; }
 }
-.rules-details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 700; color: var(--brand-ink); }
+.rules-title { margin: 14px 0 4px; font-size: 1rem; font-weight: 600; color: var(--ink-2); }
+
+/* Bảng nhỏ trên khung camera (điện thoại): không nền, chữ trắng có viền bóng để đọc được trên mọi phông */
+.stage-parts {
+  position: absolute; left: 10px; top: 54px; z-index: 2; margin: 0; padding: 0; list-style: none; pointer-events: none;
+  display: grid; gap: 3px; max-width: min(52%, 15rem);
+  font-size: .78rem; line-height: 1.25; color: #fff; font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .95), 0 0 6px rgba(0, 0, 0, .7);
+}
+.stage-parts:empty { display: none; }
+.stage-parts--right { left: auto; right: 10px; }
+.stage-parts { transition: opacity var(--t-base); }
+.stage-parts.is-faded { opacity: .35; }
+.stage-parts li { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.stage-parts li::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .85); }
+.stage-parts span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stage-parts b { flex: none; margin-left: auto; padding-left: 6px; font-weight: 700; }
+.stage-parts .sp--ok { --c: #22c55e; } .stage-parts .sp--bad { --c: #ef4444; } .stage-parts .sp--muted { --c: #94a3b8; }
+
+/* Máy tính: hộp thoại rộng hơn, camera bên trái – bảng điểm luôn mở bên phải */
+@media (min-width: 1000px) {
+  dialog.sheet.sheet--practice { width: min(1320px, calc(100vw - 48px)); height: min(94vh, 1040px); max-height: 94vh; }
+  .practice.is-live { max-width: none; }
+  .practice.is-live .live-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 20px; align-items: start; }
+  .practice.is-live .stage { margin: 0; justify-self: center; max-width: calc((94vh - 240px) * 4 / 3); }
+  .practice.is-live .scoreboard { position: sticky; top: 0; background: #f7faf8; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; }
+  .practice.is-live .scoreboard .advice { margin-top: 12px; }
+  .practice.is-live .rules th, .practice.is-live .rules td { padding: 7px 6px; }
+  .stage-parts { display: none; }
+}
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .95rem; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
