@@ -7,6 +7,7 @@ import {
   loadPoseLandmarker, evaluateRules, measure, adviceFor, HoldTimer, RepCounter, CONNECTIONS, PASS_SCORE, easeRule, easeReps,
 } from './pose-scoring.js';
 import { esc } from './util.js';
+import { store } from './data.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding } from './speak.js';
@@ -346,9 +347,15 @@ export function mountPractice(root, ex) {
       return { label: r.rule.label, joint: r.joints?.[1], angle: r.angle, target: r.rule.target, kind: r.rule.kind, need: r.rule.need, score: s, missing: r.missing };
     });
     const allSeen = parts.every((p) => p.score != null);
-    const avg = parts.length && allSeen ? parts.reduce((a, p) => a + p.score, 0) / parts.length : null;
+    // Chấm trọn bộ: bộ phận máy không thấy (vd chân bị khuất) không chặn nhịp. Đạt khi máy thấy ít nhất một nửa
+    // số bộ phận và quá nửa số bộ phận thấy được đạt ≥ 80%.
+    const seen = parts.filter((p) => p.score != null);
+    const okSeen = seen.filter((p) => p.score >= PASS_SCORE);
+    const avg = isSeq
+      ? (seen.length ? seen.reduce((a, p) => a + p.score, 0) / seen.length : null)
+      : parts.length && allSeen ? parts.reduce((a, p) => a + p.score, 0) / parts.length : null;
     const allOk = isSeq
-      ? allSeen && avg >= PASS_SCORE && parts.every((p) => p.score >= SEQ_PART_MIN)
+      ? seen.length >= Math.ceil(parts.length / 2) && okSeen.length > seen.length / 2
       : allSeen && parts.every((p) => p.score >= PASS_SCORE);
     let repInfo = null;
 
@@ -388,11 +395,11 @@ export function mountPractice(root, ex) {
         if (b) finish(b.lm, w, h, b.parts, b.repInfo, b.frame); else finish(lm, w, h, parts, m);
       }
     } else if (isSeq) {
-      timer.update(allOk ? avg : null, tSec);
+      timer.update(allOk ? PASS_SCORE : null, tSec);
       if (allOk) {
-        if (!attempt.streak) attempt.streak = { n: 0, sums: parts.map(() => 0) };
+        if (!attempt.streak) attempt.streak = { n: 0, sum: 0 };
         attempt.streak.n += 1;
-        parts.forEach((p, i) => { attempt.streak.sums[i] += p.score; });
+        attempt.streak.sum += okSeen.length === seen.length ? avg : (okSeen.reduce((a, p) => a + p.score, 0) / okSeen.length);
       } else attempt.streak = null;
       // Thời gian thử nhịp này: chỉ tính lúc máy thấy người (đi vào chỗ đứng không bị tính).
       if (attempt.lastT != null && tSec >= attempt.lastT) attempt.vis += Math.min(0.5, tSec - attempt.lastT);
@@ -406,11 +413,13 @@ export function mountPractice(root, ex) {
       setVal('hud', `${attempt.si + 1}/${N}`);
       setProgress((attempt.si + Math.min(1, timer.current / holdSec)) / N);
       // Làm chuẩn (≥ 90%, không bộ phận nào dưới 75%) liên tục 0,3 giây → qua nhịp ngay, khỏi chờ đủ 1 giây.
-      const great = allOk && avg >= 90 && parts.every((p) => p.score >= 75);
+      const great = allOk && seen.length === parts.length && avg >= 90 && parts.every((p) => p.score >= 75);
       if (great) { if (attempt.greatT == null) attempt.greatT = tSec; } else attempt.greatT = null;
       const fast = great && tSec - attempt.greatT >= 0.3;
       const far = tooFar(lm, h);
-      const why = far || adviceFor(ev);
+      // Gợi ý theo bộ phận máy thấy được; chỉ nhắc "chưa thấy rõ" khi thấy chưa đủ một nửa.
+      const evSeen = { unseen: seen.length < Math.ceil(parts.length / 2) ? ev.unseen : [], results: ev.results.filter((x) => x.score != null) };
+      const why = far || adviceFor(evSeen);
       // Sau 5 giây chưa đạt: nói ngắn gọn vì sao (một lần mỗi nhịp) và hiện lý do bằng chữ to.
       if (!allOk && attempt.vis >= 5 && !attempt.told && why) {
         attempt.told = true;
@@ -505,7 +514,7 @@ export function mountPractice(root, ex) {
   }
   function stepDone(lm, w, h, parts) {
     const st = attempt.streak;
-    const score = Math.round(st ? st.sums.reduce((a, b) => a + b, 0) / st.sums.length / st.n : 80);
+    const score = Math.round(st ? st.sum / st.n : 80);
     attempt.res.push({ ok: true, score, thumb: thumbOf(lm, w, h, parts) });
     nextStep(true);
   }
@@ -538,6 +547,10 @@ export function mountPractice(root, ex) {
       })
       : steps.map((st, k) => ({ label: frames[st.frame]?.label || `Nhịp ${k + 1}`, score: res[k].score }));
     const result = { score: total, detail: `${passed}/${steps.length} nhịp đạt${seqGroup ? ` · ${seqGroup}` : ''}`, parts, time: new Date() };
+    result.steps = steps.map((st, k) => {
+      const lab = frames[st.frame]?.label || '';
+      return { short: /^TTCB/.test(lab) ? 'TTCB' : (lab.match(/\d+/)?.[0] ? `N${lab.match(/\d+/)[0]}` : String(k + 1)), ok: res[k].ok, score: res[k].score };
+    });
     result.image = collage(result);
     const rec = session.get(ex.id) || { best: null, last: null };
     const newRecord = Boolean(rec.best) && result.score > rec.best.score;
@@ -671,6 +684,35 @@ export function mountPractice(root, ex) {
     return c.toDataURL('image/jpeg', 0.86);
   }
 
+  // ------------------------------------------------ Phiếu kết quả PDF (một trang) cho thầy cô
+  let reportName = '';
+  root.addEventListener('input', (e) => { if (e.target.dataset.k === 'name') reportName = e.target.value; });
+  async function exportPdf(btn) {
+    const rec = session.get(ex.id);
+    const r = btn?.dataset.kind === 'last' ? rec?.last : rec?.best;
+    if (!r) return;
+    const old = btn.innerHTML;
+    btn.disabled = true; btn.textContent = 'Đang tạo PDF…';
+    try {
+      const { makeReportPdf } = await import('./report-pdf.js');
+      const blob = await makeReportPdf({
+        title: ex.title, grade: ex.grade, chapter: store.chapters?.get(ex.chapter)?.title || '', name: reportName.trim(), result: r,
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const d = r.time;
+      a.href = url; a.download = `ket-qua-${ex.id}-${d.getDate()}-${d.getMonth() + 1}-${r.score}.pdf`;
+      document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      btn.innerHTML = `${icon('doc')} Đã tạo PDF ✓`;
+      setTimeout(() => { btn.innerHTML = old; }, 2500);
+    } catch (err) {
+      console.warn(err);
+      btn.innerHTML = old;
+      showAdvice('Chưa tạo được PDF. Em bấm “Lưu ảnh” thay thế nhé.');
+    } finally { btn.disabled = false; }
+  }
+
   function renderResults(newRecord = false) {
     const box = root.querySelector('.results');
     const rec = session.get(ex.id);
@@ -683,10 +725,15 @@ export function mountPractice(root, ex) {
         <div class="result-card__score"><strong>${r.score}%</strong><span>${esc(r.detail)} · ${fmtTime(r.time)}</span></div>
         <ul class="part-bars">${r.parts.map((p) => `<li><span>${esc(p.label)}</span>
           <span class="bar"><span style="width:${Math.min(100, p.score)}%" class="bar--${tone(p.score)}"></span></span><b>${p.score}%</b></li>`).join('')}</ul>
-        <a class="btn btn--ghost btn--small" href="${r.image}" download="${ex.id}-${r.score}.jpg">${icon('upload')} Lưu ảnh về máy</a>
+        <p class="result-card__actions">
+          <button type="button" class="btn btn--primary btn--small" data-act="pdf" data-kind="${kind}">${icon('doc')} Xuất PDF cho thầy cô</button>
+          <a class="btn btn--ghost btn--small" href="${r.image}" download="${ex.id}-${r.score}.jpg">${icon('upload')} Lưu ảnh</a>
+        </p>
       </article>`;
     const showLast = rec.last && rec.last !== rec.best;
     box.innerHTML = `
+      <label class="report-name">Họ tên em để in vào phiếu PDF <span>(không bắt buộc, không lưu)</span>
+        <input type="text" maxlength="60" autocomplete="off" data-k="name" value="${esc(reportName)}" placeholder="Có thể để trống rồi ghi tay"></label>
       ${showLast ? cardHtml(rec.last, 'last') : ''}
       ${cardHtml(rec.best, 'best')}
       <p class="results__again"><button type="button" class="btn btn--primary" data-act="again">Tập lại để phá kỷ lục</button></p>`;
@@ -834,6 +881,7 @@ export function mountPractice(root, ex) {
     }
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'camera' || act === 'again') { primeVoice(); primeSound(); }
+    if (act === 'pdf') { exportPdf(e.target.closest('[data-act="pdf"]')); return; }
     if (act === 'camera') startCamera();
     else if (act === 'voice') {
       const on = !voicePref();
@@ -910,6 +958,7 @@ export function icon(name) {
     upload: 'M12 3l5 5h-3v6h-4V8H7l5-5zM4 16h2v3h12v-3h2v5H4v-5z',
     flip: 'M4 12a8 8 0 0 1 14-5.3V4h2v6h-6V8h2.5A6 6 0 0 0 6 12H4zm16 0a8 8 0 0 1-14 5.3V20H4v-6h6v2H7.5A6 6 0 0 0 18 12h2z',
     target: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 4a6 6 0 1 1 0 12 6 6 0 0 1 0-12zm0 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4z',
+    doc: 'M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1.5V8h4.5L13 3.5zM8 12v2h8v-2H8zm0 4v2h8v-2H8z',
     trophy: 'M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v2H8v-2h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3V3zm0 4H6v1a2 2 0 0 0 1 1.7V7zm10 0v2.7A2 2 0 0 0 18 8V7h-1z',
   };
   return `<svg class="icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="${paths[name]}"/></svg>`;

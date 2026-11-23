@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.17.0] - 2026-11-23: Phiếu kết quả PDF, đạt nhịp khi quá nửa bộ phận đạt
+
+### Thêm
+- **Nút “Xuất PDF cho thầy cô”** trên thẻ kết quả, dùng cho mọi bài có camera.
+  - Tạo phiếu **một trang A4** ngay trên máy, không gửi đi đâu (`js/report-pdf.js`, không cần thư viện ngoài).
+  - Phiếu gồm: họ tên (không bắt buộc, không lưu), dòng ghi lớp, thời gian, bài, điểm máy chấm (Đạt/Chưa đạt), ảnh lúc tập (bài trọn bộ: ảnh ghép các nhịp), điểm từng phần / từng nhịp.
+  - Có ô **dành cho giáo viên**: nhận xét, điểm/xếp loại, chữ ký.
+
+### Thay đổi (10 bài thể dục chấm trọn bộ)
+- **Đạt nhịp khi quá nửa số bộ phận máy thấy được đạt ≥ 80%.** Bộ phận bị khuất (vd không thấy chân) không còn chặn nhịp.
+  Máy cần thấy ít nhất một nửa số bộ phận.
+- Gợi ý sửa dựa trên bộ phận máy thấy được. Chỉ nhắc “chưa thấy rõ…” khi thấy chưa đủ một nửa.
+
 ## [0.16.0] - 2026-11-23: Qua nhịp nhanh, nói lý do chưa đạt, camera góc rộng
 
 ### Thay đổi (10 bài thể dục chấm trọn bộ)

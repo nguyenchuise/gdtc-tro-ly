@@ -116,11 +116,12 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Trên hình camera, mỗi bộ phận hiện **nhãn % nổi** ngay cạnh khớp (xanh ≥ 80%, cam 50–79%, đỏ < 50%). Màn hình chật thì nhãn chỉ ghi số %.
 - **Đạt** khi *mọi* bộ phận ≥ 80% liên tục **khoảng 1 giây** (bài giữ tư thế), hoặc **3 lần** đạt chuẩn (bài đếm lần).
 - Chấm đã được **nới cho dễ đạt** (`EASE` trong `js/pose-scoring.js`): mỗi góc được lệch thêm 10° mà vẫn 100%, điểm giảm chậm hơn; làm gần đúng tư thế là được khoảng 80–100%. Bảng "Cần" vẫn ghi góc chuẩn trong sách.
+- Thẻ kết quả có nút **Xuất PDF cho thầy cô**: phiếu một trang A4 (điểm, ảnh, từng phần/từng nhịp, ô nhận xét và chữ ký giáo viên), tạo ngay trên máy.
 - Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
 - Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
 
 **Chấm trọn bộ (10 bài thể dục, `scoring.mode = "sequence"`).** Máy chấm lần lượt **từng nhịp** theo đúng các hình trong sách:
-- Mỗi nhịp đạt khi **điểm trung bình ≥ 80%, không bộ phận nào dưới 60%** và **giữ liên tục 1 giây** (`holdSeconds`). Tiêu chí được nới vừa phải (góc +8°, vị trí +¼ bề rộng vai, xem `easeSeq` trong `js/practice.js`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
+- Mỗi nhịp đạt khi máy thấy ít nhất một nửa số bộ phận và **quá nửa số bộ phận thấy được đạt ≥ 80%** (bộ phận bị khuất, vd chân, không chặn nhịp) và **giữ liên tục 1 giây** (`holdSeconds`). Tiêu chí được nới vừa phải (góc +8°, vị trí +¼ bề rộng vai, xem `easeSeq` trong `js/practice.js`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
 - Thử **10 giây** (`autoSkipSeconds`, chỉ tính lúc máy thấy người; nhịp đầu thêm 5 giây) mà chưa được thì **tự sang nhịp sau** (tính 0 điểm). Vẫn có nút **Bỏ qua nhịp**.
 - Mỗi nhịp có câu hướng dẫn ngắn (`steps[k].say`): hiện **chữ to giữa khung camera** và **đọc bằng giọng tiếng Việt có sẵn trong máy** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ).
 - Hình mẫu trong khung camera mặc định **to** (cao gần bằng khung) để nhìn từ xa 2–3 m; bấm vào để đổi to → nhỏ → ẩn.

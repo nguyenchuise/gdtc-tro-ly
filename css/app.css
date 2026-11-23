@@ -759,3 +759,9 @@ details { margin: 10px 0; }
 .stage-cue span.is-why b { color: #fff3c4; }
 /* Chấm trọn bộ: bỏ bảng nhỏ trên camera cho thoáng (bảng đầy đủ ở dưới) */
 .practice--seq .stage-parts { display: none; }
+/* Phiếu kết quả PDF */
+.result-card__actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.report-name { display: grid; gap: 6px; margin: 0 0 12px; font-weight: 600; font-size: .95rem; }
+.report-name span { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.report-name input { min-height: 44px; padding: 8px 12px; border: 2px solid var(--line); border-radius: var(--radius-sm); font: inherit; font-weight: 500; }
+.report-name input:focus { outline: none; border-color: var(--brand); }
