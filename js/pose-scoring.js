@@ -77,9 +77,65 @@ export function measure(lm, spec, w, h) {
   return best || { angle: null, missing: [...missing] };
 }
 
+// ---------------------------------------------------------------------------
+// Rule theo vị trí (không phải góc) — dùng cho bài chấm trọn bộ nhiều nhịp.
+// Đơn vị độ dài: S = bề rộng vai trên hình (ổn định khi đứng quay mặt vào máy).
+//   kind 'dy'   : độ cao của điểm a so với điểm b = (b.y − a.y) / S  (dương: a cao hơn b). a có thể là danh sách,
+//                 pick 'all' (mọi điểm phải đạt, mặc định) | 'any' (một điểm đạt là được).
+//   kind 'dx'   : khoảng cách ngang |a.x − b.x| / S (vd hai cổ chân → chân rộng/hẹp, hai cổ tay → tay chéo/dang).
+//   kind 'torso': chiều cao thân (vai → hông) / S; thân gập về phía máy thì số này nhỏ đi.
+//   kind 'tilt' : độ nghiêng thân sang bên (độ).
+// Mỗi rule có min và/hoặc max; nằm trong khoảng = 100%, ra ngoài giảm dần về 0% sau `range`.
+// Điểm b có thể là 'sh' | 'hip' | 'knee' | 'nose' (trung điểm hai vai / hông / gối, hoặc mũi).
+const MID = { sh: [11, 12], hip: [23, 24], knee: [25, 26], nose: [0] };
+const refIdx = (r) => (typeof r === 'string' ? MID[r] : [r]);
+function pt(lm, r, w, h) {
+  const ids = refIdx(r);
+  return { x: (ids.reduce((s, i) => s + lm[i].x, 0) / ids.length) * w, y: (ids.reduce((s, i) => s + lm[i].y, 0) / ids.length) * h };
+}
+export function rangeScore(v, min, max, range = 0.5) {
+  const d = min != null && v < min ? min - v : max != null && v > max ? v - max : 0;
+  return d <= 0 ? 100 : Math.max(0, 100 * (1 - d / range));
+}
+const RANGE = { dy: 0.5, dx: 0.5, torso: 0.4, tilt: 12 };
+
+/** Đo một rule vị trí. Trả về { value, score, joints } hoặc { value: null, missing }. */
+export function measureKind(lm, r, w, h) {
+  const as = Array.isArray(r.a) ? r.a : r.a != null ? [r.a] : [];
+  const seen = (ref) => refIdx(ref).every((k) => visible(lm, k));
+  const need = [11, 12, 23, 24, ...(r.b != null ? refIdx(r.b) : []), ...(r.pick === 'any' ? [] : as.flatMap(refIdx))];
+  const miss = new Set(need.filter((i) => !visible(lm, i)));
+  if (r.pick === 'any' && as.length && !as.some(seen)) as.flatMap(refIdx).forEach((i) => miss.add(i));
+  if (miss.size) return { value: null, missing: [...miss] };
+  const P = (i) => pt(lm, i, w, h);
+  const sh = P('sh'), hip = P('hip');
+  const torsoLen = Math.hypot(sh.x - hip.x, sh.y - hip.y);
+  const S = Math.max(Math.hypot(P(11).x - P(12).x, P(11).y - P(12).y), 0.45 * torsoLen, 1e-6);
+  const range = r.range ?? RANGE[r.kind] ?? 0.5;
+  const score = (v) => rangeScore(v, r.min, r.max, range);
+  if (r.kind === 'torso') { const v = (hip.y - sh.y) / S; return { value: v, score: score(v), joints: [11] }; }
+  if (r.kind === 'tilt') {
+    const v = (Math.atan2(Math.abs(sh.x - hip.x), Math.max(1e-6, hip.y - sh.y)) * 180) / Math.PI;
+    return { value: v, score: score(v), joints: [11] };
+  }
+  if (r.kind === 'dx') { const A = P(as[0]), B = P(r.b); const v = Math.abs(A.x - B.x) / S; return { value: v, score: score(v), joints: [as[0]] }; }
+  if (r.kind === 'dy') {
+    const B = P(r.b);
+    const items = as.filter(seen).map((a) => { const v = (B.y - P(a).y) / S; return { a, v, s: score(v) }; });
+    const pick = items.sort((x, y) => x.s - y.s)[r.pick === 'any' ? items.length - 1 : 0];
+    return { value: pick.v, score: pick.s, joints: [pick.a] };
+  }
+  return { value: null, missing: [] };
+}
+
 /** Chấm một khung hình theo danh sách rule. score = null nếu còn khớp chưa thấy rõ (không chấm bừa). */
 export function evaluateRules(lm, rules, w, h) {
   const results = rules.map((r) => {
+    if (r.kind) {
+      const m = measureKind(lm, r, w, h);
+      if (m.value == null) return { rule: r, angle: null, score: null, missing: m.missing };
+      return { rule: r, angle: m.value, joints: [null, m.joints[0]], score: m.score };
+    }
     const m = measure(lm, r, w, h);
     if (m.angle == null) return { rule: r, angle: null, score: null, missing: m.missing };
     return { rule: r, angle: m.angle, joints: m.joints, score: ruleScore(m.angle, r.target, r.tolerance, r.range) };
@@ -100,6 +156,7 @@ export function adviceFor(evaluation) {
   if (!worst) return '';
   if (worst.score >= PASS_SCORE) return 'Tốt lắm! Giữ nguyên tư thế.';
   if (worst.rule.hint) return worst.rule.hint;
+  if (worst.rule.kind) return `${worst.rule.label}: chưa đúng, em xem lại hình mẫu.`;
   const diff = Math.round(worst.angle - worst.rule.target);
   const verb = diff > 0 ? 'gập/khép lại thêm' : 'mở/duỗi ra thêm';
   return `${worst.rule.label}: đang ${Math.round(worst.angle)}°, cần khoảng ${worst.rule.target}° — ${verb} ${Math.abs(diff)}°.`;

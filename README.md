@@ -119,6 +119,20 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
 - Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
 
+**Chấm trọn bộ (10 bài thể dục, `scoring.mode = "sequence"`).** Máy chấm lần lượt **từng nhịp** theo đúng các hình trong sách:
+- Mỗi nhịp phải đúng mọi tiêu chí ≥ 80% và **giữ liên tục 1,5 giây** (`holdSeconds`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
+- Nhịp khó quá thì bấm **Bỏ qua nhịp** (nhịp đó tính 0 điểm).
+- Hết bài mới có **điểm tổng = trung bình các nhịp**, kèm ảnh ghép tất cả các nhịp và điểm theo từng động tác.
+- Bài nhịp điệu chọn được chấm *Cả bài* hoặc từng động tác.
+- Mỗi nhịp (`steps[k]`) gồm `frame` (khung hình trong `bookAnim`) và `rules`. Ngoài rule góc, có rule theo vị trí, không nới thêm:
+  - `dy`: tay cao hơn đầu / thấp hơn gối…
+  - `dx`: hai chân rộng hơn vai, hai tay bắt chéo…
+  - `torso`: thân gập.
+  - `tilt`: nghiêng lườn.
+
+  Đơn vị là bề rộng vai, xem chú thích trong `js/pose-scoring.js`.
+- Tiêu chí là **ước lượng từ hình sách**, cần thầy cô thử và chỉnh.
+
 **Hình mẫu chuyển động từ sách (bài thể dục).** 10 bài thể dục liên hoàn / nhịp điệu (lớp 6 – 9) có trường `bookAnim`: mỗi khung là
 `{page, box: [x, y, rộng, cao], cap, label, group}` (toạ độ tỉ lệ 0–1 trên ảnh trang). Trang web chỉ "nhìn qua ô cửa sổ" vào ảnh trang
 sách trên máy chủ NXB, không sao chép ảnh. Tab 1. Sách có trình chiếu đầy đủ (chọn động tác, ‹ ›, tốc độ); tab 4. Tự tập dùng nó làm

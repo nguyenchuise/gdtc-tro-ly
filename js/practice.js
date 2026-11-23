@@ -11,7 +11,7 @@ import { figureModel, createFigure, animateFigures, figureLegend } from './pose-
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 
 const PART = {
-  11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
+  0: 'Thân', 11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
   23: 'Hông trái', 24: 'Hông phải', 25: 'Gối trái', 26: 'Gối phải', 27: 'Cổ chân trái', 28: 'Cổ chân phải',
 };
 const CAMERA_TIPS = {
@@ -33,19 +33,32 @@ const fmtTime = (d) => d.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-d
 export function mountPractice(root, ex) {
   const sc = ex.scoring;
   const isReps = sc.mode === 'reps';
-  // Chấm "dễ thở" để em hứng thú: nới góc cho phép, chỉ cần giữ đúng khoảng 1 giây là chụp ảnh luôn.
-  const rules = (sc.rules || []).map(easeRule);
+  // Chấm trọn bộ (bài thể dục nhiều nhịp): làm lần lượt từng nhịp như hình trong sách, mỗi nhịp giữ đúng holdSeconds.
+  const isSeq = sc.mode === 'sequence';
+  const frames = ex.bookAnim?.frames || [];
+  const stepGroup = (st) => frames[st.frame]?.group || null;
+  const stepName = (st) => [frames[st.frame]?.label, stepGroup(st)].filter(Boolean).join(' · ') || 'Nhịp';
+  const seqGroups = isSeq ? [...new Set(sc.steps.map(stepGroup).filter(Boolean))] : [];
+  let seqGroup = null; // null = cả bài
+  const seqSteps = () => sc.steps.filter((st) => !seqGroup || stepGroup(st) === seqGroup);
+  // Bài một tư thế: nới góc cho dễ đạt. Bài chấm trọn bộ: tiêu chí đã soạn riêng cho từng nhịp, không nới thêm.
+  let rules = isSeq ? sc.steps[0].rules : (sc.rules || []).map(easeRule);
   const repSpec = isReps ? easeReps(sc.reps) : null;
   const holdSec = sc.holdSeconds || 1;
-  const goalText = isReps ? `Làm đúng <strong>${sc.reps.target} lần</strong>` : `Giữ đúng tư thế <strong>${holdSec} giây</strong> là máy tự chụp ảnh`;
+  const secText = String(holdSec).replace('.', ',');
+  const seqGoal = () => `Làm lần lượt <strong>${seqSteps().length} nhịp</strong> như hình, mỗi nhịp giữ đúng <strong>${secText} giây</strong>`;
+  const goalText = isSeq ? seqGoal() : isReps ? `Làm đúng <strong>${sc.reps.target} lần</strong>` : `Giữ đúng tư thế <strong>${secText} giây</strong> là máy tự chụp ảnh`;
   root.innerHTML = `
     <div class="practice">
       <div class="goal-card">
         <span class="goal-card__icon" aria-hidden="true">${icon('target')}</span>
         <div><p class="goal-card__title">${goalText}</p>
           ${sc.pose ? `<p class="goal-card__pose">${esc(sc.pose)}</p>` : ''}
-          <p class="goal-card__sub">Mỗi bộ phận đạt từ ${PASS_SCORE}% là được.</p></div>
+          <p class="goal-card__sub">${isSeq ? `Đúng nhịp nào máy tính nhịp đó rồi chuyển sang nhịp sau; hết bài mới có điểm. Nhịp khó quá thì bấm “Bỏ qua nhịp”.` : `Mỗi bộ phận đạt từ ${PASS_SCORE}% là được.`}</p></div>
       </div>
+      ${seqGroups.length > 1 ? `<div class="seq-pick" role="group" aria-label="Chọn phần để chấm"><span class="seq-pick__label">Chấm:</span>
+        <button type="button" class="chip chip--sm" data-seq="" aria-pressed="true">Cả bài (${sc.steps.length} nhịp)</button>
+        ${seqGroups.map((g) => `<button type="button" class="chip chip--sm" data-seq="${esc(g)}" aria-pressed="false">${esc(g)} (${sc.steps.filter((st) => stepGroup(st) === g).length})</button>`).join('')}</div>` : ''}
       <section class="figure-card figure-card--pre" aria-label="Tư thế mẫu">
         <div class="figure-card__img" data-fig="pre"></div>
         <div class="figure-card__body">
@@ -74,7 +87,7 @@ export function mountPractice(root, ex) {
         <div class="float-labels" aria-hidden="true"></div>
         <div class="hud" aria-hidden="true">
           <span class="hud__score" data-k="hud">—</span>
-          <span class="hud__label">${isReps ? 'lần đạt' : 'điểm'}</span>
+          <span class="hud__label">${isReps ? 'lần đạt' : isSeq ? 'nhịp' : 'điểm'}</span>
         </div>
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
@@ -85,6 +98,7 @@ export function mountPractice(root, ex) {
         ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
+          ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>' : ''}
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
         </div>
       </div>
@@ -95,7 +109,11 @@ export function mountPractice(root, ex) {
           <div class="figure-card__body"><h4 class="figure-card__title">Tư thế mẫu</h4><div data-fig-legend></div></div>
         </section>
         <div class="stats">
-          ${isReps ? `
+          ${isSeq ? `
+            <div class="stat"><span class="stat__value" data-k="step">1/${sc.steps.length}</span><span class="stat__label">Nhịp</span></div>
+            <div class="stat"><span class="stat__value" data-k="cur">—</span><span class="stat__label">Điểm nhịp này</span></div>
+            <div class="stat"><span class="stat__value" data-k="hold">0.0s</span><span class="stat__label">Đã giữ / ${secText}s</span></div>`
+          : isReps ? `
             <div class="stat"><span class="stat__value" data-k="reps">0/${sc.reps.target}</span><span class="stat__label">Lần đạt</span></div>
             <div class="stat"><span class="stat__value" data-k="total">0</span><span class="stat__label">Tổng số lần</span></div>
             <div class="stat"><span class="stat__value" data-k="cur">—</span><span class="stat__label">Lần vừa rồi</span></div>`
@@ -104,6 +122,7 @@ export function mountPractice(root, ex) {
             <div class="stat"><span class="stat__value" data-k="peak">—</span><span class="stat__label">Cao nhất</span></div>
             <div class="stat"><span class="stat__value" data-k="hold">0.0s</span><span class="stat__label">Đã giữ / ${holdSec}s</span></div>`}
         </div>
+        ${isSeq ? '<p class="seq-now"></p><ol class="seq-track" aria-label="Tiến độ các nhịp"></ol>' : ''}
         <p class="advice" aria-live="polite"></p>
         <div class="rules-details">
           <h4 class="rules-title">Từng bộ phận</h4>
@@ -124,6 +143,7 @@ export function mountPractice(root, ex) {
   // Hình mẫu: bài thể dục có hình "Nhịp" trong SGK → hình động ghép từ sách; còn lại (hoặc không tải được ảnh sách)
   // → hình nộm vẽ từ chính các góc chấm điểm.
   let stopFig = () => {}, unmounted = false;
+  const targetPlayers = []; // hình mẫu đứng yên ở nhịp đang chấm (chấm trọn bộ)
   const stickFigures = () => {
     try {
       const model = figureModel(sc);
@@ -141,7 +161,8 @@ export function mountPractice(root, ex) {
   };
   if (hasBookAnim(ex)) {
     const focus = ex.bookAnim.focus || {};
-    const hint = focus.label
+    const hint = isSeq ? 'Xem trước các nhịp trong sách. Khi tập, khung hình mẫu sẽ dừng ở đúng nhịp máy đang chấm.'
+      : focus.label
       ? `Các nhịp trong sách chạy lần lượt. Khung viền cam “Máy chấm nhịp này” là ${esc(focus.label)}: em làm giống hình đó.`
       : focus.group ? `Đang chiếu động tác “${esc(focus.group)}” mà máy đếm số lần. Bấm “Tất cả” để xem cả bài.` : 'Các nhịp trong sách chạy lần lượt.';
     root.querySelectorAll('.figure-card').forEach((c) => {
@@ -155,8 +176,10 @@ export function mountPractice(root, ex) {
     preloadBookAnim(ex).then(() => {
       if (unmounted) return;
       const players = [...root.querySelectorAll('[data-fig]')].map((box) => {
-        const p = createBookAnim(ex, { mode: box.dataset.fig === 'inset' ? 'inset' : 'full', practice: true });
+        const ctl = isSeq && box.dataset.fig !== 'pre';
+        const p = createBookAnim(ex, { mode: box.dataset.fig === 'inset' ? 'inset' : 'full', practice: !isSeq, controlled: ctl });
         box.replaceChildren(p.el);
+        if (ctl) { targetPlayers.push(p); if (attempt?.steps) p.go(attempt.steps[attempt.si]?.frame ?? 0); }
         return p;
       });
       stopFig = () => players.forEach((p) => p.stop());
@@ -186,8 +209,9 @@ export function mountPractice(root, ex) {
   function newAttempt() {
     timer.reset(); counter?.reset();
     attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null };
+    if (isSeq) { attempt.steps = seqSteps(); attempt.si = 0; attempt.res = []; setStep(0); }
     $('.pass-banner').hidden = true;
-    setVal('cur', '—'); setVal('peak', '—'); setVal('hold', '0.0s'); setVal('reps', `0/${sc.reps?.target}`); setVal('total', '0'); setVal('hud', '—');
+    setVal('cur', '—'); setVal('peak', '—'); setVal('hold', '0.0s'); setVal('reps', `0/${sc.reps?.target}`); setVal('total', '0'); setVal('hud', isSeq ? `1/${attempt.steps.length}` : '—');
     setProgress(0);
   }
 
@@ -288,7 +312,7 @@ export function mountPractice(root, ex) {
       const prev = attempt.smooth[i];
       const s = r.score == null ? null : prev == null ? r.score : prev * 0.55 + r.score * 0.45;
       attempt.smooth[i] = s;
-      return { label: r.rule.label, joint: r.joints?.[1], angle: r.angle, target: r.rule.target, score: s, missing: r.missing };
+      return { label: r.rule.label, joint: r.joints?.[1], angle: r.angle, target: r.rule.target, kind: r.rule.kind, need: r.rule.need, score: s, missing: r.missing };
     });
     const allSeen = parts.every((p) => p.score != null);
     const avg = parts.length && allSeen ? parts.reduce((a, p) => a + p.score, 0) / parts.length : null;
@@ -330,6 +354,24 @@ export function mountPractice(root, ex) {
         const b = attempt.bestShot;
         if (b) finish(b.lm, w, h, b.parts, b.repInfo, b.frame); else finish(lm, w, h, parts, m);
       }
+    } else if (isSeq) {
+      timer.update(allOk ? avg : null, tSec);
+      if (allOk) {
+        if (!attempt.streak) attempt.streak = { n: 0, sums: parts.map(() => 0) };
+        attempt.streak.n += 1;
+        parts.forEach((p, i) => { attempt.streak.sums[i] += p.score; });
+      } else attempt.streak = null;
+      if (attempt.stepT == null) attempt.stepT = tSec;
+      const N = attempt.steps.length;
+      setVal('cur', avg == null ? '—' : `${Math.round(avg)}%`);
+      setVal('hold', `${Math.min(timer.current, 99).toFixed(1)}s`);
+      setVal('step', `${attempt.si + 1}/${N}`);
+      setVal('hud', `${attempt.si + 1}/${N}`);
+      setProgress((attempt.si + Math.min(1, timer.current / holdSec)) / N);
+      const stuck = !allOk && tSec - attempt.stepT > 12;
+      showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s`
+        : stuck ? `${adviceFor(ev)} (Khó quá thì bấm “Bỏ qua nhịp”.)` : adviceFor(ev));
+      if (!attempt.done && timer.done) stepDone(lm, w, h, parts);
     } else {
       timer.update(allOk ? avg : null, tSec);
       // Cộng dồn điểm từng bộ phận trong lúc đang giữ đúng, để ghi kết quả.
@@ -352,6 +394,128 @@ export function mountPractice(root, ex) {
     renderFloating(lm, parts, repInfo);
     const now = performance.now();
     if (now - lastTableAt > 300) { lastTableAt = now; renderTable(parts, repInfo); placeMini(lm); }
+  }
+
+  // ------------------------------------------------ Chấm trọn bộ: từng nhịp
+  function setStep(i) {
+    const st = attempt.steps[i];
+    rules = st.rules;
+    attempt.si = i; attempt.smooth = rules.map(() => null); attempt.streak = null; attempt.stepT = null;
+    timer.reset();
+    lastTableAt = 0;
+    targetPlayers.forEach((p) => p.go(st.frame));
+    const now = root.querySelector('.seq-now');
+    if (now) now.innerHTML = `Đang chấm: <strong>${esc(stepName(st))}</strong> <span>(${i + 1}/${attempt.steps.length})</span>`;
+    renderTrack();
+  }
+  function renderTrack() {
+    const box = root.querySelector('.seq-track');
+    if (!box || !attempt?.steps) return;
+    box.innerHTML = attempt.steps.map((st, k) => {
+      const r = attempt.res[k];
+      const cls = r ? (r.ok ? 'is-ok' : 'is-skip') : k === attempt.si && !attempt.done ? 'is-now' : '';
+      // Ô ghi đúng số nhịp trong sách (TTCB → "TT"); sang động tác mới thì cách ra một chút.
+      const lab = frames[st.frame]?.label || '';
+      const short = /^TTCB/.test(lab) ? 'TT' : (lab.match(/\d+/)?.[0] || String(k + 1));
+      const gs = k > 0 && stepGroup(st) !== stepGroup(attempt.steps[k - 1]) ? ' is-gstart' : '';
+      return `<li class="${cls}${gs}" title="${esc(stepName(st))}${r ? ` – ${r.ok ? `${r.score}%` : 'bỏ qua'}` : ''}">${short}</li>`;
+    }).join('');
+  }
+  /** Ảnh nhỏ của một nhịp (khung hình + khung xương) để ghép thành ảnh kết quả. */
+  function thumbOf(lm, w, h, parts) {
+    const tw = 240, th = Math.round((240 * h) / w);
+    const c = document.createElement('canvas');
+    c.width = tw; c.height = th;
+    const g = c.getContext('2d');
+    g.save();
+    if (stage.classList.contains('mirror')) { g.translate(tw, 0); g.scale(-1, 1); }
+    g.scale(tw / w, th / h);
+    g.drawImage(video, 0, 0, w, h);
+    drawSkeleton(g, lm, w, h, parts, null);
+    g.restore();
+    return c;
+  }
+  function stepDone(lm, w, h, parts) {
+    const st = attempt.streak;
+    const score = Math.round(st ? st.sums.reduce((a, b) => a + b, 0) / st.sums.length / st.n : 80);
+    attempt.res.push({ ok: true, score, thumb: thumbOf(lm, w, h, parts) });
+    nextStep(true);
+  }
+  function skipStep() {
+    if (!isSeq || !attempt || attempt.done || !running) return;
+    attempt.res.push({ ok: false, score: 0, thumb: null });
+    nextStep(false);
+  }
+  function nextStep(ok) {
+    if (attempt.si + 1 >= attempt.steps.length) { finishSeq(); return; }
+    setStep(attempt.si + 1);
+    const b = $('.pass-banner');
+    b.textContent = ok ? 'Đúng rồi! Nhịp tiếp' : 'Nhịp tiếp theo'; b.hidden = false;
+    clearTimeout(nextStep.t);
+    nextStep.t = setTimeout(() => { if (!attempt.done) b.hidden = true; }, 800);
+    if (ok) navigator.vibrate?.(40);
+  }
+  function finishSeq() {
+    attempt.done = true;
+    renderTrack();
+    const steps = attempt.steps, res = attempt.res;
+    const passed = res.filter((r) => r.ok).length;
+    const total = Math.round(res.reduce((a, r) => a + r.score, 0) / steps.length);
+    const groups = [...new Set(steps.map(stepGroup).filter(Boolean))];
+    const parts = groups.length > 1
+      ? groups.map((g) => {
+        const ks = steps.map((st, k) => (stepGroup(st) === g ? k : -1)).filter((k) => k >= 0);
+        return { label: `${g} (${ks.filter((k) => res[k].ok).length}/${ks.length} nhịp)`, score: Math.round(ks.reduce((a, k) => a + res[k].score, 0) / ks.length) };
+      })
+      : steps.map((st, k) => ({ label: frames[st.frame]?.label || `Nhịp ${k + 1}`, score: res[k].score }));
+    const result = { score: total, detail: `${passed}/${steps.length} nhịp đạt${seqGroup ? ` · ${seqGroup}` : ''}`, parts, time: new Date() };
+    result.image = collage(result);
+    const rec = session.get(ex.id) || { best: null, last: null };
+    const newRecord = Boolean(rec.best) && result.score > rec.best.score;
+    rec.last = result;
+    if (!rec.best || newRecord) rec.best = result;
+    session.set(ex.id, rec);
+    const b = $('.pass-banner');
+    clearTimeout(nextStep.t);
+    b.hidden = false;
+    b.textContent = newRecord ? 'Kỷ lục mới!' : `Xong! ${total}%`;
+    setProgress(1);
+    showAdvice(`Hoàn thành ${passed}/${steps.length} nhịp. Xem kết quả bên dưới.`);
+    navigator.vibrate?.([80, 60, 120]);
+    renderResults(newRecord);
+    setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
+  }
+  /** Ảnh kết quả chấm trọn bộ: lưới ảnh từng nhịp + điểm. */
+  function collage(result) {
+    const steps = attempt.steps, res = attempt.res;
+    const cols = steps.length <= 12 ? 4 : 6, cw = 240;
+    const th = res.find((r) => r.thumb)?.thumb.height || 180, lh = 34;
+    const rows = Math.ceil(steps.length / cols);
+    const footer = 96;
+    const c = document.createElement('canvas');
+    c.width = cols * cw; c.height = rows * (th + lh) + footer;
+    const g = c.getContext('2d');
+    g.fillStyle = '#ffffff'; g.fillRect(0, 0, c.width, c.height);
+    steps.forEach((st, k) => {
+      const x = (k % cols) * cw, y = Math.floor(k / cols) * (th + lh), r = res[k];
+      if (r.thumb) g.drawImage(r.thumb, x, y, cw, th);
+      else { g.fillStyle = '#e5ebe8'; g.fillRect(x, y, cw, th); g.fillStyle = '#5b6a64'; g.font = '600 20px "Be Vietnam Pro", system-ui, sans-serif'; g.textAlign = 'center'; g.fillText('Bỏ qua', x + cw / 2, y + th / 2); }
+      g.fillStyle = r.ok ? COLORS[tone(r.score)] : COLORS.muted;
+      g.fillRect(x, y + th, cw, lh);
+      g.fillStyle = '#fff'; g.textAlign = 'left'; g.textBaseline = 'middle';
+      g.font = '700 17px "Be Vietnam Pro", system-ui, sans-serif';
+      g.fillText(frames[st.frame]?.label || `Nhịp ${k + 1}`, x + 8, y + th + lh / 2, cw - 70);
+      g.textAlign = 'right'; g.fillText(r.ok ? `${r.score}%` : '—', x + cw - 8, y + th + lh / 2);
+      g.strokeStyle = '#fff'; g.lineWidth = 2; g.strokeRect(x, y, cw, th + lh);
+    });
+    const fy = rows * (th + lh);
+    g.fillStyle = '#0b3d2c'; g.fillRect(0, fy, c.width, footer);
+    g.fillStyle = '#fff'; g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.font = '800 40px "Be Vietnam Pro", system-ui, sans-serif';
+    g.fillText(`ĐIỂM ${result.score}%`, 20, fy + 34);
+    g.font = '500 20px "Be Vietnam Pro", system-ui, sans-serif';
+    g.fillText(`${ex.title} · ${result.detail} · ${fmtTime(result.time)}`, 20, fy + 72, c.width - 40);
+    return c.toDataURL('image/jpeg', 0.84);
   }
 
   // ------------------------------------------------ Hoàn thành một lượt → chụp ảnh, ghi kết quả
@@ -538,7 +702,8 @@ export function mountPractice(root, ex) {
     const rows = parts.map((p) => {
       const res = p.score == null ? '<span class="pill pill--muted">Chưa thấy</span>'
         : `<span class="pill pill--${p.score >= PASS_SCORE ? 'ok' : 'bad'}">${Math.round(p.score)}%</span>`;
-      return `<tr><th scope="row">${esc(p.label)}</th><td>${p.angle == null ? '—' : `${Math.round(p.angle)}°`}</td><td>${p.target}°</td><td>${res}</td></tr>`;
+      const meas = p.angle == null ? '—' : p.kind ? (p.score >= PASS_SCORE ? 'đúng' : 'chưa') : `${Math.round(p.angle)}°`;
+      return `<tr><th scope="row">${esc(p.label)}</th><td>${meas}</td><td>${p.kind ? esc(p.need || '') : `${p.target}°`}</td><td>${res}</td></tr>`;
     });
     if (repInfo) {
       rows.unshift(`<tr><th scope="row">${esc(sc.reps.label)}</th><td>${repInfo.angle == null ? '—' : `${Math.round(repInfo.angle)}°`}</td>
@@ -585,8 +750,17 @@ export function mountPractice(root, ex) {
   }
 
   root.addEventListener('click', (e) => {
+    const sp = e.target.closest('[data-seq]');
+    if (sp) {
+      seqGroup = sp.dataset.seq || null;
+      root.querySelectorAll('[data-seq]').forEach((b) => b.setAttribute('aria-pressed', String(b === sp)));
+      root.querySelector('.goal-card__title').innerHTML = seqGoal();
+      if (running) newAttempt();
+      return;
+    }
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (act === 'camera') startCamera();
+    else if (act === 'skip') skipStep();
     else if (act === 'stop') stop();
     else if (act === 'again') {
       if (running) newAttempt(); else startCamera();

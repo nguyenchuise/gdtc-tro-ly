@@ -42,19 +42,21 @@ function cropStyle(url, [x, y, w, h]) {
  * opts.mode: 'full' (có nút, chú thích sách) | 'inset' (nhỏ gọn, trong khung camera)
  * opts.practice: true → mặc định chạy nhóm động tác máy chấm, đánh dấu nhịp được chấm.
  */
-export function createBookAnim(ex, { mode = 'full', practice = false } = {}) {
+export function createBookAnim(ex, { mode = 'full', practice = false, controlled = false } = {}) {
   const A = ex.bookAnim;
   const [PW, PH] = A.pageSize || [1094, 1536];
   const focus = A.focus || {};
   const groups = [...new Set(A.frames.map((f) => f.group).filter(Boolean))];
   const isFocus = (f) => Boolean(focus.label) && f.label === focus.label && (f.group || '') === (focus.group || '');
   let group = practice && focus.group ? focus.group : null;
-  let speed = 1, i = 0, timer = 0, playing = !reduceMotion(), alive = true;
+  // controlled: không tự chạy, không nút; trang Tự tập gọi go(k) để hiện đúng nhịp đang chấm.
+  let speed = 1, i = 0, timer = 0, playing = !controlled && !reduceMotion(), alive = true;
   const list = () => A.frames.filter((f) => !group || f.group === group);
 
   const el = document.createElement('div');
   el.className = `bookanim bookanim--${mode}`;
-  const full = mode === 'full';
+  const full = mode === 'full' && !controlled;
+  const withCap = mode === 'full';
   el.innerHTML = `
     ${full && groups.length > 1 ? `<div class="bookanim__groups" role="group" aria-label="Chọn động tác">
       <button type="button" class="chip chip--sm" data-g="" aria-pressed="false">Tất cả</button>
@@ -69,7 +71,7 @@ export function createBookAnim(ex, { mode = 'full', practice = false } = {}) {
         <button type="button" class="btn btn--ghost btn--small" data-a="speed" aria-label="Đổi tốc độ"></button>
       </div>` : ''}
     </div>
-    ${full ? '<div class="bookanim__cap"></div>' : ''}`;
+    ${withCap ? '<div class="bookanim__cap"></div>' : ''}`;
   const stage = el.querySelector('.bookanim__stage');
 
   function build() {
@@ -98,15 +100,17 @@ export function createBookAnim(ex, { mode = 'full', practice = false } = {}) {
     const f = L[i];
     [...stage.children].forEach((c, k) => c.classList.toggle('is-on', k === i));
     const name = `${f.group ? `${f.group} · ` : ''}${f.label}`;
-    el.querySelector('.bookanim__label').innerHTML = `<strong>${esc(f.label)}</strong>${f.group && (full || !group) ? `<span>${esc(f.group)}</span>` : ''}${full ? `<em>${i + 1}/${L.length}</em>` : ''}`;
+    el.querySelector('.bookanim__label').innerHTML = `<strong>${esc(f.label)}</strong>${f.group && (withCap || !group) ? `<span>${esc(f.group)}</span>` : ''}${full ? `<em>${i + 1}/${L.length}</em>` : ''}`;
     stage.setAttribute('aria-label', `Hình trong sách: ${name}`);
     el.classList.toggle('is-focus', practice && isFocus(f));
-    if (full) {
+    if (withCap) {
       const cap = el.querySelector('.bookanim__cap');
       if (f.cap) {
         const w = f.cap[2] * PW, h = f.cap[3] * PH;
         cap.innerHTML = `<div class="bookanim__capimg" role="img" aria-label="Chú thích trong sách: ${esc(f.label)}" style="${cropStyle(imageOf(ex, f.page), f.cap)};width:min(100%, ${Math.round(w * 1.05)}px);aspect-ratio:${(w / h).toFixed(3)}"></div>`;
       } else cap.innerHTML = '';
+    }
+    if (full) {
       const play = el.querySelector('[data-a="play"]');
       play.textContent = playing ? '❚❚' : '▶';
       play.setAttribute('aria-label', playing ? 'Dừng' : 'Chạy');
@@ -137,5 +141,5 @@ export function createBookAnim(ex, { mode = 'full', practice = false } = {}) {
 
   build();
   tick();
-  return { el, stop: () => { alive = false; clearTimeout(timer); } };
+  return { el, stop: () => { alive = false; clearTimeout(timer); }, go: (k) => { i = Math.max(0, Math.min(A.frames.length - 1, k)); show(); } };
 }

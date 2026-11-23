@@ -48,11 +48,26 @@ for (const [i, e] of (data.exercises || []).entries()) {
   }
   const s = e.scoring;
   if (s) {
-    if (!['hold', 'reps'].includes(s.mode)) errors.push(`${at}: scoring.mode phải là "hold" hoặc "reps".`);
-    for (const [k, r] of (s.rules || []).entries()) {
-      const w = `${at} rule ${k + 1}`;
+    if (!['hold', 'reps', 'sequence'].includes(s.mode)) errors.push(`${at}: scoring.mode phải là "hold", "reps" hoặc "sequence".`);
+    const checkRule = (w, r) => {
+      if (r.kind) {
+        if (!['dy', 'dx', 'torso', 'tilt'].includes(r.kind)) errors.push(`${w}: kind "${r.kind}" không hợp lệ.`);
+        if (r.min == null && r.max == null) errors.push(`${w}: cần "min" hoặc "max".`);
+        if (['dy', 'dx'].includes(r.kind) && (r.a == null || r.b == null)) errors.push(`${w}: cần điểm "a" và "b".`);
+        return;
+      }
       if (r.oneOf) r.oneOf.forEach((j) => checkTriplet(w, j)); else checkTriplet(w, r.joints);
       if (typeof r.target !== 'number') errors.push(`${w}: thiếu "target" (góc mục tiêu, độ).`);
+    };
+    for (const [k, r] of (s.rules || []).entries()) checkRule(`${at} rule ${k + 1}`, r);
+    if (s.mode === 'sequence') {
+      const nf = e.bookAnim?.frames?.length || 0;
+      if (!s.steps?.length) errors.push(`${at}: mode "sequence" cần danh sách "steps".`);
+      for (const [k, st] of (s.steps || []).entries()) {
+        if (!(st.frame >= 0 && st.frame < nf)) errors.push(`${at} nhịp ${k + 1}: "frame" phải trỏ tới một khung trong bookAnim.`);
+        if (!st.rules?.length) errors.push(`${at} nhịp ${k + 1}: cần ít nhất một rule.`);
+        (st.rules || []).forEach((r, i) => checkRule(`${at} nhịp ${k + 1} rule ${i + 1}`, r));
+      }
     }
     if (s.mode === 'reps') {
       const r = s.reps;

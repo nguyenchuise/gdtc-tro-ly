@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.14.0] - 2026-11-23: Chấm trọn bộ các bài thể dục
+
+### Thay đổi
+- **10 bài thể dục liên hoàn / nhịp điệu (lớp 6 – 9) chuyển sang chấm trọn bộ:**
+  - Máy chấm lần lượt cả **168 nhịp** theo đúng các hình trong sách, thay vì chỉ chấm 1 tư thế.
+  - Mỗi nhịp phải đúng và **giữ liên tục 1,5 giây** mới được tính rồi chuyển sang nhịp sau.
+  - Hết bài mới ra điểm: trung bình các nhịp, số nhịp đạt, điểm theo từng động tác, ảnh ghép tất cả các nhịp (lưu về máy được).
+- Tiêu chí từng nhịp chặt hơn và **không nới thêm**: kiểm tra cả tay, chân và thân (tay cao hơn đầu, chân rộng hơn vai,
+  hai tay bắt chéo, thân gập, nghiêng lườn, ngồi xổm chống tay…). Làm sai tư thế sẽ không qua được nhịp.
+- Khi tập:
+  - Hình mẫu đứng yên ở đúng nhịp đang chấm (điện thoại: góc khung camera; máy tính: cột phải).
+  - Có dải ô theo dõi tiến độ, ô ghi đúng số nhịp trong sách.
+  - Có nút **Bỏ qua nhịp** cho nhịp khó; sau 12 giây chưa qua thì có nhắc.
+- Bài nhịp điệu chọn được chấm **Cả bài** hoặc từng động tác.
+- Bộ chấm điểm thêm các loại rule theo vị trí (`dy`, `dx`, `torso`, `tilt`); trình kiểm tra dữ liệu hiểu chế độ `sequence`.
+- Các bài khác giữ nguyên (giữ 1 giây, nới góc) để thầy cô so sánh khi thử nghiệm.
+
 ## [0.13.0] - 2026-11-23: Hình mẫu chuyển động từ sách, tab đánh số, chấm dễ hơn
 
 ### Thêm
