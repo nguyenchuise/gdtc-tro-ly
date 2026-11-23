@@ -25,7 +25,7 @@ export function setVoicePref(on) {
 }
 
 /** Đọc một câu (huỷ câu đang đọc dở). Trả về false nếu không đọc được. */
-export function say(text, { rate = 1 } = {}) {
+export function say(text, { rate = 1.2 } = {}) {
   if (!synth || !text) return false;
   const v = viVoice || pickVoice();
   if (!v) return false;
@@ -43,3 +43,24 @@ export function primeVoice() {
 }
 
 export function stopVoice() { synth?.cancel(); }
+
+// Tiếng "ting" ngắn báo đạt nhịp (nghe được khi đứng xa, không cần nhìn màn hình).
+let actx = null;
+export function primeSound() {
+  try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch { actx = null; }
+}
+export function ding(ok = true) {
+  if (!actx) return;
+  try {
+    const t = actx.currentTime;
+    (ok ? [880, 1320] : [330]).forEach((f, k) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t + k * 0.09);
+      g.gain.exponentialRampToValueAtTime(0.35, t + k * 0.09 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + k * 0.09 + 0.22);
+      o.connect(g).connect(actx.destination);
+      o.start(t + k * 0.09); o.stop(t + k * 0.09 + 0.25);
+    });
+  } catch { /* bỏ qua */ }
+}

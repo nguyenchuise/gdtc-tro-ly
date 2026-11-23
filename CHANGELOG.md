@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.16.0] - 2026-11-23: Qua nhịp nhanh, nói lý do chưa đạt, camera góc rộng
+
+### Thay đổi (10 bài thể dục chấm trọn bộ)
+- **Hình mẫu trong khung camera nhỏ lại một nửa**, nằm góc phải dưới. Dòng gợi ý chừa chỗ cho hình.
+- **Qua nhịp ngay:** làm chuẩn (≥ 90%, không bộ phận nào dưới 75%) liên tục 0,3 giây là sang nhịp sau, không chờ đủ 1 giây.
+  Mỗi lần đạt có tiếng **“ting”**; hết giờ thì tiếng trầm.
+- **Sau 5 giây chưa đạt:**
+  - Máy **nói ngắn gọn lý do**, ví dụ “Chưa đạt. Co hai cẳng tay lại trước ngực.”
+  - Chữ to trên camera chuyển màu cam, ghi lý do.
+- Nhắc **“Em đứng hơi xa, tiến lại gần một bước”** khi người quá nhỏ trong khung.
+- **Giọng đọc nhanh 1,2×.**
+- **Camera góc rộng:**
+  - Tự thu zoom về mức rộng nhất máy cho phép.
+  - Nếu máy có camera sau góc siêu rộng (iPhone 11 trở lên, nhiều máy Android) thì hiện nút **“Góc rộng”** để đứng gần hơn mà vẫn thấy đủ người.
+  - Hình camera nét hơn (960×720).
+- Mẹo đặt máy mới ở tab Tự tập: dựng dọc, thấp ngang hông; đứng xa thì nghe giọng đọc và tiếng “ting”.
+
 ## [0.15.0] - 2026-11-23: Chấm trọn bộ dễ thở hơn, đọc hướng dẫn từng nhịp
 
 ### Thay đổi (10 bài thể dục chấm trọn bộ)

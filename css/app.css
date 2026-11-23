@@ -741,11 +741,13 @@ details { margin: 10px 0; }
 
 /* Chấm trọn bộ: hình mẫu to bên phải khung camera (nhìn được khi đặt máy xa 2–3 m), chữ hướng dẫn to giữa khung */
 .stage { container-type: size; }
-.stage-figure[data-size="l"] { top: 58px; bottom: 78px; right: 8px; width: auto; max-width: 46%; padding: 4px; display: flex; flex-direction: column;
-  justify-content: center; background: rgba(255, 255, 255, .78); }
-.stage-figure[data-size="l"] .bookanim__stage { --h: 124px; --h: calc(100cqh - 150px); width: min(calc(var(--h) * var(--ar)), 44cqw); }
-.stage-figure[data-size="l"] .bookanim__label { font-size: .9rem; }
-.stage-figure[data-size="l"] .bookanim__label strong { font-size: 1rem; }
+.stage-figure[data-size="l"] { top: auto; bottom: 12px; right: 8px; width: auto; max-width: 32%; padding: 4px; display: flex; flex-direction: column;
+  background: rgba(255, 255, 255, .8); }
+.stage-figure[data-size="l"] .bookanim__stage { --h: 110px; --h: calc(50cqh - 60px); width: min(calc(var(--h) * var(--ar)), 30cqw); }
+.stage-figure[data-size="l"] .bookanim__label { font-size: .8rem; }
+.stage-figure[data-size="l"] .bookanim__label strong { font-size: .9rem; }
+/* chừa chỗ góc phải dưới cho hình mẫu: dòng gợi ý chỉ chiếm phần bên trái */
+.practice--seq .stage:has(.stage-figure[data-size="l"]:not(.is-min)) .stage-advice { right: calc(32% + 16px); }
 .stage-figure[data-size="s"] { max-width: 30%; }
 .stage-cue { position: absolute; left: 50%; top: 58px; transform: translateX(-50%); z-index: 3; margin: 0; width: max-content; max-width: 92%;
   pointer-events: none; text-align: center; }
@@ -753,8 +755,7 @@ details { margin: 10px 0; }
   font-weight: 700; line-height: 1.25; font-size: clamp(.9rem, 4.1cqw, 2rem); box-shadow: 0 2px 10px rgba(0, 0, 0, .3); }
 .stage-cue b { color: var(--lime); margin-right: 6px; }
 .stage-cue span:empty { display: none; }
-/* có hình mẫu to bên phải → chữ dời sang nửa trái cho khỏi che hình */
-.stage:has(.stage-figure[data-size="l"]:not([hidden])) .stage-cue { left: 4%; transform: none; max-width: 50%; text-align: left; }
-@media (min-width: 1000px) { .stage:has(.stage-figure[data-size="l"]) .stage-cue { left: 50%; transform: translateX(-50%); max-width: 92%; text-align: center; } }
+.stage-cue span.is-why { background: rgba(180, 60, 8, .92); }
+.stage-cue span.is-why b { color: #fff3c4; }
 /* Chấm trọn bộ: bỏ bảng nhỏ trên camera cho thoáng (bảng đầy đủ ở dưới) */
 .practice--seq .stage-parts { display: none; }

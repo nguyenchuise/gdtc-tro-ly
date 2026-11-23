@@ -9,7 +9,7 @@ import {
 import { esc } from './util.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
-import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice } from './speak.js';
+import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding } from './speak.js';
 
 const PART = {
   0: 'Thân', 11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -23,7 +23,10 @@ const CAMERA_TIPS = {
 const session = new Map();
 
 export function cameraTip(scoring) {
-  return `${CAMERA_TIPS[scoring?.camera] || CAMERA_TIPS.front} Chỗ tập đủ sáng.`;
+  const extra = scoring?.mode === 'sequence'
+    ? ' Dựng điện thoại <strong>dọc, thấp ngang hông</strong> (tựa vào cặp, chai nước) để thấy từ đầu đến chân. Máy có camera sau <strong>góc rộng</strong> thì bấm nút “Góc rộng” để đứng gần hơn. Đứng xa không nhìn rõ màn hình thì <strong>nghe giọng đọc</strong>: tiếng “ting” là đạt nhịp.'
+    : '';
+  return `${CAMERA_TIPS[scoring?.camera] || CAMERA_TIPS.front} Chỗ tập đủ sáng.${extra}`;
 }
 
 const tone = (s) => (s == null ? 'muted' : s >= PASS_SCORE ? 'ok' : s >= 50 ? 'mid' : 'bad');
@@ -111,6 +114,7 @@ export function mountPractice(root, ex) {
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
           ${isSeq && speechSupported() ? `<button type="button" class="btn btn--small btn--glass btn--icon" data-act="voice" aria-pressed="${voicePref()}" aria-label="Đọc hướng dẫn">${voicePref() ? '🔊' : '🔇'}</button>` : ''}
+          <button type="button" class="btn btn--small btn--glass" data-act="wide" hidden aria-pressed="false" aria-label="Camera góc rộng">Góc rộng</button>
           ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>' : ''}
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
         </div>
@@ -213,6 +217,7 @@ export function mountPractice(root, ex) {
   const setStatus = (t) => { status.textContent = t; status.classList.toggle('is-loading', /^Đang/.test(t)); };
 
   let stream = null, objectUrl = null, raf = 0, facing = 'user', running = false, source = null;
+  let wideId = null, useWide = false; // camera sau góc siêu rộng (nếu máy có)
   let lastVideoTime = -1, lastTs = 0, lastTableAt = 0, lastAdvice = '';
   // Một "lượt tập": từ lúc bật camera / bấm Tập lại đến khi đạt.
   let attempt = null;
@@ -236,8 +241,9 @@ export function mountPractice(root, ex) {
     }
     setStatus('Đang mở camera…');
     try {
+      const base = { width: { ideal: 960 }, height: { ideal: 720 } };
       stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false,
+        video: useWide && wideId ? { ...base, deviceId: { exact: wideId } } : { ...base, facingMode: facing }, audio: false,
       });
     } catch (err) {
       stream = null;
@@ -251,16 +257,28 @@ export function mountPractice(root, ex) {
     }
     source = 'camera';
     video.srcObject = stream;
-    stage.classList.toggle('mirror', facing === 'user');
+    stage.classList.toggle('mirror', facing === 'user' && !useWide);
+    // Góc rộng nhất có thể: thu nhỏ zoom về mức thấp nhất mà camera cho phép (một số máy < 1×).
+    const track = stream.getVideoTracks()[0];
+    const caps = track?.getCapabilities?.() || {};
+    if (caps.zoom && caps.zoom.min < (track.getSettings?.().zoom ?? 1)) {
+      track.applyConstraints({ advanced: [{ zoom: caps.zoom.min }] }).catch(() => {});
+    }
     // Nút đổi camera chỉ hiện khi máy có từ 2 camera; mặc định camera trước, chỉ đổi khi bấm.
     const flip = $('[data-act="flip"]');
-    const cams = (await navigator.mediaDevices.enumerateDevices().catch(() => [])).filter((d) => d.kind === 'videoinput').length;
+    const devs = (await navigator.mediaDevices.enumerateDevices().catch(() => [])).filter((d) => d.kind === 'videoinput');
+    const cams = devs.length;
     flip.hidden = cams < 2;
+    // Tên camera siêu rộng: iPhone "Back Ultra Wide Camera" / "Camera mặt sau góc siêu rộng"; Android thường ghi "ultra wide".
+    wideId = devs.find((d) => /ultra\s*wide|siêu rộng|ultrawide|0[.,]5x/i.test(d.label))?.deviceId || null;
+    const wb = $('[data-act="wide"]');
+    if (wb) { wb.hidden = !wideId; wb.setAttribute('aria-pressed', String(useWide)); }
     const next = facing === 'user' ? 'Camera sau' : 'Camera trước';
     flip.querySelector('.flip-text').textContent = next;
     flip.setAttribute('aria-label', `Đổi sang ${next.toLowerCase()}`);
     await begin();
-    if (facing === 'environment') setStatus('Đang dùng camera sau: hướng máy về phía bạn đang tập, thấy cả người.');
+    if (useWide) setStatus('Đang dùng camera sau góc rộng: đặt máy cách khoảng 1,5–2 m là thấy cả người.');
+    else if (facing === 'environment') setStatus('Đang dùng camera sau: hướng máy về phía bạn đang tập, thấy cả người.');
   }
 
   async function startFile(file) {
@@ -387,9 +405,24 @@ export function mountPractice(root, ex) {
       setVal('step', `${attempt.si + 1}/${N}`);
       setVal('hud', `${attempt.si + 1}/${N}`);
       setProgress((attempt.si + Math.min(1, timer.current / holdSec)) / N);
+      // Làm chuẩn (≥ 90%, không bộ phận nào dưới 75%) liên tục 0,3 giây → qua nhịp ngay, khỏi chờ đủ 1 giây.
+      const great = allOk && avg >= 90 && parts.every((p) => p.score >= 75);
+      if (great) { if (attempt.greatT == null) attempt.greatT = tSec; } else attempt.greatT = null;
+      const fast = great && tSec - attempt.greatT >= 0.3;
+      const far = tooFar(lm, h);
+      const why = far || adviceFor(ev);
+      // Sau 5 giây chưa đạt: nói ngắn gọn vì sao (một lần mỗi nhịp) và hiện lý do bằng chữ to.
+      if (!allOk && attempt.vis >= 5 && !attempt.told && why) {
+        attempt.told = true;
+        const worst = [...ev.results].filter((r) => r.score != null).sort((a, b) => a.score - b.score)[0];
+        const short = far || worst?.rule.hint || why;
+        if (voicePref()) say(`Chưa đạt. ${short}`);
+        const cue = root.querySelector('.stage-cue span');
+        if (cue) { cue.classList.add('is-why'); cue.innerHTML = `<b>Chưa đạt</b> ${esc(short)}`; }
+      }
       showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s`
-        : left <= 5 ? `${adviceFor(ev)} · Tự sang nhịp sau ${Math.max(0, Math.ceil(left))}s` : adviceFor(ev));
-      if (!attempt.done && timer.done) stepDone(lm, w, h, parts);
+        : left <= 5 ? `${why} · Tự sang nhịp sau ${Math.max(0, Math.ceil(left))}s` : why);
+      if (!attempt.done && (timer.done || fast)) stepDone(lm, w, h, parts);
       // Quá thời gian mà chưa làm được (và không đang giữ đúng) → tự bỏ qua nhịp này.
       else if (!attempt.done && left <= 0 && !allOk) skipStep(true);
     } else {
@@ -417,10 +450,17 @@ export function mountPractice(root, ex) {
   }
 
   // ------------------------------------------------ Chấm trọn bộ: từng nhịp
+  /** Người quá nhỏ trong khung (đứng quá xa) → máy đo kém chính xác. */
+  function tooFar(lm, h) {
+    const ys = [0, 27, 28].map((k) => lm[k]).filter((q) => q && (q.visibility ?? 1) >= 0.5).map((q) => q.y);
+    if (ys.length < 3) return '';
+    return Math.max(...ys) - Math.min(...ys) < 0.45 ? 'Em đứng hơi xa, tiến lại gần một bước.' : '';
+  }
   function setStep(i) {
     const st = attempt.steps[i];
     rules = st.rules.map(easeSeq);
     attempt.si = i; attempt.smooth = rules.map(() => null); attempt.streak = null; attempt.vis = 0; attempt.lastT = null;
+    attempt.greatT = null; attempt.told = false;
     timer.reset();
     lastTableAt = 0;
     targetPlayers.forEach((p) => p.go(st.frame));
@@ -429,7 +469,7 @@ export function mountPractice(root, ex) {
     // Chữ to giữa camera + giọng đọc hướng dẫn nhịp này
     const f = frames[st.frame] || {};
     const cue = root.querySelector('.stage-cue span');
-    if (cue) cue.innerHTML = `<b>${esc(f.label || `Nhịp ${i + 1}`)}</b> ${esc(st.say || '')}`;
+    if (cue) { cue.classList.remove('is-why'); cue.innerHTML = `<b>${esc(f.label || `Nhịp ${i + 1}`)}</b> ${esc(st.say || '')}`; }
     const prev = attempt.steps[i - 1];
     const newGroup = f.group && (!prev || stepGroup(prev) !== f.group);
     const label = /^TTCB/.test(f.label || '') ? 'Tư thế chuẩn bị' : (f.label || '');
@@ -475,6 +515,7 @@ export function mountPractice(root, ex) {
     nextStep(false, auto);
   }
   function nextStep(ok, auto = false) {
+    ding(ok);
     if (attempt.si + 1 >= attempt.steps.length) { finishSeq(); return; }
     setStep(attempt.si + 1);
     const b = $('.pass-banner');
@@ -792,7 +833,7 @@ export function mountPractice(root, ex) {
       return;
     }
     const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'camera' || act === 'again') primeVoice();
+    if (act === 'camera' || act === 'again') { primeVoice(); primeSound(); }
     if (act === 'camera') startCamera();
     else if (act === 'voice') {
       const on = !voicePref();
@@ -820,10 +861,11 @@ export function mountPractice(root, ex) {
         b.setAttribute('aria-pressed', String(min));
         b.setAttribute('aria-label', min ? 'Hiện hình mẫu' : 'Thu nhỏ hình mẫu');
       }
-    } else if (act === 'flip') { facing = facing === 'user' ? 'environment' : 'user'; startCamera(); }
+    } else if (act === 'flip') { useWide = false; facing = facing === 'user' ? 'environment' : 'user'; startCamera(); }
+    else if (act === 'wide') { useWide = !useWide; if (!useWide) facing = 'user'; startCamera(); }
   });
   root.addEventListener('change', (e) => {
-    if (e.target.dataset.act === 'file') { primeVoice(); startFile(e.target.files?.[0]); e.target.value = ''; }
+    if (e.target.dataset.act === 'file') { primeVoice(); primeSound(); startFile(e.target.files?.[0]); e.target.value = ''; }
   });
   const onHidden = () => { if (document.hidden && source === 'camera') stop(); };
   document.addEventListener('visibilitychange', onHidden);
