@@ -120,8 +120,10 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
 
 **Chấm trọn bộ (10 bài thể dục, `scoring.mode = "sequence"`).** Máy chấm lần lượt **từng nhịp** theo đúng các hình trong sách:
-- Mỗi nhịp phải đúng mọi tiêu chí ≥ 80% và **giữ liên tục 1,5 giây** (`holdSeconds`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
-- Nhịp khó quá thì bấm **Bỏ qua nhịp** (nhịp đó tính 0 điểm).
+- Mỗi nhịp đạt khi **điểm trung bình ≥ 80%, không bộ phận nào dưới 60%** và **giữ liên tục 1 giây** (`holdSeconds`). Tiêu chí được nới vừa phải (góc +8°, vị trí +¼ bề rộng vai, xem `easeSeq` trong `js/practice.js`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
+- Thử **10 giây** (`autoSkipSeconds`, chỉ tính lúc máy thấy người; nhịp đầu thêm 5 giây) mà chưa được thì **tự sang nhịp sau** (tính 0 điểm). Vẫn có nút **Bỏ qua nhịp**.
+- Mỗi nhịp có câu hướng dẫn ngắn (`steps[k].say`): hiện **chữ to giữa khung camera** và **đọc bằng giọng tiếng Việt có sẵn trong máy** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ).
+- Hình mẫu trong khung camera mặc định **to** (cao gần bằng khung) để nhìn từ xa 2–3 m; bấm vào để đổi to → nhỏ → ẩn.
 - Hết bài mới có **điểm tổng = trung bình các nhịp**, kèm ảnh ghép tất cả các nhịp và điểm theo từng động tác.
 - Bài nhịp điệu chọn được chấm *Cả bài* hoặc từng động tác.
 - Mỗi nhịp (`steps[k]`) gồm `frame` (khung hình trong `bookAnim`) và `rules`. Ngoài rule góc, có rule theo vị trí, không nới thêm:

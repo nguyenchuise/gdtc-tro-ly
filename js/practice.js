@@ -9,6 +9,7 @@ import {
 import { esc } from './util.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
+import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice } from './speak.js';
 
 const PART = {
   0: 'Thân', 11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -42,14 +43,24 @@ export function mountPractice(root, ex) {
   let seqGroup = null; // null = cả bài
   const seqSteps = () => sc.steps.filter((st) => !seqGroup || stepGroup(st) === seqGroup);
   // Bài một tư thế: nới góc cho dễ đạt. Bài chấm trọn bộ: tiêu chí đã soạn riêng cho từng nhịp, không nới thêm.
-  let rules = isSeq ? sc.steps[0].rules : (sc.rules || []).map(easeRule);
+  // Chấm trọn bộ: nới vừa phải (góc +8°, vị trí +¼ bề rộng vai); một nhịp đạt khi điểm trung bình ≥ 80%
+  // và không bộ phận nào dưới SEQ_PART_MIN.
+  const SEQ_PART_MIN = 60;
+  const SEQ_MARGIN = { dy: 0.25, dx: 0.25, torso: 0.15, tilt: 4 };
+  const easeSeq = (r) => {
+    if (!r.kind) return { ...r, tolerance: (r.tolerance ?? 10) + 8, range: (r.range ?? 30) + 10 };
+    const m = SEQ_MARGIN[r.kind] ?? 0;
+    return { ...r, min: r.min == null ? r.min : r.min - m, max: r.max == null ? r.max : r.max + m };
+  };
+  const autoSkip = sc.autoSkipSeconds || 10;
+  let rules = isSeq ? sc.steps[0].rules.map(easeSeq) : (sc.rules || []).map(easeRule);
   const repSpec = isReps ? easeReps(sc.reps) : null;
   const holdSec = sc.holdSeconds || 1;
   const secText = String(holdSec).replace('.', ',');
   const seqGoal = () => `Làm lần lượt <strong>${seqSteps().length} nhịp</strong> như hình, mỗi nhịp giữ đúng <strong>${secText} giây</strong>`;
   const goalText = isSeq ? seqGoal() : isReps ? `Làm đúng <strong>${sc.reps.target} lần</strong>` : `Giữ đúng tư thế <strong>${secText} giây</strong> là máy tự chụp ảnh`;
   root.innerHTML = `
-    <div class="practice">
+    <div class="practice${isSeq ? ' practice--seq' : ''}">
       <div class="goal-card">
         <span class="goal-card__icon" aria-hidden="true">${icon('target')}</span>
         <div><p class="goal-card__title">${goalText}</p>
@@ -92,12 +103,14 @@ export function mountPractice(root, ex) {
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
         <p class="stage-advice" aria-hidden="true"></p>
-        <button type="button" class="stage-figure" data-act="fig-toggle" aria-label="Thu nhỏ hình mẫu" aria-pressed="false">
+        ${isSeq ? '<p class="stage-cue" aria-live="polite"><span></span></p>' : ''}
+        <button type="button" class="stage-figure" data-act="fig-toggle" ${isSeq ? 'data-size="l"' : ''} aria-label="Đổi cỡ hình mẫu" aria-pressed="false">
           <span class="stage-figure__img" data-fig="inset"></span><span class="stage-figure__label">Hình mẫu</span>
         </button>
         ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
+          ${isSeq && speechSupported() ? `<button type="button" class="btn btn--small btn--glass btn--icon" data-act="voice" aria-pressed="${voicePref()}" aria-label="Đọc hướng dẫn">${voicePref() ? '🔊' : '🔇'}</button>` : ''}
           ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>' : ''}
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
         </div>
@@ -316,7 +329,9 @@ export function mountPractice(root, ex) {
     });
     const allSeen = parts.every((p) => p.score != null);
     const avg = parts.length && allSeen ? parts.reduce((a, p) => a + p.score, 0) / parts.length : null;
-    const allOk = allSeen && parts.every((p) => p.score >= PASS_SCORE);
+    const allOk = isSeq
+      ? allSeen && avg >= PASS_SCORE && parts.every((p) => p.score >= SEQ_PART_MIN)
+      : allSeen && parts.every((p) => p.score >= PASS_SCORE);
     let repInfo = null;
 
     if (isReps) {
@@ -361,17 +376,22 @@ export function mountPractice(root, ex) {
         attempt.streak.n += 1;
         parts.forEach((p, i) => { attempt.streak.sums[i] += p.score; });
       } else attempt.streak = null;
-      if (attempt.stepT == null) attempt.stepT = tSec;
+      // Thời gian thử nhịp này: chỉ tính lúc máy thấy người (đi vào chỗ đứng không bị tính).
+      if (attempt.lastT != null && tSec >= attempt.lastT) attempt.vis += Math.min(0.5, tSec - attempt.lastT);
+      attempt.lastT = tSec;
       const N = attempt.steps.length;
+      const limit = autoSkip + (attempt.si === 0 ? 5 : 0);
+      const left = limit - attempt.vis;
       setVal('cur', avg == null ? '—' : `${Math.round(avg)}%`);
       setVal('hold', `${Math.min(timer.current, 99).toFixed(1)}s`);
       setVal('step', `${attempt.si + 1}/${N}`);
       setVal('hud', `${attempt.si + 1}/${N}`);
       setProgress((attempt.si + Math.min(1, timer.current / holdSec)) / N);
-      const stuck = !allOk && tSec - attempt.stepT > 12;
       showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s`
-        : stuck ? `${adviceFor(ev)} (Khó quá thì bấm “Bỏ qua nhịp”.)` : adviceFor(ev));
+        : left <= 5 ? `${adviceFor(ev)} · Tự sang nhịp sau ${Math.max(0, Math.ceil(left))}s` : adviceFor(ev));
       if (!attempt.done && timer.done) stepDone(lm, w, h, parts);
+      // Quá thời gian mà chưa làm được (và không đang giữ đúng) → tự bỏ qua nhịp này.
+      else if (!attempt.done && left <= 0 && !allOk) skipStep(true);
     } else {
       timer.update(allOk ? avg : null, tSec);
       // Cộng dồn điểm từng bộ phận trong lúc đang giữ đúng, để ghi kết quả.
@@ -399,13 +419,21 @@ export function mountPractice(root, ex) {
   // ------------------------------------------------ Chấm trọn bộ: từng nhịp
   function setStep(i) {
     const st = attempt.steps[i];
-    rules = st.rules;
-    attempt.si = i; attempt.smooth = rules.map(() => null); attempt.streak = null; attempt.stepT = null;
+    rules = st.rules.map(easeSeq);
+    attempt.si = i; attempt.smooth = rules.map(() => null); attempt.streak = null; attempt.vis = 0; attempt.lastT = null;
     timer.reset();
     lastTableAt = 0;
     targetPlayers.forEach((p) => p.go(st.frame));
     const now = root.querySelector('.seq-now');
     if (now) now.innerHTML = `Đang chấm: <strong>${esc(stepName(st))}</strong> <span>(${i + 1}/${attempt.steps.length})</span>`;
+    // Chữ to giữa camera + giọng đọc hướng dẫn nhịp này
+    const f = frames[st.frame] || {};
+    const cue = root.querySelector('.stage-cue span');
+    if (cue) cue.innerHTML = `<b>${esc(f.label || `Nhịp ${i + 1}`)}</b> ${esc(st.say || '')}`;
+    const prev = attempt.steps[i - 1];
+    const newGroup = f.group && (!prev || stepGroup(prev) !== f.group);
+    const label = /^TTCB/.test(f.label || '') ? 'Tư thế chuẩn bị' : (f.label || '');
+    if (voicePref()) say(`${newGroup ? `Động tác ${f.group}. ` : ''}${label}. ${st.say || ''}`);
     renderTrack();
   }
   function renderTrack() {
@@ -441,16 +469,16 @@ export function mountPractice(root, ex) {
     attempt.res.push({ ok: true, score, thumb: thumbOf(lm, w, h, parts) });
     nextStep(true);
   }
-  function skipStep() {
+  function skipStep(auto = false) {
     if (!isSeq || !attempt || attempt.done || !running) return;
-    attempt.res.push({ ok: false, score: 0, thumb: null });
-    nextStep(false);
+    attempt.res.push({ ok: false, score: 0, thumb: null, auto });
+    nextStep(false, auto);
   }
-  function nextStep(ok) {
+  function nextStep(ok, auto = false) {
     if (attempt.si + 1 >= attempt.steps.length) { finishSeq(); return; }
     setStep(attempt.si + 1);
     const b = $('.pass-banner');
-    b.textContent = ok ? 'Đúng rồi! Nhịp tiếp' : 'Nhịp tiếp theo'; b.hidden = false;
+    b.textContent = ok ? 'Đúng rồi! Nhịp tiếp' : auto ? 'Hết giờ – nhịp tiếp' : 'Nhịp tiếp theo'; b.hidden = false;
     clearTimeout(nextStep.t);
     nextStep.t = setTimeout(() => { if (!attempt.done) b.hidden = true; }, 800);
     if (ok) navigator.vibrate?.(40);
@@ -481,6 +509,9 @@ export function mountPractice(root, ex) {
     b.textContent = newRecord ? 'Kỷ lục mới!' : `Xong! ${total}%`;
     setProgress(1);
     showAdvice(`Hoàn thành ${passed}/${steps.length} nhịp. Xem kết quả bên dưới.`);
+    const cue = root.querySelector('.stage-cue span');
+    if (cue) cue.innerHTML = `<b>Xong!</b> ${total}% · ${passed}/${steps.length} nhịp đạt`;
+    if (voicePref()) say(`Hoàn thành. Em được ${total} phần trăm, đạt ${passed} trên ${steps.length} nhịp.`);
     navigator.vibrate?.([80, 60, 120]);
     renderResults(newRecord);
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
@@ -659,7 +690,7 @@ export function mountPractice(root, ex) {
   function stageObstacles(mirror) {
     const box = stage.getBoundingClientRect();
     if (!box.width) return [];
-    return ['.hud', '.stage-controls', '.stage-parts', '.stage-figure'].map((sel) => root.querySelector(sel)?.getBoundingClientRect())
+    return ['.hud', '.stage-controls', '.stage-parts', '.stage-figure', '.stage-cue span'].map((sel) => root.querySelector(sel)?.getBoundingClientRect())
       .filter((r) => r && r.width > 0).map((r) => {
       const cx = (r.left + r.width / 2 - box.left) / box.width;
       return { x: mirror ? 1 - cx : cx, y: (r.top + r.height / 2 - box.top) / box.height, w: r.width / box.width + 0.02, h: r.height / box.height + 0.02 };
@@ -693,7 +724,8 @@ export function mountPractice(root, ex) {
     const w = mini.offsetWidth + 16, h = mini.offsetHeight + 16, top = mini.offsetTop - 8;
     const hits = (x0) => pts.filter(([x, y]) => x >= x0 && x <= x0 + w && y >= top && y <= top + h).length;
     const left = hits(0), right = hits(sw - w);
-    const useRight = right < left;
+    const bigFig = root.querySelector('.stage-figure[data-size="l"]:not([hidden])');
+    const useRight = !bigFig && right < left;
     mini.classList.toggle('stage-parts--right', useRight);
     mini.classList.toggle('is-faded', Math.min(left, right) > 0);
   }
@@ -733,6 +765,7 @@ export function mountPractice(root, ex) {
 
   function stop() {
     running = false;
+    stopVoice();
     cancelAnimationFrame(raf);
     stream?.getTracks().forEach((t) => t.stop());
     stream = null;
@@ -759,7 +792,16 @@ export function mountPractice(root, ex) {
       return;
     }
     const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'camera' || act === 'again') primeVoice();
     if (act === 'camera') startCamera();
+    else if (act === 'voice') {
+      const on = !voicePref();
+      setVoicePref(on);
+      const b = e.target.closest('[data-act="voice"]');
+      b.textContent = on ? '🔊' : '🔇'; b.setAttribute('aria-pressed', String(on));
+      if (on && !hasVietnameseVoice()) showAdvice('Máy này chưa có giọng đọc tiếng Việt, em xem chữ trên màn hình nhé.');
+      else if (on && attempt?.steps) say(attempt.steps[attempt.si]?.say || '');
+    }
     else if (act === 'skip') skipStep();
     else if (act === 'stop') stop();
     else if (act === 'again') {
@@ -767,13 +809,21 @@ export function mountPractice(root, ex) {
       stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (act === 'fig-toggle') {
       const b = e.target.closest('.stage-figure');
-      const min = b.classList.toggle('is-min');
-      b.setAttribute('aria-pressed', String(min));
-      b.setAttribute('aria-label', min ? 'Hiện hình mẫu' : 'Thu nhỏ hình mẫu');
+      if (b.dataset.size) {
+        // Chấm trọn bộ: to (nhìn từ xa) → nhỏ → ẩn → to
+        const next = { l: 's', s: 'min', min: 'l' }[b.dataset.size] || 'l';
+        b.dataset.size = next;
+        b.classList.toggle('is-min', next === 'min');
+        b.setAttribute('aria-pressed', String(next === 'min'));
+      } else {
+        const min = b.classList.toggle('is-min');
+        b.setAttribute('aria-pressed', String(min));
+        b.setAttribute('aria-label', min ? 'Hiện hình mẫu' : 'Thu nhỏ hình mẫu');
+      }
     } else if (act === 'flip') { facing = facing === 'user' ? 'environment' : 'user'; startCamera(); }
   });
   root.addEventListener('change', (e) => {
-    if (e.target.dataset.act === 'file') { startFile(e.target.files?.[0]); e.target.value = ''; }
+    if (e.target.dataset.act === 'file') { primeVoice(); startFile(e.target.files?.[0]); e.target.value = ''; }
   });
   const onHidden = () => { if (document.hidden && source === 'camera') stop(); };
   document.addEventListener('visibilitychange', onHidden);

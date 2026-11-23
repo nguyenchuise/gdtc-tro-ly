@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.15.0] - 2026-11-23: Chấm trọn bộ dễ thở hơn, đọc hướng dẫn từng nhịp
+
+### Thay đổi (10 bài thể dục chấm trọn bộ)
+- **Dễ đạt hơn:**
+  - Mỗi nhịp đạt khi điểm trung bình ≥ 80% và không bộ phận nào dưới 60% (trước: mọi bộ phận ≥ 80%).
+  - Tiêu chí nới vừa phải: góc +8°, vị trí +¼ bề rộng vai.
+- **Giữ 1 giây** mỗi nhịp (trước 1,5 giây).
+- **Tự bỏ qua sau 10 giây** không làm được, chỉ tính lúc máy thấy người; nhịp đầu thêm 5 giây để vào chỗ. Còn 5 giây thì có đếm ngược.
+- **Hình mẫu to trong khung camera:**
+  - Cao gần bằng khung (khoảng 4–5 lần trước), để nhìn được khi đặt điện thoại xa.
+  - Bấm để đổi to → nhỏ → ẩn.
+  - Bỏ bảng nhỏ trên camera cho thoáng; bảng đầy đủ vẫn ở dưới.
+- **Hướng dẫn từng nhịp:**
+  - Câu ngắn cho cả 168 nhịp, hiện chữ to giữa khung camera.
+  - Đọc bằng giọng tiếng Việt có sẵn trong điện thoại, không cần mạng. Nút 🔊/🔇 bật/tắt, máy nhớ lựa chọn.
+  - Hết bài đọc điểm.
+
 ## [0.14.0] - 2026-11-23: Chấm trọn bộ các bài thể dục
 
 ### Thay đổi

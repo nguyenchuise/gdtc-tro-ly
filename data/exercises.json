@@ -1100,12 +1100,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Đứng thẳng, hai tay buông dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "label": "Hai chân duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 172, "tolerance": 20, "range": 30, "hint": "Duỗi thẳng hai gối." }
@@ -1113,6 +1115,7 @@
           },
           {
             "frame": 1,
+            "say": "Đưa thẳng hai tay ra trước, ngang vai.",
             "rules": [
               { "kind": "dy", "label": "Hai tay ngang vai (đưa ra trước)", "need": "ngang vai", "hint": "Đưa hai tay thẳng ra trước, cao ngang vai.", "a": [ 15, 16 ], "b": "sh", "min": -0.5, "max": 0.5 },
               { "kind": "dx", "label": "Hai tay song song phía trước", "need": "hai tay gần nhau", "hint": "Hai tay đưa ra trước, không dang sang hai bên.", "a": 15, "b": 16, "max": 1.8 },
@@ -1121,6 +1124,7 @@
           },
           {
             "frame": 2,
+            "say": "Đưa thẳng hai tay lên cao.",
             "rules": [
               { "label": "Hai tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 165, "tolerance": 20, "range": 30, "hint": "Đưa thẳng cả hai tay lên cao, sát tai." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Vươn hai bàn tay lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.7 },
@@ -1129,6 +1133,7 @@
           },
           {
             "frame": 3,
+            "say": "Dang hai tay ngang vai, hai chân thẳng.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1138,6 +1143,7 @@
           },
           {
             "frame": 4,
+            "say": "Khuỵu gối, hai tay bắt chéo trước bụng.",
             "rules": [
               { "label": "Hai gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 140, "tolerance": 20, "range": 30, "hint": "Khuỵu hai gối xuống thêm." },
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
@@ -1146,6 +1152,7 @@
           },
           {
             "frame": 5,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -1154,6 +1161,7 @@
           },
           {
             "frame": 6,
+            "say": "Hai cánh tay ngang vai, ngón tay chạm vai.",
             "rules": [
               { "label": "Cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 25, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Gập khuỷu, ngón tay chạm vai", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 35, "tolerance": 30, "range": 30, "hint": "Gập khuỷu cho đầu ngón tay chạm mỏm vai." }
@@ -1161,6 +1169,7 @@
           },
           {
             "frame": 7,
+            "say": "Dang hai tay ngang vai, hai chân thẳng.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1170,6 +1179,7 @@
           },
           {
             "frame": 8,
+            "say": "Chân rộng hơn vai, co cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -1179,6 +1189,7 @@
           },
           {
             "frame": 9,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1188,6 +1199,7 @@
           },
           {
             "frame": 10,
+            "say": "Chân rộng hơn vai, co cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -1197,6 +1209,7 @@
           },
           {
             "frame": 11,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1287,12 +1300,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1302,6 +1317,7 @@
           },
           {
             "frame": 1,
+            "say": "Một tay chống hông, tay kia đưa cao, nghiêng lườn.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "label": "Một tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 155, "tolerance": 25, "range": 30, "hint": "Đưa một tay thẳng lên cao, áp sát tai." },
@@ -1310,6 +1326,7 @@
           },
           {
             "frame": 2,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1319,6 +1336,7 @@
           },
           {
             "frame": 3,
+            "say": "Một tay chống hông, tay kia đưa cao, nghiêng lườn.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "label": "Một tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 155, "tolerance": 25, "range": 30, "hint": "Đưa một tay thẳng lên cao, áp sát tai." },
@@ -1327,6 +1345,7 @@
           },
           {
             "frame": 4,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -1336,6 +1355,7 @@
           },
           {
             "frame": 5,
+            "say": "Khép chân, đưa thẳng hai tay lên cao.",
             "rules": [
               { "label": "Hai tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 165, "tolerance": 20, "range": 30, "hint": "Đưa thẳng cả hai tay lên cao, sát tai." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Vươn hai bàn tay lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.7 },
@@ -1344,6 +1364,7 @@
           },
           {
             "frame": 6,
+            "say": "Gập thân, tay chạm mũi bàn chân, chân thẳng.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.7 },
               { "kind": "dy", "label": "Tay chạm mũi bàn chân", "need": "thấp hơn gối", "hint": "Cúi xuống, tay chạm mũi bàn chân.", "a": [ 15, 16 ], "b": "knee", "max": 0 },
@@ -1352,6 +1373,7 @@
           },
           {
             "frame": 7,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -1359,6 +1381,7 @@
           },
           {
             "frame": 8,
+            "say": "Chống tay, một chân duỗi sang ngang.",
             "rules": [
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn hông", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "hip", "max": 0 },
               { "kind": "dx", "label": "Một chân duỗi sang ngang", "need": "hai chân tách xa", "hint": "Duỗi một chân sang ngang thật rộng.", "a": 27, "b": 28, "min": 2.0 },
@@ -1367,6 +1390,7 @@
           },
           {
             "frame": 9,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -1374,6 +1398,7 @@
           },
           {
             "frame": 10,
+            "say": "Chống tay, một chân duỗi sang ngang.",
             "rules": [
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn hông", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "hip", "max": 0 },
               { "kind": "dx", "label": "Một chân duỗi sang ngang", "need": "hai chân tách xa", "hint": "Duỗi một chân sang ngang thật rộng.", "a": 27, "b": 28, "min": 2.0 },
@@ -1382,6 +1407,7 @@
           },
           {
             "frame": 11,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -1476,12 +1502,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Chống thẳng tay, hai chân duỗi ra sau.",
             "rules": [
               { "kind": "dy", "label": "Hai tay chống đất", "need": "thấp hơn vai nhiều", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "sh", "max": -0.6 },
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.8 },
@@ -1490,6 +1518,7 @@
           },
           {
             "frame": 1,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -1497,6 +1526,7 @@
           },
           {
             "frame": 2,
+            "say": "Đưa thẳng hai tay lên cao.",
             "rules": [
               { "label": "Hai tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 165, "tolerance": 20, "range": 30, "hint": "Đưa thẳng cả hai tay lên cao, sát tai." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Vươn hai bàn tay lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.7 },
@@ -1505,6 +1535,7 @@
           },
           {
             "frame": 3,
+            "say": "Khuỵu gối, thân ngả ra trước.",
             "rules": [
               { "label": "Hai gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 140, "tolerance": 20, "range": 30, "hint": "Khuỵu hai gối xuống thêm." },
               { "kind": "torso", "label": "Thân ngả ra trước", "need": "thân ngả", "hint": "Ngả thân trên ra trước một chút.", "max": 1.15 }
@@ -1512,6 +1543,7 @@
           },
           {
             "frame": 4,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -1520,6 +1552,7 @@
           },
           {
             "frame": 5,
+            "say": "Khuỵu gối, hai tay đưa thẳng ra trước.",
             "rules": [
               { "kind": "dy", "label": "Hai tay ngang vai (đưa ra trước)", "need": "ngang vai", "hint": "Đưa hai tay thẳng ra trước, cao ngang vai.", "a": [ 15, 16 ], "b": "sh", "min": -0.5, "max": 0.5 },
               { "kind": "dx", "label": "Hai tay song song phía trước", "need": "hai tay gần nhau", "hint": "Hai tay đưa ra trước, không dang sang hai bên.", "a": 15, "b": 16, "max": 1.8 },
@@ -1528,6 +1561,7 @@
           },
           {
             "frame": 6,
+            "say": "Đứng thẳng, hai tay buông dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "label": "Hai chân duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 172, "tolerance": 20, "range": 30, "hint": "Duỗi thẳng hai gối." }
@@ -3171,12 +3205,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Đứng thẳng, hai tay buông dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "label": "Hai chân duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 172, "tolerance": 20, "range": 30, "hint": "Duỗi thẳng hai gối." }
@@ -3184,6 +3220,7 @@
           },
           {
             "frame": 1,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -3193,6 +3230,7 @@
           },
           {
             "frame": 2,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3201,6 +3239,7 @@
           },
           {
             "frame": 3,
+            "say": "Một gối khuỵu, chân kia duỗi, thân ngả trước.",
             "rules": [
               { "label": "Một gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 130, "tolerance": 20, "range": 30, "hint": "Khuỵu một gối xuống." },
               { "label": "Chân kia duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 170, "tolerance": 20, "range": 30, "hint": "Chân còn lại duỗi thẳng." },
@@ -3209,6 +3248,7 @@
           },
           {
             "frame": 4,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3217,6 +3257,7 @@
           },
           {
             "frame": 5,
+            "say": "Đá chân ra trước cao ngang hông.",
             "rules": [
               { "kind": "dy", "label": "Đá chân lên cao", "need": "bàn chân gần ngang hông", "hint": "Đá chân thẳng ra trước, cao ngang hông.", "a": [ 27, 28 ], "b": "hip", "pick": "any", "min": -1.3 },
               { "kind": "dy", "label": "Hai tay ngang vai (đưa ra trước)", "need": "ngang vai", "hint": "Đưa hai tay thẳng ra trước, cao ngang vai.", "a": [ 15, 16 ], "b": "sh", "min": -0.5, "max": 0.5 }
@@ -3224,6 +3265,7 @@
           },
           {
             "frame": 6,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -3232,6 +3274,7 @@
           },
           {
             "frame": 7,
+            "say": "Thân ngả trước, hai tay dang ngang.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.9 },
               { "kind": "dx", "label": "Hai tay duỗi thẳng sang ngang", "need": "cổ tay xa nhau", "hint": "Duỗi thẳng hai tay sang hai bên.", "a": 15, "b": 16, "min": 2.6 }
@@ -3239,6 +3282,7 @@
           },
           {
             "frame": 8,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3247,6 +3291,7 @@
           },
           {
             "frame": 9,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -3256,6 +3301,7 @@
           },
           {
             "frame": 10,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3340,12 +3386,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Một gối khuỵu, chân kia duỗi, thân ngả trước.",
             "rules": [
               { "label": "Một gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 130, "tolerance": 20, "range": 30, "hint": "Khuỵu một gối xuống." },
               { "label": "Chân kia duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 170, "tolerance": 20, "range": 30, "hint": "Chân còn lại duỗi thẳng." },
@@ -3354,6 +3402,7 @@
           },
           {
             "frame": 1,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3362,6 +3411,7 @@
           },
           {
             "frame": 2,
+            "say": "Đá chân ra trước cao ngang hông.",
             "rules": [
               { "kind": "dy", "label": "Đá chân lên cao", "need": "bàn chân gần ngang hông", "hint": "Đá chân thẳng ra trước, cao ngang hông.", "a": [ 27, 28 ], "b": "hip", "pick": "any", "min": -1.3 },
               { "kind": "dy", "label": "Hai tay ngang vai (đưa ra trước)", "need": "ngang vai", "hint": "Đưa hai tay thẳng ra trước, cao ngang vai.", "a": [ 15, 16 ], "b": "sh", "min": -0.5, "max": 0.5 }
@@ -3369,6 +3419,7 @@
           },
           {
             "frame": 3,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -3377,6 +3428,7 @@
           },
           {
             "frame": 4,
+            "say": "Thân ngả trước, hai tay dang ngang.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.9 },
               { "kind": "dx", "label": "Hai tay duỗi thẳng sang ngang", "need": "cổ tay xa nhau", "hint": "Duỗi thẳng hai tay sang hai bên.", "a": 15, "b": 16, "min": 2.6 }
@@ -3384,6 +3436,7 @@
           },
           {
             "frame": 5,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -3392,6 +3445,7 @@
           },
           {
             "frame": 6,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -3401,6 +3455,7 @@
           },
           {
             "frame": 7,
+            "say": "Đá chân sang ngang, hai tay dang ngang.",
             "rules": [
               { "kind": "dx", "label": "Đá chân sang ngang", "need": "hai chân tách xa", "hint": "Đá chân sang ngang thật rộng.", "a": 27, "b": 28, "min": 2.2 },
               { "kind": "dy", "label": "Chân đá lên cao", "need": "bàn chân cao", "hint": "Đá chân lên cao hơn.", "a": [ 27, 28 ], "b": "hip", "pick": "any", "min": -1.7 },
@@ -3409,6 +3464,7 @@
           },
           {
             "frame": 8,
+            "say": "Chân rộng, khuỵu một gối, hai tay dang ngang.",
             "rules": [
               { "label": "Một gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 130, "tolerance": 20, "range": 30, "hint": "Khuỵu một gối xuống." },
               { "label": "Chân kia duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 170, "tolerance": 20, "range": 30, "hint": "Chân còn lại duỗi thẳng." },
@@ -3418,6 +3474,7 @@
           },
           {
             "frame": 9,
+            "say": "Chân rộng, khuỵu một gối, hai tay dang ngang.",
             "rules": [
               { "label": "Một gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 130, "tolerance": 20, "range": 30, "hint": "Khuỵu một gối xuống." },
               { "label": "Chân kia duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 170, "tolerance": 20, "range": 30, "hint": "Chân còn lại duỗi thẳng." },
@@ -3508,12 +3565,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Chân rộng, gập thân, hai tay dang ngang.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.8 },
               { "kind": "dx", "label": "Hai chân rộng hơn vai", "need": "rộng hơn vai", "hint": "Bước chân rộng ra, rộng hơn vai.", "a": 27, "b": 28, "min": 1.5 },
@@ -3522,6 +3581,7 @@
           },
           {
             "frame": 1,
+            "say": "Gập thân, một tay chạm bàn chân, tay kia đưa cao.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.9 },
               { "kind": "dy", "label": "Một tay chạm bàn chân", "need": "thấp hơn gối", "hint": "Cúi xuống, một tay chạm bàn chân bên kia.", "a": [ 15, 16 ], "b": "knee", "pick": "any", "max": 0 },
@@ -3530,6 +3590,7 @@
           },
           {
             "frame": 2,
+            "say": "Gập thân, một tay chạm bàn chân, tay kia đưa cao.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.9 },
               { "kind": "dy", "label": "Một tay chạm bàn chân", "need": "thấp hơn gối", "hint": "Cúi xuống, một tay chạm bàn chân bên kia.", "a": [ 15, 16 ], "b": "knee", "pick": "any", "max": 0 },
@@ -3538,6 +3599,7 @@
           },
           {
             "frame": 3,
+            "say": "Chân rộng, gập thân, hai tay dang ngang.",
             "rules": [
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.8 },
               { "kind": "dx", "label": "Hai chân rộng hơn vai", "need": "rộng hơn vai", "hint": "Bước chân rộng ra, rộng hơn vai.", "a": 27, "b": 28, "min": 1.5 },
@@ -3546,6 +3608,7 @@
           },
           {
             "frame": 4,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -3553,6 +3616,7 @@
           },
           {
             "frame": 5,
+            "say": "Chống thẳng tay, hai chân duỗi ra sau.",
             "rules": [
               { "kind": "dy", "label": "Hai tay chống đất", "need": "thấp hơn vai nhiều", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "sh", "max": -0.6 },
               { "kind": "torso", "label": "Gập thân ra trước", "need": "thân gập", "hint": "Gập thân trên ra trước nhiều hơn.", "max": 0.8 },
@@ -3561,6 +3625,7 @@
           },
           {
             "frame": 6,
+            "say": "Chống tay, một chân co ra trước.",
             "rules": [
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn hông", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "hip", "max": 0 },
               { "label": "Một gối gập ra trước", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 70, "tolerance": 40, "range": 30, "hint": "Đưa một chân ra trước, gập gối." }
@@ -3568,6 +3633,7 @@
           },
           {
             "frame": 7,
+            "say": "Chống tay, một chân co ra trước.",
             "rules": [
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn hông", "hint": "Chống hai tay xuống đất.", "a": [ 15, 16 ], "b": "hip", "max": 0 },
               { "label": "Một gối gập ra trước", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 70, "tolerance": 40, "range": 30, "hint": "Đưa một chân ra trước, gập gối." }
@@ -3575,6 +3641,7 @@
           },
           {
             "frame": 8,
+            "say": "Ngồi xổm, hai tay chống đất.",
             "rules": [
               { "label": "Ngồi xổm, gối gập sâu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Ngồi xổm xuống, gập gối sâu." },
               { "kind": "dy", "label": "Tay chống đất", "need": "thấp hơn gối", "hint": "Đặt hai tay chống xuống đất.", "a": [ 15, 16 ], "b": "knee", "max": 0 }
@@ -3582,6 +3649,7 @@
           },
           {
             "frame": 9,
+            "say": "Đứng thẳng, hai tay buông dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "label": "Hai chân duỗi thẳng", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "min", "target": 172, "tolerance": 20, "range": 30, "hint": "Duỗi thẳng hai gối." }
@@ -5120,36 +5188,42 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Chạy tại chỗ, co hai tay.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Co hai khuỷu tay, đánh tay như khi chạy." }
             ]
           },
           {
             "frame": 1,
+            "say": "Chạy tại chỗ, co hai tay.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Co hai khuỷu tay, đánh tay như khi chạy." }
             ]
           },
           {
             "frame": 2,
+            "say": "Chạy tại chỗ, co hai tay.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Co hai khuỷu tay, đánh tay như khi chạy." }
             ]
           },
           {
             "frame": 3,
+            "say": "Chạy tại chỗ, co hai tay.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Co hai khuỷu tay, đánh tay như khi chạy." }
             ]
           },
           {
             "frame": 4,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5158,6 +5232,7 @@
           },
           {
             "frame": 5,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5167,6 +5242,7 @@
           },
           {
             "frame": 6,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5175,6 +5251,7 @@
           },
           {
             "frame": 7,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5184,6 +5261,7 @@
           },
           {
             "frame": 8,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5192,6 +5270,7 @@
           },
           {
             "frame": 9,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5201,6 +5280,7 @@
           },
           {
             "frame": 10,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5209,6 +5289,7 @@
           },
           {
             "frame": 11,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5218,6 +5299,7 @@
           },
           {
             "frame": 12,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5226,6 +5308,7 @@
           },
           {
             "frame": 13,
+            "say": "Một tay chếch cao, một tay chếch thấp.",
             "rules": [
               { "label": "Một tay chếch lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chếch xuống thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 40, "tolerance": 25, "range": 30, "hint": "Tay còn lại chếch xuống dưới." },
@@ -5234,6 +5317,7 @@
           },
           {
             "frame": 14,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5242,6 +5326,7 @@
           },
           {
             "frame": 15,
+            "say": "Một tay chếch cao, một tay chếch thấp.",
             "rules": [
               { "label": "Một tay chếch lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chếch xuống thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 40, "tolerance": 25, "range": 30, "hint": "Tay còn lại chếch xuống dưới." },
@@ -5250,6 +5335,7 @@
           },
           {
             "frame": 16,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5258,6 +5344,7 @@
           },
           {
             "frame": 17,
+            "say": "Một tay chếch cao, một tay chếch thấp.",
             "rules": [
               { "label": "Một tay chếch lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chếch xuống thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 40, "tolerance": 25, "range": 30, "hint": "Tay còn lại chếch xuống dưới." },
@@ -5266,6 +5353,7 @@
           },
           {
             "frame": 18,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5274,6 +5362,7 @@
           },
           {
             "frame": 19,
+            "say": "Một tay chếch cao, một tay chếch thấp.",
             "rules": [
               { "label": "Một tay chếch lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chếch xuống thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 40, "tolerance": 25, "range": 30, "hint": "Tay còn lại chếch xuống dưới." },
@@ -5282,6 +5371,7 @@
           },
           {
             "frame": 20,
+            "say": "Khép chân, hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 },
@@ -5290,6 +5380,7 @@
           },
           {
             "frame": 21,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5299,6 +5390,7 @@
           },
           {
             "frame": 22,
+            "say": "Khép chân, hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 },
@@ -5307,6 +5399,7 @@
           },
           {
             "frame": 23,
+            "say": "Chân rộng hơn vai, hai tay chếch cao chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -5316,6 +5409,7 @@
           },
           {
             "frame": 24,
+            "say": "Khép chân, hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 },
@@ -5324,6 +5418,7 @@
           },
           {
             "frame": 25,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5333,6 +5428,7 @@
           },
           {
             "frame": 26,
+            "say": "Khép chân, hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 },
@@ -5341,6 +5437,7 @@
           },
           {
             "frame": 27,
+            "say": "Chân rộng hơn vai, hai tay chếch cao chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -5453,12 +5550,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Hai tay đưa cao, nghiêng lườn sang bên.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "kind": "dy", "label": "Hai tay vươn cao", "need": "cao hơn vai", "hint": "Hai tay duỗi thẳng, áp sát tai.", "a": [ 15, 16 ], "b": "sh", "min": 0.5 }
@@ -5466,6 +5565,7 @@
           },
           {
             "frame": 1,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5474,6 +5574,7 @@
           },
           {
             "frame": 2,
+            "say": "Hai tay đưa cao, nghiêng lườn sang bên.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "kind": "dy", "label": "Hai tay vươn cao", "need": "cao hơn vai", "hint": "Hai tay duỗi thẳng, áp sát tai.", "a": [ 15, 16 ], "b": "sh", "min": 0.5 }
@@ -5481,6 +5582,7 @@
           },
           {
             "frame": 3,
+            "say": "Hai tay đưa cao, nghiêng lườn sang bên.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "kind": "dy", "label": "Hai tay vươn cao", "need": "cao hơn vai", "hint": "Hai tay duỗi thẳng, áp sát tai.", "a": [ 15, 16 ], "b": "sh", "min": 0.5 }
@@ -5488,6 +5590,7 @@
           },
           {
             "frame": 4,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5496,6 +5599,7 @@
           },
           {
             "frame": 5,
+            "say": "Hai tay đưa cao, nghiêng lườn sang bên.",
             "rules": [
               { "kind": "tilt", "label": "Nghiêng lườn", "need": "nghiêng sang bên", "hint": "Nghiêng thân sang bên nhiều hơn.", "min": 12 },
               { "kind": "dy", "label": "Hai tay vươn cao", "need": "cao hơn vai", "hint": "Hai tay duỗi thẳng, áp sát tai.", "a": [ 15, 16 ], "b": "sh", "min": 0.5 }
@@ -5503,6 +5607,7 @@
           },
           {
             "frame": 6,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5512,12 +5617,14 @@
           },
           {
             "frame": 7,
+            "say": "Nâng cao đùi.",
             "rules": [
               { "kind": "dy", "label": "Nâng đùi cao", "need": "gối gần ngang hông", "hint": "Nâng gối lên cao, đùi song song mặt đất.", "a": [ 25, 26 ], "b": "hip", "pick": "any", "min": -0.5 }
             ]
           },
           {
             "frame": 8,
+            "say": "Dang hai tay ngang vai, hai chân thẳng.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5527,12 +5634,14 @@
           },
           {
             "frame": 9,
+            "say": "Nâng cao đùi.",
             "rules": [
               { "kind": "dy", "label": "Nâng đùi cao", "need": "gối gần ngang hông", "hint": "Nâng gối lên cao, đùi song song mặt đất.", "a": [ 25, 26 ], "b": "hip", "pick": "any", "min": -0.5 }
             ]
           },
           {
             "frame": 10,
+            "say": "Dang hai tay ngang vai, hai chân thẳng.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -5542,6 +5651,7 @@
           },
           {
             "frame": 11,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5549,6 +5659,7 @@
           },
           {
             "frame": 12,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5556,6 +5667,7 @@
           },
           {
             "frame": 13,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5563,6 +5675,7 @@
           },
           {
             "frame": 14,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5570,6 +5683,7 @@
           },
           {
             "frame": 15,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5577,6 +5691,7 @@
           },
           {
             "frame": 16,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5584,6 +5699,7 @@
           },
           {
             "frame": 17,
+            "say": "Hai tay ngang vai, gập một cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Một cẳng tay gập trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 60, "tolerance": 35, "range": 30, "hint": "Gập một cẳng tay trước ngực." }
@@ -5591,6 +5707,7 @@
           },
           {
             "frame": 18,
+            "say": "Một tay dọc thân, cẳng tay kia chéo trước ngực.",
             "rules": [
               { "label": "Một tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ một tay dọc thân." },
               { "label": "Cẳng tay kia chéo trước ngực", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 50, "tolerance": 35, "range": 30, "hint": "Co cẳng tay kia, đặt chéo trước ngực." }
@@ -5598,6 +5715,7 @@
           },
           {
             "frame": 19,
+            "say": "Co hai cẳng tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 70, "tolerance": 35, "range": 30, "hint": "Co hai cẳng tay lại trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "ngang ngực", "hint": "Để hai bàn tay ở trước ngực, không quá cao hay quá thấp.", "a": [ 15, 16 ], "b": "sh", "min": -1.3, "max": 0.4 },
@@ -5606,6 +5724,7 @@
           },
           {
             "frame": 20,
+            "say": "Chân rộng hơn vai, hai tay chếch cao chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -5615,6 +5734,7 @@
           },
           {
             "frame": 21,
+            "say": "Khép chân, hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "kind": "dx", "label": "Hai chân khép", "need": "khép sát", "hint": "Thu chân về khép sát.", "a": 27, "b": 28, "max": 1.0 }
@@ -6995,12 +7115,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7008,6 +7130,7 @@
           },
           {
             "frame": 1,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7015,6 +7138,7 @@
           },
           {
             "frame": 2,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7022,6 +7146,7 @@
           },
           {
             "frame": 3,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7029,6 +7154,7 @@
           },
           {
             "frame": 4,
+            "say": "Một tay chống hông, tay kia chếch cao.",
             "rules": [
               { "label": "Một tay đưa chếch cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chống hông", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 95, "tolerance": 30, "range": 30, "hint": "Tay còn lại chống hông." }
@@ -7036,6 +7162,7 @@
           },
           {
             "frame": 5,
+            "say": "Một tay chống hông, tay kia chếch cao.",
             "rules": [
               { "label": "Một tay đưa chếch cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 140, "tolerance": 25, "range": 30, "hint": "Đưa một tay chếch lên cao." },
               { "label": "Tay kia chống hông", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 95, "tolerance": 30, "range": 30, "hint": "Tay còn lại chống hông." }
@@ -7043,6 +7170,7 @@
           },
           {
             "frame": 6,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7051,6 +7179,7 @@
           },
           {
             "frame": 7,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7059,6 +7188,7 @@
           },
           {
             "frame": 8,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7067,6 +7197,7 @@
           },
           {
             "frame": 9,
+            "say": "Hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 }
@@ -7074,6 +7205,7 @@
           },
           {
             "frame": 10,
+            "say": "Hai tay bắt chéo trên cao.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trên cao.", "a": 15, "b": 16, "max": 0.9 },
               { "kind": "dy", "label": "Tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Đưa hai tay bắt chéo lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.4 }
@@ -7081,6 +7213,7 @@
           },
           {
             "frame": 11,
+            "say": "Hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 }
@@ -7088,6 +7221,7 @@
           },
           {
             "frame": 12,
+            "say": "Hai tay bắt chéo trên cao.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trên cao.", "a": 15, "b": 16, "max": 0.9 },
               { "kind": "dy", "label": "Tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Đưa hai tay bắt chéo lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.4 }
@@ -7095,6 +7229,7 @@
           },
           {
             "frame": 13,
+            "say": "Hai tay bắt chéo trước bụng.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trước bụng.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay hạ trước bụng", "need": "thấp hơn ngực", "hint": "Hạ hai tay xuống trước bụng.", "a": [ 15, 16 ], "b": "sh", "max": -0.7 }
@@ -7102,6 +7237,7 @@
           },
           {
             "frame": 14,
+            "say": "Hai tay bắt chéo trên cao.",
             "rules": [
               { "kind": "dx", "label": "Hai tay bắt chéo", "need": "cổ tay sát nhau", "hint": "Bắt chéo hai tay trên cao.", "a": 15, "b": 16, "max": 0.9 },
               { "kind": "dy", "label": "Tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Đưa hai tay bắt chéo lên cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.4 }
@@ -7109,12 +7245,14 @@
           },
           {
             "frame": 15,
+            "say": "Hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." }
             ]
           },
           {
             "frame": 16,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7124,6 +7262,7 @@
           },
           {
             "frame": 17,
+            "say": "Một tay đưa cao, tay kia dang ngang.",
             "rules": [
               { "label": "Một tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 160, "tolerance": 25, "range": 30, "hint": "Đưa một tay thẳng lên cao sát tai." },
               { "label": "Tay kia dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 25, "range": 30, "hint": "Tay còn lại dang ngang vai." }
@@ -7131,6 +7270,7 @@
           },
           {
             "frame": 18,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7140,6 +7280,7 @@
           },
           {
             "frame": 19,
+            "say": "Một tay đưa cao, tay kia dang ngang.",
             "rules": [
               { "label": "Một tay đưa thẳng lên cao", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 160, "tolerance": 25, "range": 30, "hint": "Đưa một tay thẳng lên cao sát tai." },
               { "label": "Tay kia dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 90, "tolerance": 25, "range": 30, "hint": "Tay còn lại dang ngang vai." }
@@ -7147,6 +7288,7 @@
           },
           {
             "frame": 20,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7156,6 +7298,7 @@
           },
           {
             "frame": 21,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7164,6 +7307,7 @@
           },
           {
             "frame": 22,
+            "say": "Dang hai tay ngang vai, hai chân rộng hơn vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7173,6 +7317,7 @@
           },
           {
             "frame": 23,
+            "say": "Khép chân, hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "kind": "dx", "label": "Hai chân khép", "need": "khép sát", "hint": "Thu chân về khép sát.", "a": 27, "b": 28, "max": 1.0 }
@@ -7180,6 +7325,7 @@
           },
           {
             "frame": 24,
+            "say": "Bật tách chân, khuỵu gối, hai tay dang ngang.",
             "rules": [
               { "label": "Hai gối khuỵu", "oneOf": [ [ 23, 25, 27 ], [ 24, 26, 28 ] ], "pick": "max", "target": 150, "tolerance": 20, "range": 30, "hint": "Khuỵu hai gối xuống thêm." },
               { "kind": "dx", "label": "Hai chân rộng hơn vai", "need": "rộng hơn vai", "hint": "Bước chân rộng ra, rộng hơn vai.", "a": 27, "b": 28, "min": 1.5 },
@@ -7188,6 +7334,7 @@
           },
           {
             "frame": 25,
+            "say": "Khép chân, hai tay vỗ trên cao.",
             "rules": [
               { "kind": "dx", "label": "Hai tay chạm nhau trên cao", "need": "sát nhau", "hint": "Đưa hai tay lên cao, vỗ vào nhau.", "a": 15, "b": 16, "max": 0.8 },
               { "kind": "dy", "label": "Tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai tay vươn cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.4 },
@@ -7196,6 +7343,7 @@
           },
           {
             "frame": 26,
+            "say": "Chân rộng hơn vai, hai tay chếch cao chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7205,6 +7353,7 @@
           },
           {
             "frame": 27,
+            "say": "Khép chân, hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." },
               { "kind": "dx", "label": "Hai chân khép", "need": "khép sát", "hint": "Thu chân về khép sát.", "a": 27, "b": 28, "max": 1.0 }
@@ -7212,6 +7361,7 @@
           },
           {
             "frame": 28,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7220,6 +7370,7 @@
           },
           {
             "frame": 29,
+            "say": "Nâng gối, co hai tay.",
             "rules": [
               { "kind": "dy", "label": "Nâng đùi cao", "need": "gối gần ngang hông", "hint": "Nâng gối lên cao, đùi song song mặt đất.", "a": [ 25, 26 ], "b": "hip", "pick": "any", "min": -0.5 },
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Co hai khuỷu tay, đánh tay như khi chạy." }
@@ -7227,6 +7378,7 @@
           },
           {
             "frame": 30,
+            "say": "Dang hai tay ngang vai.",
             "rules": [
               { "label": "Tay trái dang ngang", "oneOf": [ [ 23, 11, 13 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay trái ngang vai, không cao không thấp." },
               { "label": "Tay phải dang ngang", "oneOf": [ [ 24, 12, 14 ] ], "pick": "closest", "target": 90, "tolerance": 20, "range": 30, "hint": "Dang tay phải ngang vai, không cao không thấp." },
@@ -7235,6 +7387,7 @@
           },
           {
             "frame": 31,
+            "say": "Hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." }
             ]
@@ -7353,12 +7506,14 @@
       "scoring": {
         "mode": "sequence",
         "camera": "front",
-        "holdSeconds": 1.5,
+        "holdSeconds": 1,
+        "autoSkipSeconds": 10,
         "estimated": true,
         "pose": "Làm lần lượt từng nhịp như hình trong sách; máy chấm trọn bài.",
         "steps": [
           {
             "frame": 0,
+            "say": "Một tay dang ngang, tay kia hạ thấp.",
             "rules": [
               { "label": "Một tay dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 90, "tolerance": 25, "range": 30, "hint": "Dang một tay ngang vai." },
               { "label": "Tay kia hạ thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 25, "tolerance": 25, "range": 30, "hint": "Tay còn lại hạ xuống thấp." }
@@ -7366,6 +7521,7 @@
           },
           {
             "frame": 1,
+            "say": "Một tay dang ngang, tay kia hạ thấp.",
             "rules": [
               { "label": "Một tay dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 90, "tolerance": 25, "range": 30, "hint": "Dang một tay ngang vai." },
               { "label": "Tay kia hạ thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 25, "tolerance": 25, "range": 30, "hint": "Tay còn lại hạ xuống thấp." }
@@ -7373,6 +7529,7 @@
           },
           {
             "frame": 2,
+            "say": "Một tay dang ngang, tay kia hạ thấp.",
             "rules": [
               { "label": "Một tay dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 90, "tolerance": 25, "range": 30, "hint": "Dang một tay ngang vai." },
               { "label": "Tay kia hạ thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 25, "tolerance": 25, "range": 30, "hint": "Tay còn lại hạ xuống thấp." }
@@ -7380,6 +7537,7 @@
           },
           {
             "frame": 3,
+            "say": "Một tay dang ngang, tay kia hạ thấp.",
             "rules": [
               { "label": "Một tay dang ngang", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 90, "tolerance": 25, "range": 30, "hint": "Dang một tay ngang vai." },
               { "label": "Tay kia hạ thấp", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 25, "tolerance": 25, "range": 30, "hint": "Tay còn lại hạ xuống thấp." }
@@ -7387,6 +7545,7 @@
           },
           {
             "frame": 4,
+            "say": "Co hai tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 80, "tolerance": 35, "range": 30, "hint": "Co hai tay, bàn tay trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "cao hơn hông", "hint": "Đưa hai bàn tay lên trước ngực.", "a": [ 15, 16 ], "b": "hip", "min": 0.6 }
@@ -7394,6 +7553,7 @@
           },
           {
             "frame": 5,
+            "say": "Khuỵu gối, hai tay duỗi chếch xuống trước.",
             "rules": [
               { "label": "Hai tay duỗi thẳng", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 170, "tolerance": 30, "range": 30, "hint": "Duỗi thẳng hai tay chếch xuống trước." },
               { "kind": "dy", "label": "Tay thấp hơn vai", "need": "thấp hơn vai", "hint": "Đưa tay chếch xuống, thấp hơn vai.", "a": [ 15, 16 ], "b": "sh", "max": 0 },
@@ -7402,6 +7562,7 @@
           },
           {
             "frame": 6,
+            "say": "Co hai tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 80, "tolerance": 35, "range": 30, "hint": "Co hai tay, bàn tay trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "cao hơn hông", "hint": "Đưa hai bàn tay lên trước ngực.", "a": [ 15, 16 ], "b": "hip", "min": 0.6 }
@@ -7409,6 +7570,7 @@
           },
           {
             "frame": 7,
+            "say": "Khuỵu gối, hai tay duỗi chếch xuống trước.",
             "rules": [
               { "label": "Hai tay duỗi thẳng", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 170, "tolerance": 30, "range": 30, "hint": "Duỗi thẳng hai tay chếch xuống trước." },
               { "kind": "dy", "label": "Tay thấp hơn vai", "need": "thấp hơn vai", "hint": "Đưa tay chếch xuống, thấp hơn vai.", "a": [ 15, 16 ], "b": "sh", "max": 0 },
@@ -7417,6 +7579,7 @@
           },
           {
             "frame": 8,
+            "say": "Co hai tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 80, "tolerance": 35, "range": 30, "hint": "Co hai tay, bàn tay trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "cao hơn hông", "hint": "Đưa hai bàn tay lên trước ngực.", "a": [ 15, 16 ], "b": "hip", "min": 0.6 }
@@ -7424,6 +7587,7 @@
           },
           {
             "frame": 9,
+            "say": "Khuỵu gối, hai tay duỗi chếch xuống trước.",
             "rules": [
               { "label": "Hai tay duỗi thẳng", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 170, "tolerance": 30, "range": 30, "hint": "Duỗi thẳng hai tay chếch xuống trước." },
               { "kind": "dy", "label": "Tay thấp hơn vai", "need": "thấp hơn vai", "hint": "Đưa tay chếch xuống, thấp hơn vai.", "a": [ 15, 16 ], "b": "sh", "max": 0 },
@@ -7432,6 +7596,7 @@
           },
           {
             "frame": 10,
+            "say": "Co hai tay trước ngực.",
             "rules": [
               { "label": "Hai khuỷu tay co", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 80, "tolerance": 35, "range": 30, "hint": "Co hai tay, bàn tay trước ngực." },
               { "kind": "dy", "label": "Tay ở trước ngực", "need": "cao hơn hông", "hint": "Đưa hai bàn tay lên trước ngực.", "a": [ 15, 16 ], "b": "hip", "min": 0.6 }
@@ -7439,12 +7604,14 @@
           },
           {
             "frame": 11,
+            "say": "Hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." }
             ]
           },
           {
             "frame": 12,
+            "say": "Chân rộng, hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 },
@@ -7453,6 +7620,7 @@
           },
           {
             "frame": 13,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7460,6 +7628,7 @@
           },
           {
             "frame": 14,
+            "say": "Chân rộng, hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 },
@@ -7468,6 +7637,7 @@
           },
           {
             "frame": 15,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7475,6 +7645,7 @@
           },
           {
             "frame": 16,
+            "say": "Hai tay chống hông.",
             "rules": [
               { "label": "Hai khuỷu tay co (chống hông)", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 95, "tolerance": 30, "range": 30, "hint": "Chống hai tay vào hông, khuỷu tay mở sang hai bên." },
               { "kind": "dy", "label": "Tay ngang hông", "need": "ngang hông", "hint": "Đặt hai bàn tay ngang hông.", "a": [ 15, 16 ], "b": "hip", "min": -0.6, "max": 0.6 }
@@ -7482,6 +7653,7 @@
           },
           {
             "frame": 17,
+            "say": "Một tay co ngang vai, cẳng tay dựng lên.",
             "rules": [
               { "label": "Một cẳng tay dựng lên", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "min", "target": 90, "tolerance": 30, "range": 30, "hint": "Co một tay ngang vai, cẳng tay dựng lên." },
               { "kind": "dy", "label": "Bàn tay cao hơn vai", "need": "cao hơn vai", "hint": "Đưa bàn tay lên cao hơn vai.", "a": [ 15, 16 ], "b": "sh", "pick": "any", "min": 0.3 }
@@ -7489,6 +7661,7 @@
           },
           {
             "frame": 18,
+            "say": "Hai tay co, cẳng tay dựng lên.",
             "rules": [
               { "label": "Cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 95, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Cẳng tay dựng lên", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Gập khuỷu, dựng cẳng tay lên." },
@@ -7497,6 +7670,7 @@
           },
           {
             "frame": 19,
+            "say": "Hai tay co, cẳng tay dựng lên.",
             "rules": [
               { "label": "Cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 95, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Cẳng tay dựng lên", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Gập khuỷu, dựng cẳng tay lên." },
@@ -7505,6 +7679,7 @@
           },
           {
             "frame": 20,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7513,6 +7688,7 @@
           },
           {
             "frame": 21,
+            "say": "Hai tay co, cẳng tay dựng lên.",
             "rules": [
               { "label": "Cánh tay ngang vai", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 95, "tolerance": 30, "range": 30, "hint": "Nâng hai cánh tay ngang vai." },
               { "label": "Cẳng tay dựng lên", "oneOf": [ [ 11, 13, 15 ], [ 12, 14, 16 ] ], "pick": "max", "target": 90, "tolerance": 30, "range": 30, "hint": "Gập khuỷu, dựng cẳng tay lên." },
@@ -7521,6 +7697,7 @@
           },
           {
             "frame": 22,
+            "say": "Đưa hai tay chếch cao thành chữ V.",
             "rules": [
               { "label": "Hai tay chếch cao (chữ V)", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "min", "target": 140, "tolerance": 20, "range": 30, "hint": "Đưa hai tay chếch lên cao thành chữ V." },
               { "kind": "dy", "label": "Bàn tay cao hơn đầu", "need": "cao hơn đầu", "hint": "Hai bàn tay phải cao hơn đầu.", "a": [ 15, 16 ], "b": "nose", "min": 0.3 },
@@ -7529,6 +7706,7 @@
           },
           {
             "frame": 23,
+            "say": "Hai tay hạ dọc thân.",
             "rules": [
               { "label": "Hai tay hạ dọc thân", "oneOf": [ [ 23, 11, 13 ], [ 24, 12, 14 ] ], "pick": "max", "target": 15, "tolerance": 25, "range": 30, "hint": "Hạ hai tay xuống, áp dọc thân." }
             ]
