@@ -214,7 +214,7 @@ export function renderTeacher(root, editId) {
     "pages": [ { "page": 12, "image": "media/sach/g6-dang-tay/trang-12.jpg", "caption": "" } ]
   },
   "scoring": {
-    "mode": "hold", "holdSeconds": 2, "camera": "front",
+    "mode": "hold", "holdSeconds": 1, "camera": "front",
     "rules": [
       { "label": "Tay trái ngang vai", "joints": [23, 11, 13], "target": 90, "tolerance": 12, "range": 40 }
     ]

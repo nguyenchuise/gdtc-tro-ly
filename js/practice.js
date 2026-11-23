@@ -4,10 +4,11 @@
 // - "Kết quả tốt nhất" được giữ trong lúc mở trang; tập lại mà tốt hơn thì tự thay.
 // Không lưu, không gửi hình ảnh đi đâu (ảnh chụp chỉ nằm trong bộ nhớ trình duyệt, tải lại trang là mất).
 import {
-  loadPoseLandmarker, evaluateRules, measure, adviceFor, HoldTimer, RepCounter, CONNECTIONS, PASS_SCORE,
+  loadPoseLandmarker, evaluateRules, measure, adviceFor, HoldTimer, RepCounter, CONNECTIONS, PASS_SCORE, easeRule, easeReps,
 } from './pose-scoring.js';
 import { esc } from './util.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
+import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 
 const PART = {
   11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -32,8 +33,11 @@ const fmtTime = (d) => d.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-d
 export function mountPractice(root, ex) {
   const sc = ex.scoring;
   const isReps = sc.mode === 'reps';
-  const rules = sc.rules || [];
-  const goalText = isReps ? `Làm đúng <strong>${sc.reps.target} lần</strong>` : `Giữ đúng tư thế <strong>${sc.holdSeconds} giây</strong>`;
+  // Chấm "dễ thở" để em hứng thú: nới góc cho phép, chỉ cần giữ đúng khoảng 1 giây là chụp ảnh luôn.
+  const rules = (sc.rules || []).map(easeRule);
+  const repSpec = isReps ? easeReps(sc.reps) : null;
+  const holdSec = sc.holdSeconds || 1;
+  const goalText = isReps ? `Làm đúng <strong>${sc.reps.target} lần</strong>` : `Giữ đúng tư thế <strong>${holdSec} giây</strong> là máy tự chụp ảnh`;
   root.innerHTML = `
     <div class="practice">
       <div class="goal-card">
@@ -98,7 +102,7 @@ export function mountPractice(root, ex) {
           : `
             <div class="stat"><span class="stat__value" data-k="cur">—</span><span class="stat__label">Điểm bây giờ</span></div>
             <div class="stat"><span class="stat__value" data-k="peak">—</span><span class="stat__label">Cao nhất</span></div>
-            <div class="stat"><span class="stat__value" data-k="hold">0.0s</span><span class="stat__label">Đã giữ / ${sc.holdSeconds}s</span></div>`}
+            <div class="stat"><span class="stat__value" data-k="hold">0.0s</span><span class="stat__label">Đã giữ / ${holdSec}s</span></div>`}
         </div>
         <p class="advice" aria-live="polite"></p>
         <div class="rules-details">
@@ -117,21 +121,57 @@ export function mountPractice(root, ex) {
     </div>`;
 
   const $ = (s) => root.querySelector(s);
-  // Hình nộm tư thế mẫu (vẽ từ chính các góc chấm điểm)
-  let stopFig = () => {};
-  try {
-    const model = figureModel(sc);
-    const figs = [...root.querySelectorAll('[data-fig]')].map((box) => {
-      const f = createFigure(model, { numbers: box.dataset.fig !== 'inset' });
-      box.append(f.el);
-      return f;
+  // Hình mẫu: bài thể dục có hình "Nhịp" trong SGK → hình động ghép từ sách; còn lại (hoặc không tải được ảnh sách)
+  // → hình nộm vẽ từ chính các góc chấm điểm.
+  let stopFig = () => {}, unmounted = false;
+  const stickFigures = () => {
+    try {
+      const model = figureModel(sc);
+      const figs = [...root.querySelectorAll('[data-fig]')].map((box) => {
+        const f = createFigure(model, { numbers: box.dataset.fig !== 'inset' });
+        box.replaceChildren(f.el);
+        return f;
+      });
+      root.querySelectorAll('[data-fig-legend]').forEach((b) => { b.innerHTML = figureLegend(model, sc); });
+      stopFig = animateFigures(model, figs);
+    } catch (err) {
+      console.warn('Không vẽ được hình mẫu', err);
+      root.querySelectorAll('.figure-card, .stage-figure').forEach((e) => e.remove());
+    }
+  };
+  if (hasBookAnim(ex)) {
+    const focus = ex.bookAnim.focus || {};
+    const hint = focus.label
+      ? `Các nhịp trong sách chạy lần lượt. Khung viền cam “Máy chấm nhịp này” là ${esc(focus.label)}: em làm giống hình đó.`
+      : focus.group ? `Đang chiếu động tác “${esc(focus.group)}” mà máy đếm số lần. Bấm “Tất cả” để xem cả bài.` : 'Các nhịp trong sách chạy lần lượt.';
+    root.querySelectorAll('.figure-card').forEach((c) => {
+      c.classList.add('figure-card--book');
+      c.querySelector('.figure-card__title').textContent = 'Hình mẫu trong sách';
+      const h = c.querySelector('.figure-card__hint');
+      if (h) h.innerHTML = hint;
+      c.querySelector('[data-fig-legend]')?.replaceChildren();
     });
-    root.querySelectorAll('[data-fig-legend]').forEach((b) => { b.innerHTML = figureLegend(model, sc); });
-    stopFig = animateFigures(model, figs);
-  } catch (err) {
-    console.warn('Không vẽ được hình mẫu', err);
-    root.querySelectorAll('.figure-card, .stage-figure').forEach((e) => e.remove());
-  }
+    root.querySelector('.stage-figure')?.classList.add('stage-figure--book');
+    preloadBookAnim(ex).then(() => {
+      if (unmounted) return;
+      const players = [...root.querySelectorAll('[data-fig]')].map((box) => {
+        const p = createBookAnim(ex, { mode: box.dataset.fig === 'inset' ? 'inset' : 'full', practice: true });
+        box.replaceChildren(p.el);
+        return p;
+      });
+      stopFig = () => players.forEach((p) => p.stop());
+    }).catch(() => {
+      if (unmounted) return;
+      root.querySelectorAll('.figure-card').forEach((c) => {
+        c.classList.remove('figure-card--book');
+        c.querySelector('.figure-card__title').textContent = 'Tư thế mẫu';
+        const h = c.querySelector('.figure-card__hint');
+        if (h) h.textContent = 'Làm theo hình. Số trên hình là bộ phận máy chấm:';
+      });
+      root.querySelector('.stage-figure')?.classList.remove('stage-figure--book');
+      stickFigures();
+    });
+  } else stickFigures();
   const stage = $('.stage'), video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d');
   const labelsBox = $('.float-labels'), status = $('.status'), board = $('.scoreboard');
   const setStatus = (t) => { status.textContent = t; status.classList.toggle('is-loading', /^Đang/.test(t)); };
@@ -140,12 +180,12 @@ export function mountPractice(root, ex) {
   let lastVideoTime = -1, lastTs = 0, lastTableAt = 0, lastAdvice = '';
   // Một "lượt tập": từ lúc bật camera / bấm Tập lại đến khi đạt.
   let attempt = null;
-  const timer = new HoldTimer(sc.holdSeconds || 2);
-  const counter = isReps ? new RepCounter(sc.reps) : null;
+  const timer = new HoldTimer(holdSec);
+  const counter = isReps ? new RepCounter(repSpec) : null;
 
   function newAttempt() {
     timer.reset(); counter?.reset();
-    attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [] };
+    attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null };
     $('.pass-banner').hidden = true;
     setVal('cur', '—'); setVal('peak', '—'); setVal('hold', '0.0s'); setVal('reps', `0/${sc.reps?.target}`); setVal('total', '0'); setVal('hud', '—');
     setProgress(0);
@@ -256,14 +296,26 @@ export function mountPractice(root, ex) {
     let repInfo = null;
 
     if (isReps) {
-      const m = measure(lm, sc.reps, w, h);
+      const m = measure(lm, repSpec, w, h);
       const before = counter.count;
+      const wasDown = counter.state === 'down';
       counter.update(m.angle);
       repInfo = m;
+      // Ghi lại khung hình ở điểm sâu nhất của lần đang làm → ảnh chụp đúng lúc làm đúng động tác.
+      if (counter.state === 'down' && m.angle != null && (!wasDown || !attempt.low || m.angle <= attempt.low.angle)) {
+        attempt.low = { angle: m.angle, frame: grabFrame(w, h, attempt.low?.frame), lm, parts, repInfo: m };
+      }
       if (counter.count > before && !attempt.done) {
         // Lần này đạt khi độ sâu đạt chuẩn và (nếu có) các bộ phận khác cũng đạt.
         const ok = counter.lastQuality >= PASS_SCORE && (!parts.length || allOk);
-        if (ok) { attempt.goodReps += 1; attempt.goodQ.push(counter.lastQuality); }
+        if (ok) {
+          attempt.goodReps += 1; attempt.goodQ.push(counter.lastQuality);
+          if (attempt.low && (!attempt.bestShot || counter.lastQuality >= attempt.bestShot.q)) {
+            attempt.bestShot = { ...attempt.low, q: counter.lastQuality };
+            attempt.low = null; // khung đã giữ lại làm ảnh, lần sau dùng khung mới
+          }
+          flashOk();
+        }
         setVal('cur', `${Math.round(counter.lastQuality)}% ${ok ? 'đạt' : 'chưa'}`);
       }
       setVal('reps', `${attempt.goodReps}/${sc.reps.target}`);
@@ -274,7 +326,10 @@ export function mountPractice(root, ex) {
       else if (counter.state === 'down') showAdvice('Tốt! Giờ trở về như lúc đầu.');
       else showAdvice(counter.lastQuality != null && counter.lastQuality < PASS_SCORE
         ? 'Lần vừa rồi chưa đủ sâu. Cố thêm chút nữa!' : 'Bắt đầu nào! Làm thật đúng nhé.');
-      if (!attempt.done && attempt.goodReps >= sc.reps.target) finish(lm, w, h, parts, m);
+      if (!attempt.done && attempt.goodReps >= sc.reps.target) {
+        const b = attempt.bestShot;
+        if (b) finish(b.lm, w, h, b.parts, b.repInfo, b.frame); else finish(lm, w, h, parts, m);
+      }
     } else {
       timer.update(allOk ? avg : null, tSec);
       // Cộng dồn điểm từng bộ phận trong lúc đang giữ đúng, để ghi kết quả.
@@ -288,8 +343,8 @@ export function mountPractice(root, ex) {
       setVal('peak', attempt.peak ? `${Math.round(attempt.peak)}%` : '—');
       setVal('hold', `${Math.min(timer.current, 99).toFixed(1)}s`);
       setVal('hud', avg == null ? '—' : `${Math.round(avg)}%`);
-      setProgress(timer.current / sc.holdSeconds);
-      showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, sc.holdSeconds - timer.current).toFixed(1)}s` : adviceFor(ev));
+      setProgress(timer.current / holdSec);
+      showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s` : adviceFor(ev));
       if (!attempt.done && timer.done) finish(lm, w, h, parts, null);
     }
     stage.classList.toggle('is-ok', isReps ? counter.state === 'down' : allOk);
@@ -300,7 +355,7 @@ export function mountPractice(root, ex) {
   }
 
   // ------------------------------------------------ Hoàn thành một lượt → chụp ảnh, ghi kết quả
-  function finish(lm, w, h, parts, repInfo) {
+  function finish(lm, w, h, parts, repInfo, frame = null) {
     attempt.done = true;
     let result;
     if (isReps) {
@@ -315,12 +370,12 @@ export function mountPractice(root, ex) {
       const per = parts.map((p, i) => ({ label: p.label, score: Math.round(st ? st.sums[i] / st.n : p.score) }));
       result = {
         score: Math.round(per.reduce((a, p) => a + p.score, 0) / per.length),
-        detail: `Giữ ${sc.holdSeconds} giây`,
+        detail: `Giữ ${holdSec} giây`,
         parts: per,
       };
     }
     result.time = new Date();
-    result.image = snapshot(lm, w, h, parts, repInfo, result);
+    result.image = snapshot(lm, w, h, parts, repInfo, result, frame || video);
     const rec = session.get(ex.id) || { best: null, last: null };
     const newRecord = Boolean(rec.best) && result.score > rec.best.score;
     rec.last = result;
@@ -333,7 +388,23 @@ export function mountPractice(root, ex) {
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
   }
 
-  function snapshot(lm, w, h, parts, repInfo, result) {
+  /** Chép khung hình camera hiện tại (dùng lại canvas cũ nếu có) để chụp đúng khoảnh khắc làm đúng. */
+  function grabFrame(w, h, reuse) {
+    const c = reuse && reuse.width === w && reuse.height === h ? reuse : document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(video, 0, 0, w, h);
+    return c;
+  }
+  function flashOk() {
+    const b = $('.pass-banner');
+    if (attempt.done) return;
+    b.textContent = 'Đúng rồi!'; b.hidden = false;
+    clearTimeout(flashOk.t);
+    flashOk.t = setTimeout(() => { if (!attempt.done) b.hidden = true; }, 700);
+    navigator.vibrate?.(40);
+  }
+
+  function snapshot(lm, w, h, parts, repInfo, result, src = video) {
     const c = document.createElement('canvas');
     const footer = Math.round(h * 0.16);
     c.width = w; c.height = h + footer;
@@ -341,7 +412,7 @@ export function mountPractice(root, ex) {
     const mirror = stage.classList.contains('mirror');
     g.save();
     if (mirror) { g.translate(w, 0); g.scale(-1, 1); }
-    g.drawImage(video, 0, 0, w, h);
+    g.drawImage(src, 0, 0, w, h);
     drawSkeleton(g, lm, w, h, parts, repInfo);
     g.restore();
     // Nhãn % từng bộ phận (vẽ chữ không lật)
@@ -471,7 +542,7 @@ export function mountPractice(root, ex) {
     });
     if (repInfo) {
       rows.unshift(`<tr><th scope="row">${esc(sc.reps.label)}</th><td>${repInfo.angle == null ? '—' : `${Math.round(repInfo.angle)}°`}</td>
-        <td>&lt;${sc.reps.down}° rồi &gt;${sc.reps.up}°</td>
+        <td>&lt;${repSpec.down}° rồi &gt;${repSpec.up}°</td>
         <td><span class="pill">${counter.state === 'down' ? 'Xuống' : 'Lên'}</span></td></tr>`);
     }
     root.querySelector('tbody').innerHTML = rows.join('');
@@ -534,7 +605,7 @@ export function mountPractice(root, ex) {
   document.addEventListener('visibilitychange', onHidden);
   renderResults();
 
-  return () => { stop(); stopFig(); document.removeEventListener('visibilitychange', onHidden); };
+  return () => { unmounted = true; stop(); stopFig(); document.removeEventListener('visibilitychange', onHidden); };
 }
 
 function drawSkeleton(g, lm, w, h, parts, repInfo) {

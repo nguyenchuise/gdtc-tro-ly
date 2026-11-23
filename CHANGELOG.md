@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.13.0] - 2026-11-23: Hình mẫu chuyển động từ sách, tab đánh số, chấm dễ hơn
+
+### Thêm
+- **Hình mẫu chuyển động ghép từ chính ảnh trong SGK** cho 10 bài thể dục (lớp 6: 3 bài liên hoàn; lớp 7: 3 bài liên hoàn;
+  lớp 8, 9: mỗi lớp 2 bài nhịp điệu), tổng 168 khung "Nhịp" (`js/book-anim.js`, trường `bookAnim`).
+  - Các hình "TTCB, Nhịp 1, Nhịp 2…" trong sách được cắt đúng vùng và chạy lần lượt như phim, cùng tỉ lệ, chân đặt cùng mặt sàn.
+  - Dưới hình là chú thích gốc của sách cho nhịp đó. Có nút ‹ ›, dừng/chạy, tốc độ Chậm/Vừa/Nhanh; bài nhịp điệu chọn được từng động tác.
+  - Ảnh vẫn lấy trực tiếp từ máy chủ NXB Giáo dục (không lưu ảnh trong repo). Không tải được ảnh thì tự quay về hình nộm.
+- Tab 4. Tự tập: hình mẫu là hình động từ sách. Chạy sẵn động tác máy chấm, khung máy chấm viền cam, ghi "Máy chấm nhịp này" và dừng lâu hơn.
+  Điện thoại: hình nhỏ ở góc khung camera.
+
+### Thay đổi
+- **Tab đánh số và đổi thứ tự cho mọi bài: 1. Sách · 2. Video · 3. Hướng dẫn · 4. Tự tập**; mở bài vào tab Sách.
+- **Chấm dễ hơn để tạo hứng khởi:**
+  - Bài giữ tư thế chỉ cần đúng **khoảng 1 giây** là tự chụp ảnh (trước 2 giây). Bài đếm lần cần **3 lần** (trước 8 – 10).
+  - Mỗi góc được lệch thêm 10° mà vẫn 100%, làm gần đúng là khoảng 80–100%.
+  - Bài đếm lần: mỗi lần đạt nháy "Đúng rồi!"; ảnh chụp đúng khoảnh khắc sâu nhất của lần tốt nhất.
+- Tối ưu cho điện thoại / iPad ngoài sân trường:
+  - Nút "Bật camera" luôn nổi ở mép dưới khi đang xem hình mẫu.
+  - Hàng chọn động tác cuộn ngang.
+  - Hình mẫu gọn hơn trên màn hình nhỏ.
+
 ## [0.12.0] - 2026-11-22: Hình nộm tư thế mẫu ở tab Tự tập
 
 ### Thêm

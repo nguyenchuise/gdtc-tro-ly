@@ -114,9 +114,18 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 ## 4. Tự tập và chấm điểm (học sinh)
 
 - Trên hình camera, mỗi bộ phận hiện **nhãn % nổi** ngay cạnh khớp (xanh ≥ 80%, cam 50–79%, đỏ < 50%). Màn hình chật thì nhãn chỉ ghi số %.
-- **Đạt** khi *mọi* bộ phận ≥ 80% liên tục đủ số giây (bài giữ tư thế), hoặc đủ số lần đạt chuẩn (bài đếm lần, ví dụ nâng cao đùi: lần nào đủ sâu mới được tính).
-- Khi đạt, trang **tự chụp ảnh** (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
+- **Đạt** khi *mọi* bộ phận ≥ 80% liên tục **khoảng 1 giây** (bài giữ tư thế), hoặc **3 lần** đạt chuẩn (bài đếm lần).
+- Chấm đã được **nới cho dễ đạt** (`EASE` trong `js/pose-scoring.js`): mỗi góc được lệch thêm 10° mà vẫn 100%, điểm giảm chậm hơn; làm gần đúng tư thế là được khoảng 80–100%. Bảng "Cần" vẫn ghi góc chuẩn trong sách.
+- Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
 - Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
+
+**Hình mẫu chuyển động từ sách (bài thể dục).** 10 bài thể dục liên hoàn / nhịp điệu (lớp 6 – 9) có trường `bookAnim`: mỗi khung là
+`{page, box: [x, y, rộng, cao], cap, label, group}` (toạ độ tỉ lệ 0–1 trên ảnh trang). Trang web chỉ "nhìn qua ô cửa sổ" vào ảnh trang
+sách trên máy chủ NXB, không sao chép ảnh. Tab 1. Sách có trình chiếu đầy đủ (chọn động tác, ‹ ›, tốc độ); tab 4. Tự tập dùng nó làm
+hình mẫu, chạy sẵn động tác máy chấm và đánh dấu "Máy chấm nhịp này". Không tải được ảnh sách thì tự quay về hình nộm.
+
+Thứ tự tab trong mỗi bài: **1. Sách · 2. Video · 3. Hướng dẫn · 4. Tự tập**; mở bài mặc định vào tab Sách.
+Giao diện ưu tiên điện thoại và iPad dùng ngoài sân trường: nút "Bật camera" luôn nổi ở mép dưới khi xem hình mẫu.
 
 ## 5. Chạy thử trên máy
 
@@ -141,6 +150,8 @@ js/voice.js           Nói để tìm (Web Speech API, vi-VN)
 js/youtube.js         Đọc link YouTube, khung video "bấm mới tải" (youtube-nocookie)
 js/pose-scoring.js    Tính góc, chấm điểm, đếm giữ/lần; nạp MediaPipe khi cần
 js/practice.js        Tab Tự tập: camera / video, nhãn % nổi, tự chụp ảnh khi đạt, kết quả tốt nhất
+js/book-anim.js       Hình động ghép từ các hình "Nhịp" trong SGK (10 bài thể dục), cắt bằng CSS từ ảnh trang của NXB
+js/pose-figure.js     Hình nộm tư thế mẫu vẽ từ góc chấm (dùng cho các bài còn lại)
 js/teacher.js         Trang giáo viên: tình trạng, trình soạn, đăng lên GitHub
 js/teacher-gate.js    Ô nhập mã vào trang giáo viên
 js/data.js            Nạp exercises.json + media.json + bản nháp
@@ -153,7 +164,7 @@ tools/                Sinh media.json, kiểm tra dữ liệu, test chấm đi�
 .github/workflows/pages.yml   Deploy GitHub Pages
 ```
 
-Đường dẫn trực tiếp: `#bai/g8-xuat-phat-thap` (Hướng dẫn), `#bai/g8-xuat-phat-thap/video`, `#bai/g8-xuat-phat-thap/sach`, `#bai/g8-xuat-phat-thap/tu-tap`, `#giao-vien/g8-xuat-phat-thap`. Thầy cô có thể dán link này vào nhóm lớp.
+Đường dẫn trực tiếp: `#bai/g8-xuat-phat-thap` (tab 1. Sách), `#bai/g8-xuat-phat-thap/video`, `#bai/g8-xuat-phat-thap/huong-dan`, `#bai/g8-xuat-phat-thap/tu-tap`, `#giao-vien/g8-xuat-phat-thap`. Thầy cô có thể dán link này vào nhóm lớp.
 
 ## 7. Quyền riêng tư
 

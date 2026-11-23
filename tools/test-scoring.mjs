@@ -1,7 +1,7 @@
 // Kiểm tra nhanh logic chấm điểm và tìm kiếm: node tools/test-scoring.mjs
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { angleAt, ruleScore, evaluateRules, HoldTimer, RepCounter, measure, adviceFor } from '../js/pose-scoring.js';
+import { angleAt, ruleScore, evaluateRules, HoldTimer, RepCounter, measure, adviceFor, easeRule, easeReps } from '../js/pose-scoring.js';
 import { normalize, parseQuery, search, buildIndex, leadingNumber } from '../js/search.js';
 
 const P = (x, y, visibility = 0.99) => ({ x, y, visibility });
@@ -46,6 +46,17 @@ t.reset(); run(0, 1, 85); t.update(85, 3); assert.equal(t.current, 0);
 const rc = new RepCounter({ down: 100, up: 160, target: 2, depthTarget: 90, tolerance: 15, range: 40 });
 [170, 120, 95, 85, 120, 165, 170, 98, 150, 165].forEach((a) => rc.update(a));
 assert.equal(rc.count, 2); assert.equal(rc.done, true); assert.equal(rc.qualities[0], 100);
+
+// Chấm dễ: lệch 25° so với góc mẫu (dung sai gốc 15) vẫn đạt ≥ 80%
+{
+  const r = easeRule({ target: 90, tolerance: 15, range: 40 });
+  assert.equal(ruleScore(115, r.target, r.tolerance, r.range), 100);
+  assert.ok(ruleScore(125, r.target, r.tolerance, r.range) >= 80);
+  const e = easeReps({ down: 140, up: 165, tolerance: 15, range: 40 });
+  assert.deepEqual([e.down, e.up], [146, 161]);
+  const tight = easeReps({ down: 12, up: 22 });
+  assert.deepEqual([tight.down, tight.up], [12, 22]); // quá sát → giữ nguyên ngưỡng
+}
 
 // Tìm kiếm
 assert.equal(normalize('Đứng thẳng, Lớp 6!'), 'dung thang lop 6');

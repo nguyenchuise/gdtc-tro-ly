@@ -35,6 +35,17 @@ for (const [i, e] of (data.exercises || []).entries()) {
     if (p.image && !/^https?:/.test(p.image) && !existsSync(`${root}${decodeURIComponent(p.image)}`)) errors.push(`${at}: không thấy ảnh "${p.image}".`);
   }
   if (e.book?.image && !/^https?:/.test(e.book.image) && !existsSync(`${root}${e.book.image}`)) errors.push(`${at}: không thấy ảnh "${e.book.image}".`);
+  if (e.bookAnim) {
+    const pages = new Set((e.book?.pages || []).map((p) => p.page));
+    const fr = e.bookAnim.frames || [];
+    if (!fr.length) errors.push(`${at}: bookAnim cần ít nhất một khung.`);
+    const okBox = (b) => Array.isArray(b) && b.length === 4 && b.every((v) => v >= 0 && v <= 1) && b[0] + b[2] <= 1.0001 && b[1] + b[3] <= 1.0001;
+    fr.forEach((f, k) => {
+      if (!pages.has(f.page)) errors.push(`${at} bookAnim khung ${k + 1}: trang ${f.page} không có trong book.pages.`);
+      if (!okBox(f.box) || (f.cap && !okBox(f.cap))) errors.push(`${at} bookAnim khung ${k + 1}: box/cap phải là [x, y, rộng, cao] trong khoảng 0–1.`);
+      if (!f.label) errors.push(`${at} bookAnim khung ${k + 1}: thiếu "label".`);
+    });
+  }
   const s = e.scoring;
   if (s) {
     if (!['hold', 'reps'].includes(s.mode)) errors.push(`${at}: scoring.mode phải là "hold" hoặc "reps".`);

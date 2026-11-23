@@ -4,6 +4,24 @@
 export const MIN_VISIBILITY = 0.5;
 export const PASS_SCORE = 80;
 
+/**
+ * Nới chấm điểm cho học sinh tự tập (dễ đạt, tạo hứng thú): mỗi góc được lệch thêm `tolerance` độ mà vẫn 100%,
+ * và điểm giảm chậm hơn (`range`). Làm gần đúng tư thế → khoảng 80–100%.
+ */
+export const EASE = { tolerance: 10, range: 20, repDown: 6, repUp: 4 };
+
+export function easeRule(r) {
+  return { ...r, tolerance: (r.tolerance ?? 10) + EASE.tolerance, range: (r.range ?? 40) + EASE.range };
+}
+
+/** Đếm số lần: nới ngưỡng xuống/lên một chút (giữ khoảng cách ≥ 10° để không đếm nhầm do rung). */
+export function easeReps(rep) {
+  const e = easeRule(rep);
+  const down = rep.down + EASE.repDown, up = rep.up - EASE.repUp;
+  if (up - down >= 10) { e.down = down; e.up = up; }
+  return e;
+}
+
 export const JOINT_NAMES = {
   0: 'mũi', 11: 'vai trái', 12: 'vai phải', 13: 'khuỷu tay trái', 14: 'khuỷu tay phải',
   15: 'cổ tay trái', 16: 'cổ tay phải', 23: 'hông trái', 24: 'hông phải',

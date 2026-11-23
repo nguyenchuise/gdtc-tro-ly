@@ -5,14 +5,16 @@ import { listen, voiceSupported } from './voice.js';
 import { videoFacade, watchUrl, searchUrl } from './youtube.js';
 import { isTeacherUnlocked, renderTeacherGate } from './teacher-gate.js';
 import { esc, $, $$, debounce } from './util.js';
+import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 
 const state = { grade: null, chapter: null, q: '' };
 const closed = new Set(); // các nhóm Lớp/Phần đang thu gọn (nhớ trong lúc dùng trang)
 const GRADES = [6, 7, 8, 9];
+// Thứ tự tab: Sách → Video → Hướng dẫn → Tự tập. Mở bài mặc định vào tab đầu (Sách).
 const TABS = [
-  { id: 'huong-dan', label: 'Hướng dẫn', icon: 'list' },
-  { id: 'video', label: 'Video', icon: 'video' },
   { id: 'sach', label: 'Sách', icon: 'book' },
+  { id: 'video', label: 'Video', icon: 'video' },
+  { id: 'huong-dan', label: 'Hướng dẫn', icon: 'list' },
   { id: 'tu-tap', label: 'Tự tập', icon: 'target', needs: (e) => e.scoring },
 ];
 const ICONS = {
@@ -323,7 +325,13 @@ function panelBook(e, root) {
     : b.url && b.range
       ? bookLinkPanel(b)
       : waitingPanel('book', e, b.url ? `<p><a class="btn btn--ghost" href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : '');
+  const anim = hasBookAnim(e) ? `<section class="anim-card" aria-labelledby="anim-title">
+      <h3 id="anim-title">Động tác trong sách <span class="anim-card__tag">hình động</span></h3>
+      <div data-bookanim><p class="muted small">Đang tải hình trong sách…</p></div>
+      <p class="muted small anim-card__note">Ghép từ các hình “Nhịp” trong SGK, chạy lần lượt như một đoạn phim. Bấm ‹ › để xem từng nhịp.</p>
+    </section>` : '';
   root.innerHTML = `
+    ${anim}
     ${series ? `<p class="muted small book-series">Bộ sách: ${esc(series)}</p>` : ''}
     <div class="book-split">
       <section class="book-split__text" aria-labelledby="sum-title"><h3 id="sum-title">Ý chính</h3>${summary}
@@ -348,6 +356,17 @@ function panelBook(e, root) {
     root.querySelector('.book-viewer__full').href = p.image;
     $$('[data-page]', root).forEach((x) => x.setAttribute('aria-pressed', String(x === pg)));
   });
+  // Hình động: chỉ hiện khi tải được ảnh trang sách; không tải được thì bỏ hẳn khung này.
+  let player = null, gone = false;
+  const slot = root.querySelector('[data-bookanim]');
+  if (slot) {
+    preloadBookAnim(e).then(() => {
+      if (gone || !slot.isConnected) return;
+      player = createBookAnim(e, { mode: 'full' });
+      slot.replaceChildren(player.el);
+    }).catch(() => { root.querySelector('.anim-card')?.replaceWith(); });
+  }
+  return () => { gone = true; player?.stop(); };
 }
 function bookLinkPanel(b, note = 'Xem hình minh hoạ trong sách điện tử của NXB Giáo dục.') {
   return `<div class="waiting book-link" role="note">
@@ -401,13 +420,13 @@ async function showTab(tabId, { focus = false, updateHash = true } = {}) {
       if (tip) tip.innerHTML = cameraTip(ex.scoring);
     }
   } else if (tab.id === 'video') panelVideo(ex, panel);
-  else if (tab.id === 'sach') panelBook(ex, panel);
+  else if (tab.id === 'sach') current.cleanup = panelBook(ex, panel);
   else if (tab.id === 'tu-tap') {
     const { mountPractice } = await import('./practice.js');
     if (current?.tab === 'tu-tap') current.cleanup = mountPractice(panel, ex);
   }
   if (tab.id !== 'tu-tap') body.insertAdjacentHTML('beforeend', relatedBlock(ex));
-  if (updateHash) history.replaceState(null, '', `#bai/${encodeURIComponent(ex.id)}${tab.id === 'huong-dan' ? '' : `/${tab.id}`}`);
+  if (updateHash) history.replaceState(null, '', `#bai/${encodeURIComponent(ex.id)}${tab.id === TABS[0].id ? '' : `/${tab.id}`}`);
 }
 
 function openLesson(id, tabId) {
@@ -422,13 +441,14 @@ function openLesson(id, tabId) {
     const tabs = TABS.filter((t) => !t.needs || t.needs(ex));
     const st = contentStatus(ex);
     $('#lesson-tabs').innerHTML = tabs.map((t) => {
+      const n = TABS.indexOf(t) + 1; // số thứ tự cố định: 1. Sách 2. Video 3. Hướng dẫn 4. Tự tập
       const waiting = (t.id === 'video' && !st.video) || (t.id === 'sach' && !st.book);
-      return `<button type="button" role="tab" id="tab-${t.id}" data-tab="${t.id}" aria-controls="panel-${t.id}" aria-selected="false" tabindex="-1">${svg(t.icon, 18)}<span>${t.label}</span>${waiting ? '<span class="tab-dot" title="Sắp có"><span class="visually-hidden"> (sắp có)</span></span>' : ''}</button>`;
+      return `<button type="button" role="tab" id="tab-${t.id}" data-tab="${t.id}" aria-controls="panel-${t.id}" aria-selected="false" tabindex="-1">${svg(t.icon, 18)}<span><span class="tab-num">${n}.</span> ${t.label}</span>${waiting ? '<span class="tab-dot" title="Sắp có"><span class="visually-hidden"> (sắp có)</span></span>' : ''}</button>`;
     }).join('');
     $('#lesson-body').replaceChildren();
   }
   if (!dlg.open) { dlg.showModal(); document.body.classList.add('no-scroll'); }
-  showTab(tabId || current.tab || 'huong-dan', { updateHash: false });
+  showTab(tabId || current.tab || TABS[0].id, { updateHash: false });
 }
 
 function closeLesson({ fromRoute = false } = {}) {
