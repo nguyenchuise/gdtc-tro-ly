@@ -171,7 +171,7 @@ js/book-anim.js       Hình động ghép từ các hình "Nhịp" trong SGK (10
 js/figure-anim.js     Mục 2. Video: bạn mẫu phía sau nhân tạo (trái) + ảnh gốc SGK chạy động (phải), cùng nhịp
 js/figures/<id>.*.js  Hình vector từng bài, SINH TỰ ĐỘNG từ tệp Gemini bằng tools/import-gemini-figure.mjs
 tools/gemini-src/     Tệp Gemini gốc, tệp chỉnh cho khớp SGK (<id>.fix.json), câu lệnh mẫu HUONG-DAN-GEMINI.md
-js/pose-figure.js     Hình nộm tư thế mẫu vẽ từ góc chấm (dùng cho các bài còn lại)
+js/pose-figure.js     Hình nộm tư thế mẫu vẽ từ góc chấm (bài chưa có data/sgk-poses.json)
 js/teacher.js         Trang giáo viên: tình trạng, trình soạn, đăng lên GitHub
 js/teacher-gate.js    Ô nhập mã vào trang giáo viên
 js/data.js            Nạp exercises.json + media.json + bản nháp
@@ -194,7 +194,7 @@ Hàng trên chia **hai cột chạy cùng nhịp**, để đối chiếu ngay v�
 
 | Cột | Nội dung | Khi chưa có |
 |---|---|---|
-| Trái: ① Bạn mẫu tập cùng em | Góc nhìn **phía sau** dựng nhân tạo (tệp Gemini), có điểm khớp AI | Bài có chấm điểm: **hình nộm tạm** vẽ từ góc máy chấm (bài quay nghiêng: nhìn nghiêng). Bài không chấm: "sắp có". |
+| Trái: ① Bạn mẫu tập cùng em | Góc nhìn **phía sau** dựng nhân tạo (tệp Gemini), có điểm khớp AI | Bài có chấm điểm: **hình nộm đi lần lượt theo từng hình SGK** (`data/sgk-poses.json`, sinh bằng `tools/sgk-poses/`), cùng nhịp với ảnh sách, hình đúng tư thế máy chấm có ★. Sách chỉ có sơ đồ/cảnh đông người: hình nộm vẽ từ góc máy chấm. Bài không chấm: "sắp có". |
 | Phải: ② Động tác trong sách | **Ảnh gốc SGK** chạy động. Góc phía trước giữ đúng sách, không dựng lại. | "Chưa có hình động", kèm link sang mục 1. Sách |
 
 Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của thầy cô; chưa có thì "Video sắp có".

@@ -3,3 +3,5 @@ node_modules/
 Thumbs.db
 __pycache__/
 *.pyc
+tools/sgk-poses/work/
+tools/sgk-poses/pages/

@@ -2,7 +2,9 @@
 //   Trái  ① Bạn mẫu tập cùng em: góc nhìn PHÍA SAU dựng nhân tạo, có điểm khớp AI chấm.
 //          - Bài có "vectorFigure": hình người vector js/figures/<mã-bài>.back.js (từ tệp Gemini, ghép bằng
 //            tools/import-gemini-figure.mjs).
-//          - Bài khác có chấm điểm: tạm dùng hình nộm vẽ từ góc chấm (js/pose-figure.js); bài quay nghiêng: nhìn nghiêng.
+//          - Bài khác có chấm điểm: hình nộm đi lần lượt theo TỪNG HÌNH SGK (data/sgk-poses.json: khớp nhận diện
+//            bằng MediaPipe trên chính các khung ảnh sách), cùng nhịp với ảnh sách bên phải; hình đúng tư thế máy chấm
+//            có dấu ★. Bài chưa có dữ liệu đó: hình nộm vẽ từ góc chấm (js/pose-figure.js).
 //   Phải ② Động tác trong sách: ẢNH GỐC SGK chạy động (js/book-anim.js), giữ nguyên hình trong sách.
 import { esc } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
@@ -185,6 +187,122 @@ async function stickSource(ex) {
   };
 }
 
+// ------------------------------------------------------------------ Nguồn 3: hình nộm theo từng hình SGK
+// data/sgk-poses.json do tools/sgk-poses/ sinh ra: mỗi khung bookAnim một tư thế (hoặc null nếu khung là sơ đồ,
+// cảnh quá nhỏ…). Hình nộm chạy lần lượt qua đủ các hình trong sách, ảnh sách bên phải đổi cùng lúc.
+let sgkPosesP = null;
+export function loadSgkPoses() {
+  sgkPosesP ||= fetch(new URL('../data/sgk-poses.json', import.meta.url), { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  return sgkPosesP;
+}
+
+/** Chữ ngắn trên nút: "Hình 3 · 2/4" → "3.2", "Hình 5" → "5". */
+const frameShort = (label, k) => {
+  const m = String(label || '').match(/Hình\s*(\d+)(?:\s*·\s*(\d+)\/\d+)?/);
+  return m ? (m[2] ? `${m[1]}.${m[2]}` : m[1]) : String(k + 1);
+};
+
+const SIDE_L = [[11, 13], [13, 15], [23, 25], [25, 27], [27, 31]];
+const SIDE_R = [[12, 14], [14, 16], [24, 26], [26, 28], [28, 32]];
+/** Vẽ một tư thế SGK. view: 'back' | 'side'. mir: lật trái ↔ phải (hình sách nhìn từ trước → nhìn từ sau). */
+function sgkSvg(pts, box, st, ai) {
+  const X = st.mir ? (p) => (-p[0] - box.x0).toFixed(1) : (p) => (p[0] - box.x0).toFixed(1);
+  const Y = (p) => (box.y1 - p[1]).toFixed(1);
+  const line = (a, b, cls) => `<line class="${cls}" x1="${X(pts[a])}" y1="${Y(pts[a])}" x2="${X(pts[b])}" y2="${Y(pts[b])}"/>`;
+  const side = st.view === 'side';
+  const farL = side && st.far === 'L';
+  const near = farL ? SIDE_R : SIDE_L, far = farL ? SIDE_L : SIDE_R;
+  let g = '';
+  g += far.map(([a, b]) => line(a, b, side ? 'fig-bone fig-bone--far' : 'fig-bone')).join('');
+  const mid = (a, b) => [(pts[a][0] + pts[b][0]) / 2, (pts[a][1] + pts[b][1]) / 2];
+  const ms = mid(11, 12), mh = mid(23, 24);
+  g += `<line class="fig-bone fig-torso" x1="${X(ms)}" y1="${Y(ms)}" x2="${X(mh)}" y2="${Y(mh)}"/>`;
+  if (!side) g += line(11, 12, 'fig-bone') + line(23, 24, 'fig-bone');
+  g += near.map(([a, b]) => line(a, b, 'fig-bone')).join('');
+  // cổ: nối giữa vai tới đầu
+  const h = pts.h;
+  g += `<line class="fig-bone" x1="${X(ms)}" y1="${Y(ms)}" x2="${X([(ms[0] * 0.55 + h[0] * 0.45), (ms[1] * 0.55 + h[1] * 0.45)])}" y2="${Y([(ms[0] * 0.55 + h[0] * 0.45), (ms[1] * 0.55 + h[1] * 0.45)])}"/>`;
+  g += side ? `<circle class="fig-head" cx="${X(h)}" cy="${Y(h)}" r="10"/>`
+    : `<circle cx="${X(h)}" cy="${Y(h)}" r="10" fill="#2B303A" stroke="#1f3a2e" stroke-width="2"/>`;
+  if (ai) g += JOINTS.map((j) => `<circle cx="${X(pts[j])}" cy="${Y(pts[j])}" r="3.8" fill="#F97316" stroke="#fff" stroke-width="1.6"/>`).join('');
+  return g;
+}
+
+/** Điểm khớp dạng MediaPipe (y hướng xuống) để chấm thử tư thế SGK bằng đúng bộ chấm của bài. */
+function asLandmarks(pts) {
+  const lm = Array.from({ length: 33 }, () => ({ x: 0, y: 0, visibility: 0 }));
+  for (const [k, p] of Object.entries(pts)) if (k !== 'h') lm[Number(k)] = { x: p[0], y: -p[1], visibility: 1 };
+  return lm;
+}
+
+async function sgkSource(ex, D, order) {
+  const { evaluateRules, measure } = await import('./pose-scoring.js');
+  const frames = ex.bookAnim.frames;
+  const unpack = (flat) => {
+    const o = {};
+    order.forEach((k, i) => { o[k] = [flat[2 * i], flat[2 * i + 1]]; });
+    return o;
+  };
+  const raw = D.s.map((f) => (f ? unpack(f) : null));
+  const N = frames.length;
+  // Khung không có tư thế (sơ đồ, cảnh quá nhỏ): bạn mẫu giữ tư thế của hình gần nhất trước đó.
+  const near = (k) => { for (let d = 0; d < N; d++) { const j = (k - d + N) % N; if (raw[j]) return j; } return -1; };
+  const sc = ex.scoring;
+  const deg = (v) => `${Math.round(v)}°`;
+  const st = raw.map((p, k) => {
+    const j = p ? k : near(k);
+    const v = D.v[j];
+    return { pts: raw[j], own: Boolean(p), view: v === 's' ? 'side' : 'back', mir: v === 'f', far: D.far[j] };
+  });
+  // Tư thế máy chấm: chấm thử từng hình sách bằng đúng bộ góc của bài.
+  const marks = raw.map((p) => {
+    if (!p) return null;
+    const lm = asLandmarks(p);
+    if (sc.mode === 'reps' && sc.reps) {
+      const m = measure(lm, { ...sc.reps, target: sc.reps.down });
+      if (m.angle == null) return null;
+      if (m.angle <= sc.reps.down + 8) return { tag: 'Vị trí 1 máy đếm', text: `${sc.reps.label}: hình này ~${deg(m.angle)} (máy đếm khi < ${sc.reps.down}°)` };
+      if (m.angle >= sc.reps.up - 8) return { tag: 'Vị trí 2 máy đếm', text: `${sc.reps.label}: hình này ~${deg(m.angle)} (máy đếm khi > ${sc.reps.up}°)` };
+      return null;
+    }
+    const ev = evaluateRules(lm, sc.rules || []);
+    if (ev.score == null || ev.score < 80) return null; // 80% = mức đạt của máy chấm
+    return { tag: 'Tư thế máy chấm', text: ev.results.filter((r) => !r.rule.kind).map((r) => `${r.rule.label} ~${deg(r.angle)} (mẫu ${deg(r.rule.target)})`).join(' · ') };
+  });
+  const poses = frames.map((f, k) => {
+    const cap = D.cap?.[k] || '';
+    const tip = !st[k].own ? 'Hình này trong sách là sơ đồ hoặc cảnh tập đông người: bạn mẫu giữ tư thế của hình trước.'
+      : marks[k] ? `★ ${marks[k].tag}: ${marks[k].text}` : '';
+    return { code: f.label || `Hình ${k + 1}`, group: '', short: frameShort(f.label, k), caption: cap, tip, star: Boolean(marks[k]) };
+  });
+  // Khung chung cho mọi tư thế (đối xứng quanh tâm hông để lật trái ↔ phải không lệch).
+  let half = 40, top = 120;
+  for (const p of raw) if (p) for (const [x, y] of Object.values(p)) { half = Math.max(half, Math.abs(x)); top = Math.max(top, y); }
+  const box = { x0: -half - 16, x1: half + 16, y1: top + 16, y0: -14 };
+  const W = box.x1 - box.x0, H = box.y1 - box.y0;
+  const ground = `<line class="fig-ground" x1="0" x2="${W.toFixed(1)}" y1="${(box.y1 + 4).toFixed(1)}" y2="${(box.y1 + 4).toFixed(1)}"/>`;
+  const vbStr = `0 0 ${W.toFixed(1)} ${H.toFixed(1)}`;
+  const render = (t, o) => {
+    const w = ((t % N) + N) % N, i = Math.floor(w), f = ease(w - i);
+    const A = st[i], B = st[(i + 1) % N];
+    if (f < 0.001) return ground + sgkSvg(A.pts, box, A, o.ai);
+    if (A.mir === B.mir && A.view === B.view) return ground + sgkSvg(lerpPts(A.pts, B.pts, f), box, A, o.ai);
+    // đổi hướng nhìn (trước ↔ nghiêng): mờ dần hình cũ, hiện dần hình mới
+    return `${ground}<g opacity="${(1 - f).toFixed(2)}">${sgkSvg(A.pts, box, A, o.ai)}</g><g opacity="${f.toFixed(2)}">${sgkSvg(B.pts, box, B, o.ai)}</g>`;
+  };
+  const sub = (k) => (st[k].view === 'side' ? 'Theo hình SGK · nhìn nghiêng' : 'Theo hình SGK · phía sau');
+  return {
+    kind: 'stick',
+    N, poses, beat: 0.85, holdOf: () => 1.1,
+    arrows: false, bookSync: (k) => k, subOf: sub,
+    views: [{ id: 'back', sub: sub(0), vb: () => vbStr, render }],
+    note: `Bên trái là <b>hình nộm</b> dựng từ chính từng hình trong SGK (máy nhận diện khớp trên ảnh sách), chạy lần lượt
+      đủ các hình, cùng lúc với <b>ảnh gốc SGK</b> bên phải. Hình nhìn từ trước được lật thành nhìn từ phía sau: tay trái ở
+      bên trái màn hình, em làm y hệt. Nút có dấu <b class="vfig__star">★</b> là hình đúng tư thế máy chấm ở mục 4. Tự tập.`,
+  };
+}
+
 /** Bài không chấm bằng camera nhưng sách có hình: cột trái "sắp có", cột phải ảnh gốc SGK tự chạy. */
 function bookOnly(ex, num) {
   const el = document.createElement('section');
@@ -213,7 +331,13 @@ function bookOnly(ex, num) {
 export async function createFigurePlayer(ex, { num = 0 } = {}) {
   if (ex.figure3d) { const { create3DPlayer } = await import('./figure3d-player.js'); return create3DPlayer(ex, { num }); }
   if (!hasFigure(ex)) return bookOnly(ex, num);
-  const src = ex.vectorFigure ? await vectorSource(ex) : await stickSource(ex);
+  let src;
+  if (ex.vectorFigure) src = await vectorSource(ex);
+  else {
+    const doc = hasBookAnim(ex) ? await loadSgkPoses() : null;
+    const D = doc?.lessons?.[ex.id];
+    src = D && D.s.length === ex.bookAnim.frames.length && D.s.filter(Boolean).length >= 2 ? await sgkSource(ex, D, doc.order) : await stickSource(ex);
+  }
   const N = src.N;
   const beatSec = src.beat || BEAT;
   const holdOf = src.holdOf || (() => HOLD);
@@ -228,11 +352,11 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   el.innerHTML = `
     <div class="vfig__stages">${src.views.map((v) => `
       <figure class="vfig__pane vfig__pane--${v.id}">
-        <figcaption><h3 class="vfig__phead">${n(0)}Bạn mẫu tập cùng em</h3><span>${esc(v.sub)}</span></figcaption>
+        <figcaption><h3 class="vfig__phead">${n(0)}Bạn mẫu tập cùng em</h3><span data-sub>${esc(v.sub)}</span></figcaption>
         <svg viewBox="${VB_FULL}" role="img" data-view="${v.id}" aria-label="Bạn mẫu tập cùng em: ${esc(v.sub.toLowerCase())}"></svg>
       </figure>`).join('')}
       <figure class="vfig__pane vfig__pane--book">
-        <figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · ${ex.scoring?.mode === 'sequence' ? 'cùng nhịp' : 'hình động'}</span></figcaption>
+        <figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · ${ex.scoring?.mode === 'sequence' || src.bookSync ? 'cùng nhịp' : 'hình động'}</span></figcaption>
         <div class="vfig__book" data-book>${hasBookAnim(ex) ? '<p class="muted small">Đang tải hình trong sách…</p>'
           : `<p class="muted small vfig__bookwait">Chưa có hình động ghép từ sách. Xem ảnh ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`}</div>
       </figure>
@@ -241,7 +365,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       // Bài chia nhiều động tác (lớp 8, 9): đầu mỗi động tác có khoảng cách và tên nhóm khi rê/đọc.
       const gStart = p.group && p.group !== src.poses[k - 1]?.group;
       const name = `${p.group ? `${p.group} · ` : ''}${p.code}`;
-      return `<button type="button" class="chip chip--sm${gStart && k ? ' is-gstart' : ''}" data-k="${k}" aria-pressed="false" aria-label="${esc(name)}" title="${esc(name)}">${esc(p.short)}</button>`;
+      return `<button type="button" class="chip chip--sm${gStart && k ? ' is-gstart' : ''}${p.star ? ' is-star' : ''}" data-k="${k}" aria-pressed="false" aria-label="${esc(name)}${p.star ? ' (tư thế máy chấm)' : ''}" title="${esc(name)}">${p.star ? '<span class="vfig__chipstar" aria-hidden="true">★</span>' : ''}${esc(p.short)}</button>`;
     }).join('')}</div>
     <p class="vfig__now" aria-live="polite"></p>
     <div class="vfig__ctrl">
@@ -257,8 +381,9 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   // Ảnh gốc SGK. Bài đếm nhịp: trình chiếu do bạn mẫu điều khiển, luôn hiện đúng nhịp đang tập.
   // Bài khác: các hình trong sách tự chạy lần lượt, có nút riêng (số hình trong sách khác số tư thế mẫu).
   let book = null;
-  const steps = ex.scoring?.mode === 'sequence' && ex.scoring.steps.length === N ? ex.scoring.steps : null;
-  const frameOf = (k) => steps[k].frame;
+  const seqSteps = ex.scoring?.mode === 'sequence' && ex.scoring.steps.length === N ? ex.scoring.steps : null;
+  const steps = seqSteps || (src.bookSync ? true : null);
+  const frameOf = (k) => (seqSteps ? seqSteps[k].frame : src.bookSync(k));
   if (hasBookAnim(ex)) {
     const slot = el.querySelector('[data-book]');
     preloadBookAnim(ex).then(() => {
@@ -290,6 +415,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       lastIdx = k;
       if (steps) book?.go(frameOf(k));
       const p = src.poses[k] || {};
+      if (src.subOf) el.querySelector('[data-sub]').textContent = src.subOf(k);
       now.innerHTML = `${p.group ? `<span class="vfig__group">${esc(p.group)}</span>` : ''}<b>${esc(p.code || '')}</b> ${esc(p.caption || '')}
         ${p.tip ? `<span class="vfig__tip">${esc(p.tip)}</span>` : ''}`;
       el.querySelectorAll('[data-k]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.k) === k)));

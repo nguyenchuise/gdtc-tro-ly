@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.26.0] - 2026-11-24: Bạn mẫu đi đủ các hình trong sách
+
+### Thêm
+- **Hình nộm "Bạn mẫu tập cùng em" (mục 2. Video) đi lần lượt qua đủ các hình SGK** ở 56 bài ngoài chủ đề Bài tập thể dục.
+  Trước đây hình nộm chỉ diễn một tư thế chấm điểm (đứng → tư thế mẫu).
+  - Tư thế lấy từ **chính các khung ảnh sách**: MediaPipe Pose (bản chính xác cao) nhận diện khớp trên 513 khung,
+    soát bằng mắt từng khung và loại các khung nhận nhầm (ảnh cận tay, vợt, bóng).
+  - Mỗi nút là một hình trong sách ("3.2" = Hình 3, ảnh thứ 2). Ảnh SGK bên phải **đổi cùng lúc**, kèm chú thích hình.
+  - Hình nhìn từ trước được lật thành **nhìn từ phía sau** (tay trái ở bên trái màn hình); hình nhìn nghiêng giữ như sách.
+  - Hình đạt từ 80% theo đúng bộ chấm của bài có dấu **★ "Tư thế máy chấm"**, ghi góc đo được so với góc mẫu (46 bài có).
+  - Khung sơ đồ hoặc cảnh sân tập đông người: bạn mẫu giữ tư thế hình trước và ghi rõ lí do.
+- Dữ liệu ở `data/sgk-poses.json` (86 KB, chỉ tải khi mở mục Video); công cụ sinh lại và soát ở `tools/sgk-poses/`.
+  `tools/validate-data.mjs` kiểm tra số tư thế khớp số khung sách.
+
+### Còn lại
+- 19 bài vẫn dùng hình nộm cũ vẽ từ góc chấm, vì SGK chỉ có sơ đồ hoặc cảnh sân tập với người rất nhỏ
+  (các bài luyện tập phối hợp, chạy tiếp sức, trò chơi bổ trợ) hoặc có dưới 2 hình người rõ.
+
 ## [0.25.0] - 2026-11-24: Đủ hình SGK cho mọi bài; nhạc nền "Workout Music"
 
 ### Thêm

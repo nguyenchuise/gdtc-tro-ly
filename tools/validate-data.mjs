@@ -106,6 +106,20 @@ for (const e of (data.exercises || []).filter((x) => x.vectorFigure)) {
     }
   } catch (err) { errors.push(`${at}: lỗi khi vẽ thử — ${err.message}`); }
 }
+// Hình nộm theo từng hình SGK (data/sgk-poses.json): mỗi bài phải có đúng một tư thế (hoặc null) cho mỗi khung bookAnim.
+if (existsSync(`${root}data/sgk-poses.json`)) {
+  const SP = JSON.parse(readFileSync(`${root}data/sgk-poses.json`, 'utf8'));
+  const byId = new Map((data.exercises || []).map((e) => [e.id, e]));
+  const nPts = (SP.order || []).length;
+  for (const [id, L] of Object.entries(SP.lessons || {})) {
+    const e = byId.get(id);
+    if (!e) { warns.push(`sgk-poses.json: không có bài "${id}".`); continue; }
+    const nf = e.bookAnim?.frames?.length || 0;
+    if (L.s.length !== nf) errors.push(`Bài ${id}: sgk-poses có ${L.s.length} tư thế nhưng bookAnim có ${nf} khung — sinh lại bằng tools/sgk-poses/ sau khi sửa khung sách.`);
+    if (L.v.length !== L.s.length || L.far.length !== L.s.length) errors.push(`Bài ${id}: sgk-poses "v"/"far" không cùng độ dài với "s".`);
+    L.s.forEach((p, k) => { if (p && (p.length !== 2 * nPts || p.some((x) => !Number.isFinite(x)))) errors.push(`Bài ${id}: sgk-poses khung ${k + 1} sai số điểm.`); });
+  }
+}
 for (const id of Object.keys(media)) if (!ids.has(id)) warns.push(`Thư mục media/sach/${id}/ không khớp mã bài nào.`);
 for (const id of (data.exercises || []).flatMap((e) => e.related || [])) if (!ids.has(id)) warns.push(`related: không có bài "${id}".`);
 warns.forEach((w) => console.warn(`⚠️  ${w}`));
