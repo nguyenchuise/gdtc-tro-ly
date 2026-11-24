@@ -533,8 +533,33 @@ async function route() {
   }
 }
 
+/** Ảnh sân trường tự chuyển mờ (đầu trang 8 giây/ảnh, thẻ nhà trường 6 giây/ảnh). Giảm chuyển động → giữ ảnh đầu. */
+function initSlides() {
+  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  $$('[data-slides]').forEach((box) => {
+    const imgs = $$('img', box);
+    const dots = $$('button', box.parentElement.querySelector('.school-card__dots') || document.createElement('div'));
+    let i = 0, timer = 0;
+    const show = (k) => {
+      i = (k + imgs.length) % imgs.length;
+      imgs.forEach((im, j) => { im.classList.toggle('is-on', j === i); if (j === i) im.loading = 'eager'; });
+      dots.forEach((d, j) => d.setAttribute('aria-pressed', String(j === i)));
+    };
+    const run = () => {
+      clearInterval(timer);
+      if (reduce || imgs.length < 2) return;
+      timer = setInterval(() => { if (!document.hidden && !document.body.classList.contains('no-scroll')) show(i + 1); }, Number(box.dataset.slides) || 8000);
+    };
+    dots.forEach((d, j) => d.addEventListener('click', () => { show(j); run(); }));
+    // tải sẵn ảnh kế tiếp khi trang rảnh để chuyển cảnh không bị nháy
+    window.addEventListener('load', () => imgs.forEach((im) => { im.loading = 'eager'; }), { once: true });
+    run();
+  });
+}
+
 async function main() {
   initMusic();
+  initSlides();
   try {
     await loadData();
   } catch (err) {

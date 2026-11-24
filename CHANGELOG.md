@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.24.0] - 2026-11-24: Ảnh sân trường trên trang chủ
+
+### Thêm
+- **Nền chìm ảnh sân trường ở khối đầu trang:**
+  - 3 ảnh tự chuyển mờ sau mỗi 8 giây, có hiệu ứng phóng rất nhẹ.
+  - Phủ lớp xanh lá đậm để chữ trắng và ô tìm kiếm luôn rõ; trên điện thoại lớp phủ đậm hơn.
+  - Máy bật "giảm chuyển động" thì giữ cố định ảnh đầu.
+- **Thẻ "Đơn vị triển khai" cuối trang chủ:**
+  - Ảnh 16:9 tự chuyển sau mỗi 6 giây, có 3 chấm để chọn ảnh.
+  - Ghi Trường THCS Nguyễn Tất Thành, Phường Đông Gia Nghĩa, Tỉnh Lâm Đồng; Tác giả: Cô Quý Anh; một câu giới thiệu mục tiêu.
+  - Thẻ xếp dọc trên điện thoại.
+- Ảnh nằm trong `media/truong/`, đã nén khoảng 240 KB mỗi ảnh. Thay ảnh của trường bằng cách giữ đúng tên tệp (xem `media/truong/HUONG-DAN.md`).
+
 ## [0.23.0] - 2026-11-24: Đủ 10 bài thể dục có bạn mẫu dựng hình; 3D sắc nét như tranh SGK; nhịp 8 lớp 6 rõ bước trái
 
 ### Thêm

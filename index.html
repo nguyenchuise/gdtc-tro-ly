@@ -54,7 +54,12 @@
   <main id="main" tabindex="-1">
     <!-- TRANG CHỦ -->
     <section id="home-view" aria-labelledby="hero-title">
-      <div class="hero">
+      <div class="hero hero--photo">
+        <div class="hero__bg" data-slides="8000" aria-hidden="true">
+          <img class="is-on" src="media/truong/san-truong-1.webp" alt="" decoding="async" fetchpriority="low">
+          <img src="media/truong/san-truong-2.webp" alt="" decoding="async" loading="lazy">
+          <img src="media/truong/san-truong-3.webp" alt="" decoding="async" loading="lazy">
+        </div>
         <div class="container hero__grid">
           <div class="hero__text">
             <p class="hero__eyebrow">Giáo dục thể chất · Lớp 6–9</p>
@@ -139,6 +144,28 @@
           <button type="button" id="toggle-all" class="link-btn" hidden>Thu gọn tất cả</button>
         </div>
         <div id="results"></div>
+
+        <section class="school-card" aria-labelledby="school-title">
+          <div class="school-card__media">
+            <div class="school-card__frame" data-slides="6000">
+              <img class="is-on" src="media/truong/san-truong-1.webp" alt="Sân trường THCS Nguyễn Tất Thành trong buổi lễ, cờ đỏ sao vàng giăng kín sân" decoding="async" loading="lazy">
+              <img src="media/truong/san-truong-2.webp" alt="Học sinh Trường THCS Nguyễn Tất Thành ngồi ngay ngắn dưới hàng cây sân trường" decoding="async" loading="lazy">
+              <img src="media/truong/san-truong-3.webp" alt="Học sinh Trường THCS Nguyễn Tất Thành đứng chào cờ trên sân trường" decoding="async" loading="lazy">
+            </div>
+            <div class="school-card__dots" role="group" aria-label="Chọn ảnh sân trường">
+              <button type="button" aria-label="Ảnh 1" aria-pressed="true"></button>
+              <button type="button" aria-label="Ảnh 2" aria-pressed="false"></button>
+              <button type="button" aria-label="Ảnh 3" aria-pressed="false"></button>
+            </div>
+          </div>
+          <div class="school-card__body">
+            <span class="school-card__badge">Đơn vị triển khai</span>
+            <h2 id="school-title">Trường THCS Nguyễn Tất Thành</h2>
+            <p class="school-card__place">Phường Đông Gia Nghĩa, Tỉnh Lâm Đồng</p>
+            <p class="school-card__author">Tác giả: <strong>Cô Quý Anh</strong></p>
+            <p class="school-card__desc">Giúp học sinh lớp 6–9 tự luyện tập Giáo dục thể chất đúng kĩ thuật theo sách giáo khoa: xem bạn mẫu, đối chiếu hình trong sách và tự chấm tư thế bằng camera ngay trên điện thoại.</p>
+          </div>
+        </section>
       </div>
     </section>
 

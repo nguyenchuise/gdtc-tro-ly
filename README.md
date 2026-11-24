@@ -231,7 +231,9 @@ node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>
 
 Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp với ảnh SGK; công cụ báo lỗi nếu lệch. Chỗ nào lệch so với hình SGK thì chỉnh trong `tools/gemini-src/<mã-bài>.fix.json` rồi chạy lại lệnh trên. Không sửa tay các tệp trong `js/figures/`.
 
-### Tác giả và nhạc nền
+### Tác giả, ảnh trường và nhạc nền
+
+- Ảnh sân trường ở nền khối đầu trang và trong thẻ "Đơn vị triển khai" cuối trang chủ: `media/truong/san-truong-1..3.webp`. Thay ảnh thì giữ đúng tên tệp (xem `media/truong/HUONG-DAN.md`).
 
 - Thông tin tác giả nằm ở dải đầu trang, thẻ cuối trang và chân phiếu PDF: Cô Quý Anh, Trường THCS Nguyễn Tất Thành. Sửa trong `index.html` và `js/report-pdf.js`.
 - Nhạc nền (`js/music.js`):
