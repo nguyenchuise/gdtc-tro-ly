@@ -816,3 +816,23 @@ details { margin: 10px 0; }
 .vsec__wait { margin: 0; }
 .vsec--video .waiting { margin-top: 0; }
 .vfig .vsec__head { margin: 0; }
+/* Khung đầu mục Video: trái = bạn mẫu phía sau (nhân tạo), phải = ảnh gốc SGK chạy động, cùng nhịp */
+.vfig__pane figcaption { padding: 8px 6px 2px; }
+.vfig__phead { margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: .98rem; line-height: 1.2; text-align: left; color: var(--ink); }
+.vfig__phead .vsec__n { width: 24px; height: 24px; font-size: .85rem; }
+.vfig__pane--book { background: #fff; grid-template-rows: auto 1fr; }
+.vfig__book { display: grid; align-content: center; padding: 4px 6px 8px; min-height: 0; }
+.vfig__book .bookanim { gap: 6px; }
+.vfig__book .bookanim__stage { --h: min(46vh, 380px); box-shadow: none; }
+.vfig__book .bookanim__bar { justify-content: center; }
+.vfig__book .bookanim__label { font-size: .85rem; }
+.vfig__bookwait { margin: 0; padding: 16px 10px; text-align: center; align-self: center; }
+.vfig--wait .vfig__pane { background: var(--surface); border: 2px dashed var(--line); box-shadow: none; }
+@media (max-width: 759px) {
+  .vfig__phead { font-size: .84rem; gap: 4px; }
+  .vfig__phead .vsec__n { width: 20px; height: 20px; font-size: .75rem; }
+  .vfig__book .bookanim__stage { --h: min(40vh, 300px); }
+  .vfig__book .bookanim__cap { display: none; } /* điện thoại: chữ chú thích đã có ở dòng dưới hình */
+}
+.vfig__pane figcaption .vsec__n { color: #fff; font-size: .82rem; font-weight: 800; }
+@media (max-width: 759px) { .vfig__pane figcaption .vsec__n { font-size: .74rem; } }

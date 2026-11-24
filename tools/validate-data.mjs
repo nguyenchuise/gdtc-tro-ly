@@ -83,13 +83,15 @@ for (const [i, e] of (data.exercises || []).entries()) {
 // Bạn mẫu vector (mục 2. Video): hai tệp hình phải có, cùng số tư thế, vẽ được mà không ra NaN.
 for (const e of (data.exercises || []).filter((x) => x.vectorFigure)) {
   const at = `Bài ${e.id} (vectorFigure)`;
-  const files = ['front', 'back'].map((v) => `${root}js/figures/${e.id}.${v}.js`);
-  const missing = files.filter((f) => !existsSync(f));
-  if (missing.length) { errors.push(`${at}: thiếu ${missing.map((f) => f.slice(root.length)).join(', ')} — chạy tools/import-gemini-figure.mjs.`); continue; }
+  // Trang chỉ dùng góc nhìn phía sau (bên phải là ảnh gốc SGK); tệp phía trước nếu có thì kiểm tra thêm.
+  const files = ['back', 'front'].map((v) => `${root}js/figures/${e.id}.${v}.js`).filter((f, i) => i === 0 || existsSync(f));
+  if (!existsSync(files[0])) { errors.push(`${at}: thiếu js/figures/${e.id}.back.js — chạy tools/import-gemini-figure.mjs.`); continue; }
   try {
-    const [F, B] = await Promise.all(files.map((f) => import(pathToFileURL(f).href)));
-    if (F.poses.length !== B.poses.length) errors.push(`${at}: mặt trước ${F.poses.length} tư thế, mặt sau ${B.poses.length}.`);
-    for (const M of [F, B]) {
+    const mods = await Promise.all(files.map((f) => import(pathToFileURL(f).href)));
+    const B = mods[0];
+    const steps = e.scoring?.mode === 'sequence' ? e.scoring.steps.length : 0;
+    if (steps && B.poses.length !== steps) errors.push(`${at}: hình phía sau có ${B.poses.length} tư thế, bài có ${steps} nhịp chấm — phải bằng nhau để chạy cùng nhịp với ảnh SGK.`);
+    for (const M of mods) {
       for (let t = 0; t < M.poses.length; t += 0.25) {
         const svg = M.render(M.sample(t), { ai: true, arrows: true });
         if (/NaN|undefined/.test(svg)) { errors.push(`${at}: hình ${M.view} có NaN/undefined tại t=${t}.`); break; }

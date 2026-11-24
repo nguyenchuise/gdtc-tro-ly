@@ -1,6 +1,10 @@
 // Ghép hình người vector (tệp HTML thầy cô tạo bằng Gemini) vào trang, cho mục "2. Video" của một bài.
 //
-//   node tools/import-gemini-figure.mjs <mã-bài> <tệp-mặt-trước.html> <tệp-mặt-sau.html>
+//   node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>
+//   node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-trước.html> <tệp-phía-sau.html>   (cách cũ, vẫn nhận)
+//
+// Trang chỉ hiện góc nhìn PHÍA SAU dựng nhân tạo; góc phía trước dùng ảnh gốc SGK chạy động (tránh sai lệch
+// so với sách). Tệp phía trước không bắt buộc, nếu có thì chỉ lưu để tham khảo.
 //
 // Công cụ lấy phần "động cơ vẽ" (màu đồng phục, khung xương, danh sách tư thế POSES, hàm nội suy
 // samplePoseAtTime, các hàm vẽ SVG) trong thẻ <script> của mỗi tệp, bỏ phần giao diện riêng của Gemini,
@@ -17,9 +21,11 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const root = new URL('..', import.meta.url).pathname;
-const [id, frontFile, backFile] = process.argv.slice(2);
-if (!id || !frontFile || !backFile) {
-  console.error('Cách dùng: node tools/import-gemini-figure.mjs <mã-bài> <mặt-trước.html> <mặt-sau.html>');
+const args = process.argv.slice(2);
+const id = args[0];
+const [frontFile, backFile] = args.length >= 3 ? [args[1], args[2]] : [null, args[1]];
+if (!id || !backFile) {
+  console.error('Cách dùng: node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>');
   process.exit(1);
 }
 const data = JSON.parse(readFileSync(`${root}data/exercises.json`, 'utf8'));
@@ -155,18 +161,18 @@ export function render(pose, opts = {}, prefix = '${view[0]}_') {
 
 mkdirSync(`${root}js/figures`, { recursive: true });
 const out = {};
-for (const [view, file] of [['front', frontFile], ['back', backFile]]) {
+for (const [view, file] of [['front', frontFile], ['back', backFile]].filter(([, f]) => f)) {
   const path = `${root}js/figures/${id}.${view}.js`;
   writeFileSync(path, moduleFor(view, file));
   out[view] = path;
 }
 
 // Chạy thử: vẽ dày đặc theo thời gian, không được lỗi hay NaN; hai góc nhìn phải cùng số tư thế.
-const F = await import(pathToFileURL(out.front).href);
 const B = await import(pathToFileURL(out.back).href);
-if (F.poses.length !== B.poses.length) fail(`Mặt trước có ${F.poses.length} tư thế, mặt sau có ${B.poses.length} — phải bằng nhau.`);
-const N = F.poses.length;
-for (const M of [F, B]) {
+const F = out.front ? await import(pathToFileURL(out.front).href) : null;
+if (F && F.poses.length !== B.poses.length) fail(`Mặt trước có ${F.poses.length} tư thế, mặt sau có ${B.poses.length} — phải bằng nhau.`);
+const N = B.poses.length;
+for (const M of [B, F].filter(Boolean)) {
   for (let t = 0; t < N; t += 0.05) {
     const p = M.sample(t);
     if (!p || typeof p.nearestIdx !== 'number') fail(`${M.view}: samplePoseAtTime(${t.toFixed(2)}) phải trả về tư thế có nearestIdx.`);
@@ -176,7 +182,7 @@ for (const M of [F, B]) {
   }
 }
 const steps = ex.scoring?.steps?.length;
-if (steps && steps !== N) console.warn(`⚠️  Bài có ${steps} nhịp chấm điểm nhưng hình vector có ${N} tư thế — kiểm tra lại thứ tự nhịp.`);
+if (ex.scoring?.mode === 'sequence' && steps !== N) fail(`Bài có ${steps} nhịp (trùng với ảnh SGK) nhưng hình phía sau có ${N} tư thế — phải bằng nhau để chạy cùng nhịp.`);
 
 if (!ex.vectorFigure) {
   // Chèn đúng một dòng ngay sau "id" của bài, giữ nguyên cách trình bày phần còn lại của tệp.
@@ -185,5 +191,5 @@ if (!ex.vectorFigure) {
   if (!re.test(raw)) fail(`Không chèn được "vectorFigure" vào data/exercises.json — thêm tay dòng "vectorFigure": true, cho bài ${id}.`);
   writeFileSync(`${root}data/exercises.json`, raw.replace(re, (m, all, ind) => `${all}${ind}"vectorFigure": true,\n`));
 }
-console.log(`✅ ${id}: ${N} tư thế, hai góc nhìn → js/figures/${id}.front.js, js/figures/${id}.back.js`);
+console.log(`✅ ${id}: ${N} tư thế → js/figures/${id}.back.js${F ? ` (và ${id}.front.js để tham khảo)` : ''}`);
 if (!existsSync(`${root}js/figure-anim.js`)) console.warn('⚠️  Chưa có js/figure-anim.js (trình phát).');

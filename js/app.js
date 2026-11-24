@@ -5,7 +5,7 @@ import { listen, voiceSupported } from './voice.js';
 import { videoFacade, watchUrl, searchUrl } from './youtube.js';
 import { isTeacherUnlocked, renderTeacherGate } from './teacher-gate.js';
 import { esc, $, $$, debounce } from './util.js';
-import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
+import { hasBookAnim } from './book-anim.js';
 import { hasVectorFigure, hasFigure } from './figure-anim.js';
 
 const state = { grade: null, chapter: null, q: '' };
@@ -284,24 +284,22 @@ function panelGuide(e) {
 }
 
 /** Mục 2. Video — mọi bài cùng một khung, đúng thứ tự như bài mẫu lớp 6 (nhịp 1–11):
- *  1. Bạn mẫu tập cùng em (hình vector Gemini; chưa có thì hình nộm tạm)
- *  2. Động tác trong sách (hình động ghép từ hình "Nhịp" trong SGK)
- *  3. Video hướng dẫn (YouTube / video thầy cô)
- *  Phần nào chưa có thì hiện ô "sắp có" ngay tại chỗ. Ảnh trang sách chỉ nằm ở mục 1. Sách. */
+ *  Hàng trên, hai cột chạy cùng nhịp:
+ *    ① Bạn mẫu tập cùng em (trái): góc nhìn phía sau dựng nhân tạo (vector Gemini; chưa có thì hình nộm tạm)
+ *    ② Động tác trong sách (phải): ảnh gốc SGK chạy động
+ *  ③ Video hướng dẫn (YouTube / video thầy cô)
+ *  Phần nào chưa có thì hiện "sắp có" ngay tại chỗ. Ảnh trang sách tĩnh chỉ nằm ở mục 1. Sách. */
 const vHead = (n, title, tag = '') => `<h3 class="vsec__head"><span class="vsec__n" aria-hidden="true">${n}</span>${title}${tag ? ` <span class="anim-card__tag">${tag}</span>` : ''}</h3>`;
-const bookAnimWait = (e, why = 'Bài này chưa có hình động ghép từ sách.') => `${vHead(2, 'Động tác trong sách', 'hình động')}
-  <p class="muted vsec__wait">${why} Xem ảnh trang sách ở <a href="#bai/${encodeURIComponent(e.id)}/sach">mục 1. Sách</a>.</p>`;
+const figureWait = (e, why = 'Bài này chưa có bạn mẫu chuyển động.') => `<div class="vfig__stages">
+    <figure class="vfig__pane"><figcaption><h3 class="vfig__phead"><span class="vsec__n" aria-hidden="true">1</span>Bạn mẫu tập cùng em</h3><span>Phía sau</span></figcaption>
+      <p class="muted small vfig__bookwait">${why} Thầy cô sẽ bổ sung sau.</p></figure>
+    <figure class="vfig__pane"><figcaption><h3 class="vfig__phead"><span class="vsec__n" aria-hidden="true">2</span>Động tác trong sách</h3><span>Ảnh gốc SGK · hình động</span></figcaption>
+      <p class="muted small vfig__bookwait">Chưa có hình động ghép từ sách. Xem ảnh ở <a href="#bai/${encodeURIComponent(e.id)}/sach">mục 1. Sách</a>.</p></figure>
+  </div>`;
 function panelVideo(e, root) {
   const secFigure = hasFigure(e)
-    ? `<section class="vsec vsec--figure" data-vfig>${vHead(1, 'Bạn mẫu tập cùng em')}<p class="muted small">Đang tải bạn mẫu…</p></section>`
-    : `<section class="vsec vsec--wait">${vHead(1, 'Bạn mẫu tập cùng em')}<p class="muted vsec__wait">Bài này chưa có bạn mẫu chuyển động. Thầy cô sẽ bổ sung sau.</p></section>`;
-  const secBook = hasBookAnim(e)
-    ? `<section class="vsec anim-card" aria-labelledby="anim-title">
-      ${vHead(2, '<span id="anim-title">Động tác trong sách</span>', 'hình động')}
-      <div data-bookanim><p class="muted small">Đang tải hình trong sách…</p></div>
-      <p class="muted small anim-card__note">Ghép từ các hình “Nhịp” trong SGK, chạy lần lượt như một đoạn phim. Bấm ‹ › để xem từng nhịp.</p>
-    </section>`
-    : `<section class="vsec vsec--wait">${bookAnimWait(e)}</section>`;
+    ? '<section class="vsec vfig" data-vfig><p class="muted small">Đang tải bạn mẫu…</p></section>'
+    : `<section class="vsec vfig vfig--wait">${figureWait(e)}</section>`;
   const cleanup = mountMotion(e, root);
   const list = e.youtube;
   const secVideo = !list.length
@@ -312,7 +310,7 @@ function panelVideo(e, root) {
       <a class="btn btn--ghost btn--small player__open" target="_blank" rel="noopener">Mở trên YouTube ↗</a></div>
     ${list.length > 1 ? `<h4 class="visually-hidden">Danh sách video</h4><ol class="playlist">${list.map((v, i) =>
       `<li><button type="button" class="playlist__item" data-i="${i}" aria-current="${i === 0}">${i + 1}. ${esc(v.title || `Video ${i + 1}`)}</button></li>`).join('')}</ol>` : ''}</section>`;
-  root.innerHTML = secFigure + secBook + secVideo;
+  root.innerHTML = secFigure + secVideo;
   if (list.length) {
     const show = (i) => {
       const v = list[i];
@@ -341,20 +339,8 @@ function mountMotion(e, root) {
           players.push(p); vslot.replaceWith(p.el);
         }).catch((err) => {
           console.warn(err);
-          vslot.className = 'vsec vsec--wait';
-          vslot.innerHTML = `${vHead(1, 'Bạn mẫu tập cùng em')}<p class="muted vsec__wait">Chưa tải được bạn mẫu. Em thử mở lại sau nhé.</p>`;
-        });
-      }
-      // Hình động trong sách: chỉ hiện khi tải được ảnh trang sách; không tải được thì bỏ hẳn khung này.
-      const slot = root.querySelector('[data-bookanim]');
-      if (slot) {
-        preloadBookAnim(e).then(() => {
-          if (gone || !slot.isConnected) return;
-          const p = createBookAnim(e, { mode: 'full' });
-          players.push(p); slot.replaceChildren(p.el);
-        }).catch(() => {
-          const card = root.querySelector('.anim-card');
-          if (card) { card.className = 'vsec vsec--wait'; card.innerHTML = bookAnimWait(e, 'Chưa tải được ảnh sách từ máy chủ NXB.'); }
+          vslot.className = 'vsec vfig vfig--wait';
+          vslot.innerHTML = figureWait(e, 'Chưa tải được bạn mẫu.');
         });
       }
     },

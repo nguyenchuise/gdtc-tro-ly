@@ -1,10 +1,11 @@
-// Trình phát "bạn mẫu" ở mục 2. Video: hai góc nhìn chạy cùng nhịp — PHÍA SAU (trái) và PHÍA TRƯỚC (phải),
-// tự chạy, hiện sẵn điểm khớp AI chấm (vai, khuỷu, cổ tay, hông, gối, cổ chân).
-// - Bài có "vectorFigure": hình người vector từ js/figures/<mã-bài>.front.js / .back.js (sinh từ tệp Gemini
-//   bằng tools/import-gemini-figure.mjs).
-// - Bài khác có chấm điểm: tạm dùng hình nộm vẽ từ góc chấm (js/pose-figure.js), cùng khung và nút bấm,
-//   để khi có tệp Gemini chỉ cần ghép vào là hình vector tự thay chỗ.
+// Khung đầu mục 2. Video, hai cột chạy CÙNG NHỊP để đối chiếu ngay:
+//   Trái  ① Bạn mẫu tập cùng em: góc nhìn PHÍA SAU dựng nhân tạo, có điểm khớp AI chấm.
+//          - Bài có "vectorFigure": hình người vector js/figures/<mã-bài>.back.js (từ tệp Gemini, ghép bằng
+//            tools/import-gemini-figure.mjs).
+//          - Bài khác có chấm điểm: tạm dùng hình nộm vẽ từ góc chấm (js/pose-figure.js); bài quay nghiêng: nhìn nghiêng.
+//   Phải ② Động tác trong sách: ẢNH GỐC SGK chạy động (js/book-anim.js), giữ nguyên hình trong sách.
 import { esc } from './util.js';
+import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 
 const SPEEDS = [{ label: 'Chậm', k: 0.6 }, { label: 'Vừa', k: 1 }, { label: 'Nhanh', k: 1.5 }];
 const BEAT = 1.05; // giây chuyển giữa hai nhịp ở tốc độ Vừa
@@ -23,32 +24,27 @@ const shortOf = (p, k) => (/^TTCB/i.test(p.code || '') ? 'TTCB' : (String(p.code
 
 // ------------------------------------------------------------------ Nguồn 1: hình vector từ tệp Gemini
 async function vectorSource(ex) {
-  const [F, B] = await Promise.all([
-    import(`./figures/${ex.id}.front.js`),
-    import(`./figures/${ex.id}.back.js`),
-  ]);
+  const B = await import(`./figures/${ex.id}.back.js`);
   const vb = (phone) => (phone ? VB_PHONE : VB_FULL);
   return {
     kind: 'vector',
-    tag: 'phía sau · phía trước',
-    N: F.poses.length,
-    poses: F.poses.map((p, k) => ({
+    N: B.poses.length,
+    poses: B.poses.map((p, k) => ({
       code: p.code || `Nhịp ${k}`, group: p.group || '', short: shortOf(p, k),
       caption: p.caption?.replace(/^(TTCB|Nhịp\s*\d+)\.\s*/i, '') || p.shortTitle || '',
-      tip: B.poses[k]?.rearTip ? `Nhìn từ sau: ${B.poses[k].rearTip}` : '',
+      tip: p.rearTip ? `Nhìn từ sau: ${p.rearTip}` : '',
     })),
     arrows: true,
     views: [
-      { id: 'back', title: 'Phía sau', sub: 'Làm theo cùng chiều', vb,
+      { id: 'back', sub: 'Phía sau · làm theo cùng chiều', vb,
         render(t, o, uid) {
           const pb = B.sample(t);
           // Khung phụ "góc nghiêng" của Gemini (sát mép phải) quá nhỏ trên điện thoại → tắt, giữ hình chính ở giữa.
           if (o.phone && 'inset4Alpha' in pb) pb.inset4Alpha = 0;
           return B.render(pb, o, `b${uid}_`);
         } },
-      { id: 'front', title: 'Phía trước', sub: 'Như trong sách', vb, render: (t, o, uid) => F.render(F.sample(t), o, `f${uid}_`) },
     ],
-    note: '<b>Phía sau</b>: tay trái bạn mẫu ở bên trái màn hình, em làm y hệt, không bị ngược chiều. Chấm cam là <b>điểm khớp máy chấm</b> khi em tự tập.',
+    note: 'Bên trái là bạn mẫu dựng nhân tạo nhìn <b>từ phía sau</b> (tay trái ở bên trái màn hình, em làm y hệt). Bên phải là <b>ảnh gốc trong SGK</b>, chạy cùng nhịp để đối chiếu. Chấm cam là <b>điểm khớp máy chấm</b>.',
   };
 }
 
@@ -155,20 +151,18 @@ async function stickSource(ex) {
     const w = ((t % N) + N) % N, i = Math.floor(w), f = ease(w - i);
     return lerpPts(frames[i], frames[(i + 1) % N], f);
   };
-  const view = (id, title, sub) => ({
-    id, title, sub,
+  const view = (id, sub) => ({
+    id, sub,
     vb: () => stickSvg(frames[0], box, id, false).vb,
     render: (t, o) => stickSvg(at(t), box, id, o.ai).svg,
   });
   return {
     kind: 'stick',
-    tag: 'hình nộm tạm',
     N, poses, beat, holdOf: holds ? (k) => holds[k] : null,
     arrows: false,
-    views: side ? [view('side', 'Nhìn nghiêng', 'Như máy chấm nhìn')]
-      : [view('back', 'Phía sau', 'Làm theo cùng chiều'), view('front', 'Phía trước', 'Đứng đối diện')],
-    note: `Hình nộm vẽ từ các góc máy chấm, chỉ để em thấy bộ phận nào cần đúng góc.${side ? '' : ' <b>Phía sau</b>: tay trái ở bên trái màn hình, em làm y hệt.'}
-      Hình người vector ${side ? 'nhiều góc nhìn' : 'phía sau và phía trước'} sẽ thay vào khi thầy cô có tệp.`,
+    views: [side ? view('side', 'Hình nộm tạm · nhìn nghiêng') : view('back', 'Hình nộm tạm · phía sau')],
+    note: `Bên trái là <b>hình nộm tạm</b> vẽ từ các góc máy chấm${side ? ' (nhìn nghiêng, như máy chấm nhìn)' : ', nhìn từ phía sau: tay trái ở bên trái màn hình, em làm y hệt'}.
+      Hình người dựng nhân tạo sẽ thay vào khi thầy cô có tệp. Bên phải là <b>ảnh gốc trong SGK</b> (nếu có), chạy cùng nhịp.`,
   };
 }
 
@@ -184,14 +178,19 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
 
   const el = document.createElement('section');
   el.className = `vsec vfig vfig--${src.kind}`;
-  el.setAttribute('aria-labelledby', `vfig-${uid}`);
+  el.setAttribute('aria-label', 'Bạn mẫu tập cùng em và động tác trong sách');
+  const n = (k) => (num ? `<span class="vsec__n" aria-hidden="true">${num + k}</span>` : '');
   el.innerHTML = `
-    <h3 id="vfig-${uid}" class="vsec__head">${num ? `<span class="vsec__n" aria-hidden="true">${num}</span>` : ''}Bạn mẫu tập cùng em <span class="anim-card__tag">${esc(src.tag)}</span></h3>
-    <div class="vfig__stages${src.views.length === 1 ? ' vfig__stages--one' : ''}">${src.views.map((v) => `
+    <div class="vfig__stages">${src.views.map((v) => `
       <figure class="vfig__pane vfig__pane--${v.id}">
-        <figcaption><b>${esc(v.title)}</b><span>${esc(v.sub)}</span></figcaption>
-        <svg viewBox="${VB_FULL}" role="img" data-view="${v.id}" aria-label="Bạn mẫu: ${esc(v.title.toLowerCase())}"></svg>
+        <figcaption><h3 class="vfig__phead">${n(0)}Bạn mẫu tập cùng em</h3><span>${esc(v.sub)}</span></figcaption>
+        <svg viewBox="${VB_FULL}" role="img" data-view="${v.id}" aria-label="Bạn mẫu tập cùng em: ${esc(v.sub.toLowerCase())}"></svg>
       </figure>`).join('')}
+      <figure class="vfig__pane vfig__pane--book">
+        <figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · hình động</span></figcaption>
+        <div class="vfig__book" data-book>${hasBookAnim(ex) ? '<p class="muted small">Đang tải hình trong sách…</p>'
+          : `<p class="muted small vfig__bookwait">Chưa có hình động ghép từ sách. Xem ảnh ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`}</div>
+      </figure>
     </div>
     <div class="vfig__steps" role="group" aria-label="Chọn nhịp">${src.poses.map((p, k) => {
       // Bài chia nhiều động tác (lớp 8, 9): đầu mỗi động tác có khoảng cách và tên nhóm khi rê/đọc.
@@ -210,6 +209,21 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     </div>
     <p class="muted small vfig__note">${src.note}</p>`;
   const panes = src.views.map((v) => ({ v, svg: el.querySelector(`svg[data-view="${v.id}"]`) }));
+  // Ảnh gốc SGK: trình chiếu do bạn mẫu điều khiển, luôn hiện đúng nhịp đang tập.
+  let book = null;
+  const steps = ex.scoring?.mode === 'sequence' ? ex.scoring.steps : null;
+  const frameOf = (k) => (steps && steps.length === N ? steps[k].frame : k);
+  if (hasBookAnim(ex)) {
+    const slot = el.querySelector('[data-book]');
+    preloadBookAnim(ex).then(() => {
+      if (!alive) return;
+      book = createBookAnim(ex, { mode: 'full', controlled: true });
+      slot.replaceChildren(book.el);
+      book.go(frameOf(((Math.round(t) % N) + N) % N));
+    }).catch(() => {
+      slot.innerHTML = `<p class="muted small vfig__bookwait">Chưa tải được ảnh sách từ máy chủ NXB. Xem ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`;
+    });
+  }
   const now = el.querySelector('.vfig__now');
 
   let phone = Boolean(phoneMQ?.matches);
@@ -227,6 +241,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     const k = ((Math.round(t) % N) + N) % N;
     if (k !== lastIdx) {
       lastIdx = k;
+      book?.go(frameOf(k));
       const p = src.poses[k] || {};
       now.innerHTML = `${p.group ? `<span class="vfig__group">${esc(p.group)}</span>` : ''}<b>${esc(p.code || '')}</b> ${esc(p.caption || '')}
         ${p.tip ? `<span class="vfig__tip">${esc(p.tip)}</span>` : ''}`;
@@ -313,7 +328,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   return {
     el,
     stop() {
-      alive = false; if (raf) cancelAnimationFrame(raf);
+      alive = false; if (raf) cancelAnimationFrame(raf); book?.stop();
       io?.disconnect(); document.removeEventListener('visibilitychange', onVis);
       phoneMQ?.removeEventListener?.('change', onMQ);
     },

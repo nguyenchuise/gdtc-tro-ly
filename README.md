@@ -168,7 +168,7 @@ js/youtube.js         Đọc link YouTube, khung video "bấm mới tải" (yout
 js/pose-scoring.js    Tính góc, chấm điểm, đếm giữ/lần; nạp MediaPipe khi cần
 js/practice.js        Tab Tự tập: camera / video, nhãn % nổi, tự chụp ảnh khi đạt, kết quả tốt nhất
 js/book-anim.js       Hình động ghép từ các hình "Nhịp" trong SGK (10 bài thể dục, mục 2. Video), cắt bằng CSS từ ảnh trang của NXB
-js/figure-anim.js     Trình phát "bạn mẫu" vector: phía sau (trái) + phía trước (phải), có điểm khớp AI (mục 2. Video)
+js/figure-anim.js     Mục 2. Video: bạn mẫu phía sau nhân tạo (trái) + ảnh gốc SGK chạy động (phải), cùng nhịp
 js/figures/<id>.*.js  Hình vector từng bài, SINH TỰ ĐỘNG từ tệp Gemini bằng tools/import-gemini-figure.mjs
 tools/gemini-src/     Tệp Gemini gốc, tệp chỉnh cho khớp SGK (<id>.fix.json), câu lệnh mẫu HUONG-DAN-GEMINI.md
 js/pose-figure.js     Hình nộm tư thế mẫu vẽ từ góc chấm (dùng cho các bài còn lại)
@@ -188,32 +188,28 @@ tools/                Sinh media.json, kiểm tra dữ liệu, test chấm đi�
 
 ### Mục 2. Video: cùng một khung cho mọi bài
 
-Mọi bài có mục 2. Video giống bài mẫu lớp 6 (nhịp 1–11), gồm 3 phần đánh số, đúng thứ tự:
+Mọi bài có mục 2. Video giống bài mẫu lớp 6 (nhịp 1–11).
 
-| Phần | Nội dung | Khi chưa có |
+Hàng trên chia **hai cột chạy cùng nhịp**, để đối chiếu ngay và phát hiện sai lệch:
+
+| Cột | Nội dung | Khi chưa có |
 |---|---|---|
-| ① Bạn mẫu tập cùng em | Hình người vector phía sau và phía trước (tệp Gemini) | Bài có chấm điểm: **hình nộm tạm**, vẽ từ góc máy chấm (bài quay nghiêng chỉ có một hình nhìn nghiêng). Bài không chấm điểm: ô "sắp có". |
-| ② Động tác trong sách | Hình động ghép từ hình "Nhịp" trong SGK | Ô "sắp có", kèm link sang mục 1. Sách |
-| ③ Video hướng dẫn | Video YouTube hoặc video của thầy cô | "Video sắp có" và nút tìm trên YouTube |
+| Trái: ① Bạn mẫu tập cùng em | Góc nhìn **phía sau** dựng nhân tạo (tệp Gemini), có điểm khớp AI | Bài có chấm điểm: **hình nộm tạm** vẽ từ góc máy chấm (bài quay nghiêng: nhìn nghiêng). Bài không chấm: "sắp có". |
+| Phải: ② Động tác trong sách | **Ảnh gốc SGK** chạy động. Góc phía trước giữ đúng sách, không dựng lại. | "Chưa có hình động", kèm link sang mục 1. Sách |
 
-Ảnh trang sách và ý chính chỉ nằm ở **mục 1. Sách**. Hình nộm tạm tự được thay bằng hình vector ngay khi ghép tệp Gemini của bài đó.
+Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của thầy cô; chưa có thì "Video sắp có".
 
-### Bạn mẫu vector hai góc nhìn (mục 2. Video)
+Ảnh trang sách tĩnh và ý chính chỉ nằm ở **mục 1. Sách**.
 
-Bài có `"vectorFigure": true` hiện khung **Bạn mẫu tập cùng em** ở đầu mục 2. Video:
-- Hai hình chạy cùng nhịp: **phía sau** bên trái, để em đứng sau làm theo cùng chiều, và **phía trước** bên phải, giống hình trong sách.
-- Hình tự chạy, có sẵn điểm khớp AI (vai, khuỷu, cổ tay, hông, gối).
-- Trên điện thoại, khung hình được cắt bớt lề để bạn mẫu to hơn.
-
-Thêm bài mới:
-1. Nhờ Gemini vẽ theo câu lệnh trong `tools/gemini-src/HUONG-DAN-GEMINI.md`.
-2. Ghép vào trang bằng lệnh:
+Thêm hình phía sau cho một bài:
+1. Nhờ Gemini vẽ theo `tools/gemini-src/HUONG-DAN-GEMINI.md`. Chỉ cần một tệp, góc nhìn phía sau.
+2. Ghép vào trang:
 
 ```bash
-node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-trước.html> <tệp-phía-sau.html>
+node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>
 ```
 
-Chỗ nào lệch so với hình SGK thì chỉnh trong `tools/gemini-src/<mã-bài>.fix.json` rồi chạy lại lệnh trên. Không sửa tay các tệp trong `js/figures/`.
+Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp với ảnh SGK; công cụ báo lỗi nếu lệch. Chỗ nào lệch so với hình SGK thì chỉnh trong `tools/gemini-src/<mã-bài>.fix.json` rồi chạy lại lệnh trên. Không sửa tay các tệp trong `js/figures/`.
 
 ## 7. Quyền riêng tư
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.20.0] - 2026-11-24: Bạn mẫu phía sau (nhân tạo) bên trái, ảnh gốc SGK bên phải, chạy cùng nhịp
+
+### Thay đổi
+- **Mục 2. Video, hàng trên hai cột chạy cùng nhịp:**
+  - **Trái**: ① Bạn mẫu tập cùng em, chỉ còn góc nhìn **phía sau** dựng nhân tạo, có điểm khớp AI.
+  - **Phải**: ② Động tác trong sách, **ảnh gốc SGK** chạy động.
+  - Bỏ hình phía trước dựng nhân tạo. Góc phía trước dùng đúng hình trong sách, để giám khảo đối chiếu và để sớm phát hiện chỗ hình nhân tạo lệch sách.
+  - Bấm nhịp nào thì cả hai cột cùng sang nhịp đó. Đã kiểm tra tự động trên 10 bài có ảnh SGK.
+  - ③ Video hướng dẫn nằm bên dưới.
+  - Bài chưa có hình động từ sách: cột phải ghi "chưa có", kèm link sang mục 1. Sách.
+- **Nhờ Gemini chỉ cần một tệp (phía sau).**
+  - `tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>`.
+  - Công cụ báo lỗi nếu số tư thế khác số nhịp của bài.
+  - Câu lệnh mẫu trong `tools/gemini-src/HUONG-DAN-GEMINI.md` đã sửa theo cách mới.
+
 ## [0.19.0] - 2026-11-24: Mục Video cùng một khung cho mọi bài
 
 ### Thay đổi
