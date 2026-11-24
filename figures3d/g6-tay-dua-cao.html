@@ -1,0 +1,1985 @@
+<!-- TỰ SINH bởi tools/import-3d-figure.mjs từ tệp Gemini của thầy cô (g6-td-12-23-3d-back.html). Bài: g6-tay-dua-cao — Bài thể dục liên hoàn (từ nhịp 12 đến nhịp 23) -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GDTC Lớp 6 — Mô hình 3D Góc nhìn Phía sau (Nhịp 12–23 • Chuẩn đối chiếu SGK)</title>
+  <script src="../vendor/three-0.147.0.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js'"></script>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --muted: #475569;
+      --primary: #0284C7;
+      --primary-dark: #0369A1;
+      --accent: #F97316;
+      --accent-dark: #EA580C;
+      --emerald: #059669;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 18px 16px 40px; }
+    .topbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-block; background: #E0F2FE; color: var(--primary-dark);
+      font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.03em;
+    }
+    .badge-ok {
+      background: #DCFCE7; color: #166534; margin-left: 6px;
+    }
+    h1 { margin: 4px 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { margin: 2px 0 0; font-size: 13.5px; color: var(--muted); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.18fr) minmax(320px, 0.82fr);
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    /* 3D Viewport Stage */
+    .stage-toolbar {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cam-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cam-btn {
+      border: 1px solid var(--border); background: #F8FAFC; color: var(--text);
+      font-weight: 700; font-size: 13px; padding: 7px 12px; border-radius: 10px;
+      cursor: pointer; min-height: 38px;
+    }
+    .cam-btn:hover { background: #E2E8F0; }
+    .cam-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .viewport-shell {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #FFFFFF 0%, #EEF4FA 65%, #E2EBF5 100%);
+      user-select: none;
+      touch-action: none;
+    }
+    @media (max-width: 640px) {
+      .viewport-shell { height: 420px; }
+    }
+    #glCanvas {
+      width: 100%; height: 100%; display: block; cursor: grab;
+    }
+    #glCanvas:active { cursor: grabbing; }
+
+    .hud-top {
+      position: absolute; top: 10px; left: 12px; right: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none;
+    }
+    .hud-pill {
+      background: rgba(15, 23, 42, 0.78); color: #fff;
+      font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px;
+      letter-spacing: 0.03em; backdrop-filter: blur(4px);
+    }
+    .hud-pill.rear { background: rgba(2, 132, 199, 0.9); }
+    .hud-pill.front { background: rgba(5, 150, 105, 0.9); }
+
+    .split-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      background: rgba(15, 23, 42, 0.22); pointer-events: none; display: none;
+    }
+    .split-divider.show { display: block; }
+
+    .hud-lr {
+      position: absolute; bottom: 12px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none;
+    }
+    .lr-tag {
+      background: rgba(255, 255, 255, 0.9); color: #0F172A; border: 1px solid #CBD5E1;
+      font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 8px;
+    }
+    .hint-tag {
+      background: rgba(255, 255, 255, 0.85); color: #475569;
+      font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 8px;
+    }
+
+    /* Telemetry Strip */
+    .telemetry {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      margin-top: 10px;
+    }
+    @media (max-width: 560px) { .telemetry { grid-template-columns: repeat(2, 1fr); } }
+    .tel-box {
+      background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 10px; text-align: center;
+    }
+    .tel-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .tel-val { font-size: 16px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    /* Right Panel */
+    .pose-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .pose-code {
+      background: var(--primary); color: #fff; font-weight: 800; font-size: 14px;
+      padding: 5px 12px; border-radius: 10px; white-space: nowrap;
+    }
+    .pose-title { margin: 0; font-size: 19px; font-weight: 800; }
+    .pose-caption { margin: 8px 0 10px; font-size: 15px; color: #1E293B; }
+    .rear-box {
+      background: #F0F9FF; border-left: 4px solid var(--primary);
+      padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #0C4A6E;
+      margin-bottom: 12px;
+    }
+    .angle-pill {
+      display: inline-block; background: #FEF3C7; color: #92400E;
+      font-size: 12.5px; font-weight: 700; padding: 3px 9px; border-radius: 7px; margin-bottom: 6px;
+    }
+
+    .controls-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .btn {
+      border: 1px solid var(--border); background: var(--card); color: var(--text);
+      font-weight: 700; font-size: 14px; padding: 9px 14px; border-radius: 12px;
+      cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { background: #F1F5F9; }
+    .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-dark); }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-green { background: var(--emerald); border-color: var(--emerald); color: #fff; }
+    .btn-green:hover { background: #047857; }
+
+    .scrubber-wrap { margin: 10px 0 12px; }
+    .scrubber-label {
+      display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: var(--muted);
+      margin-bottom: 4px;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
+    .toggles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F1F5F9; padding: 7px 11px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; cursor: pointer; min-height: 40px; user-select: none;
+    }
+    .chip input { width: 16px; height: 16px; accent-color: var(--primary); }
+
+    .beats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+      gap: 6px; margin-bottom: 14px;
+    }
+    .beat-btn {
+      border: 1px solid var(--border); background: #F8FAFC; color: var(--text);
+      font-weight: 700; font-size: 13px; padding: 9px 4px; border-radius: 10px;
+      cursor: pointer; min-height: 42px;
+    }
+    .beat-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    details.tuner {
+      background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px 12px; margin-bottom: 14px;
+    }
+    details.tuner summary {
+      font-size: 13.5px; font-weight: 800; cursor: pointer; color: #334155;
+    }
+    .tuner-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-top: 10px;
+    }
+    .tuner-item label {
+      display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted);
+    }
+
+    .export-box {
+      border-top: 1px solid var(--border); padding-top: 12px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .export-title { font-size: 13px; font-weight: 800; color: #334155; }
+    .export-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .status-msg {
+      font-size: 12.5px; font-weight: 700; color: var(--emerald); min-height: 18px;
+    }
+    .error-banner {
+      display: none; background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B;
+      padding: 12px; border-radius: 12px; margin-bottom: 12px; font-size: 14px; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <span class="badge">GDTC LỚP 6 • BÀI 2 (NHỊP 12–23)</span>
+      <span class="badge badge-ok">MÔ HÌNH 3D DỰNG TỪ ẢNH GỐC SGK</span>
+      <h1>Trình tạo & Kiểm chứng Góc nhìn Phía sau 3D</h1>
+      <p class="subtitle">Đối chiếu trực tiếp Chính diện (khớp ảnh gốc SGK) và xuất ảnh Phía sau cùng chiều Trái/Phải cho học sinh tự tập.</p>
+    </div>
+  </div>
+
+  <div id="errBanner" class="error-banner">
+    Không tải được thư viện Three.js. Vui lòng kiểm tra kết nối mạng rồi tải lại trang (F5).
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: 3D VIEWPORT -->
+    <div class="card">
+      <div class="stage-toolbar">
+        <div class="cam-group" id="camBtns">
+          <button class="cam-btn active" data-cam="rear">Phía sau (Chuẩn)</button>
+          <button class="cam-btn" data-cam="front">Chính diện (So SGK)</button>
+          <button class="cam-btn" data-cam="left">Nghiêng trái</button>
+          <button class="cam-btn" data-cam="right">Nghiêng phải</button>
+          <button class="cam-btn" data-cam="isoRear">Chéo 3/4 sau</button>
+        </div>
+        <button class="cam-btn" id="btnSplit">◫ So sánh Trước | Sau</button>
+      </div>
+
+      <div class="viewport-shell" id="viewportShell">
+        <canvas id="glCanvas"></canvas>
+        <div class="split-divider" id="splitDivider"></div>
+        <div class="hud-top">
+          <span class="hud-pill rear" id="hudLeft">GÓC NHÌN PHÍA SAU • 180°</span>
+          <span class="hud-pill front" id="hudRight" style="display:none">PHÍA SAU (XUẤT ẢNH)</span>
+        </div>
+        <div class="hud-lr" id="hudLR">
+          <span class="lr-tag" id="tagLeft">◀ BÊN TRÁI</span>
+          <span class="hint-tag">Kéo chuột/chạm để xoay 360° • Cuộn để thu phóng</span>
+          <span class="lr-tag" id="tagRight">BÊN PHẢI ▶</span>
+        </div>
+      </div>
+
+      <div class="telemetry">
+        <div class="tel-box"><div class="tel-label">Vai Trái / Phải</div><div class="tel-val" id="telShoulder">90° / 90°</div></div>
+        <div class="tel-box"><div class="tel-label">Khuỷu Trái / Phải</div><div class="tel-val" id="telElbow">180° / 180°</div></div>
+        <div class="tel-box"><div class="tel-label">Gối Trái / Phải</div><div class="tel-val" id="telKnee">180° / 180°</div></div>
+        <div class="tel-box"><div class="tel-label">Gập / Nghiêng thân</div><div class="tel-val" id="telTorso">0° / 0°</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTROLS & EXPORT -->
+    <div class="card">
+      <div class="pose-head">
+        <span class="pose-code" id="poseCode">TTCB</span>
+        <h2 class="pose-title" id="poseTitle">Như nhịp 11</h2>
+      </div>
+      <p class="pose-caption" id="poseCaption"></p>
+
+      <div class="rear-box">
+        <div class="angle-pill" id="angleRef"></div>
+        <div id="rearNote"></div>
+      </div>
+
+      <div class="controls-row">
+        <button class="btn btn-accent" id="btnPlay">▶ Chạy liền mạch</button>
+        <button class="btn" id="btnPrev">◀ Trước</button>
+        <button class="btn" id="btnNext">Sau ▶</button>
+        <button class="btn" id="btnSpeed">1x</button>
+      </div>
+
+      <div class="scrubber-wrap">
+        <div class="scrubber-label">
+          <span>Thanh tua liên hoàn 60fps</span>
+          <span id="timeLabel">0.0 / 13.0</span>
+        </div>
+        <input type="range" id="scrubber" min="0" max="13" step="0.02" value="0" />
+      </div>
+
+      <div class="toggles">
+        <label class="chip"><input type="checkbox" id="chkSkeleton" /> Khớp AI 3D</label>
+        <label class="chip"><input type="checkbox" id="chkXray" /> X-quang thân (thấy tay trước)</label>
+        <label class="chip"><input type="checkbox" id="chkGrid" checked /> Lưới sàn định vị</label>
+        <label class="chip"><input type="checkbox" id="chkTransparent" checked /> Xuất PNG nền trong suốt</label>
+      </div>
+
+      <div class="beats-grid" id="beatsGrid"></div>
+
+      <details class="tuner">
+        <summary>⚙ Tinh chỉnh vi góc nhịp hiện tại (phòng giám khảo yêu cầu sửa)</summary>
+        <div class="tuner-grid">
+          <div class="tuner-item">
+            <label><span>Xoay thân (Yaw)</span><span id="vYaw">0°</span></label>
+            <input type="range" id="slYaw" min="-110" max="110" step="1" value="0" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Gập thân trước</span><span id="vBend">0°</span></label>
+            <input type="range" id="slBend" min="0" max="130" step="1" value="0" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Nghiêng lườn</span><span id="vSide">0°</span></label>
+            <input type="range" id="slSide" min="-42" max="42" step="1" value="0" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Quay đầu (Head Yaw)</span><span id="vHead">0°</span></label>
+            <input type="range" id="slHead" min="-75" max="75" step="1" value="0" />
+          </div>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="cam-btn" id="btnResetTune">↺ Khôi phục chuẩn SGK</button>
+        </div>
+      </details>
+
+      <div class="export-box">
+        <div class="export-title">Xuất ảnh góc nhìn Phía sau (180° chuẩn, không biến dạng phối cảnh):</div>
+        <div class="export-row">
+          <button class="btn btn-primary" id="btnExportOne">⬇ Tải PNG phía sau nhịp này</button>
+          <button class="btn btn-green" id="btnExportSheet">⬇ Tải bảng 13 tư thế sau (PNG)</button>
+        </div>
+        <div class="export-row">
+          <button class="btn" id="btnExportAllZip">⬇ Tải lần lượt 13 file PNG lẻ</button>
+        </div>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const POSES = [
+  {
+    "code": "TTCB",
+    "shortTitle": "Như nhịp 11 (Chuẩn bị)",
+    "caption": "Như nhịp 11: đứng hai chân rộng bằng vai, xoay người sang phải 90°, hai tay dang ngang, lòng bàn tay ngửa, mắt nhìn theo tay phải.",
+    "rearNote": "Nhìn từ sau: thân xoay sang phải (mặt hướng về bên PHẢI màn hình), hai chân rộng bằng vai, hai tay dang thẳng ngang vai lòng bàn tay ngửa.",
+    "angleRef": "Xoay thân phải 90° • Vai 90° • Gối 180°",
+    "rootYaw": -88,
+    "torsoBend": 0,
+    "torsoSide": 0,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 12",
+    "shortTitle": "Xoay người ra trước",
+    "caption": "Giữ tư thế hai tay dang ngang, lòng bàn tay ngửa, xoay người ra trước.",
+    "rearNote": "Lưng thẳng đối diện người xem, hai tay dang thẳng ngang vai (90°), lòng bàn tay ngửa lên trên, hai chân mở rộng bằng vai.",
+    "angleRef": "Vai 90° • Khuỷu 180° • Gối 180°",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": 0,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 13",
+    "shortTitle": "Nghiêng người sang trái",
+    "caption": "Tay trái chống hông, lòng bàn tay sấp, tay phải đưa thẳng lên cao áp sát tai, nghiêng người sang trái, chân trái kiễng gót.",
+    "rearNote": "Cùng chiều học sinh: nghiêng sang bên TRÁI màn hình; tay trái chống hông trái, tay phải vươn thẳng áp sát tai, gót chân trái kiễng cao.",
+    "angleRef": "Nghiêng trái 28° • Vai phải 172° • Kiễng gót trái",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": 28,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": -0.025,
+    "armL": {
+      "out": 42,
+      "fwd": 0,
+      "palm": "down",
+      "onHip": 1,
+      "plant": 0
+    },
+    "armR": {
+      "out": 168,
+      "fwd": 2,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 1,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 14",
+    "shortTitle": "Trở về nhịp 12",
+    "caption": "Trở về nhịp 12: đứng thẳng, hai tay dang ngang, lòng bàn tay ngửa, mắt nhìn thẳng.",
+    "rearNote": "Hạ gót chân trái chạm đất, đưa thân về thẳng trục, hai tay dang thẳng ngang vai lòng bàn tay ngửa.",
+    "angleRef": "Vai 90° • Khuỷu 180° • Gối 180°",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": 0,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 15",
+    "shortTitle": "Nghiêng người sang phải",
+    "caption": "Như nhịp 13, nhưng đổi bên: tay phải chống hông, tay trái đưa thẳng lên cao áp sát tai, nghiêng người sang phải, chân phải kiễng gót.",
+    "rearNote": "Cùng chiều học sinh: nghiêng sang bên PHẢI màn hình; tay phải chống hông phải, tay trái vươn thẳng áp sát tai, gót chân phải kiễng cao.",
+    "angleRef": "Nghiêng phải 28° • Vai trái 172° • Kiễng gót phải",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": -28,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": 0.025,
+    "armL": {
+      "out": 168,
+      "fwd": 2,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 42,
+      "fwd": 0,
+      "palm": "down",
+      "onHip": 1,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 1,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 16",
+    "shortTitle": "Trở về nhịp 14",
+    "caption": "Trở về nhịp 14: đứng thẳng, hai tay dang ngang, lòng bàn tay ngửa.",
+    "rearNote": "Hạ gót chân phải vững vàng, đứng thẳng trục, hai tay dang ngang vai lòng bàn tay ngửa.",
+    "angleRef": "Vai 90° • Khuỷu 180° • Gối 180°",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": 0,
+    "headPitch": 0,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.165,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 90,
+      "fwd": 0,
+      "palm": "up",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 17",
+    "shortTitle": "Thu chân, hai tay lên cao",
+    "caption": "Chân trái thu về sát chân phải, hai tay đưa lên cao, tay thẳng, lòng bàn tay hướng vào nhau, mắt nhìn theo tay.",
+    "rearNote": "Hai chân khép sát song song; hai tay vươn thẳng lên cao áp sát tai, lòng bàn tay hướng vào nhau, đầu ngửa nhẹ nhìn theo tay.",
+    "angleRef": "Vai 180° • Khuỷu 180° • Gối 180°",
+    "rootYaw": 0,
+    "torsoBend": 0,
+    "torsoSide": 0,
+    "headPitch": 24,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.082,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 176,
+      "fwd": 3,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 0
+    },
+    "armR": {
+      "out": 176,
+      "fwd": 3,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 0
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 18",
+    "shortTitle": "Gập thân chạm mũi chân",
+    "caption": "Chân giữ nguyên tư thế, gập thân trên, đầu các ngón tay chạm mũi bàn chân, mắt nhìn theo tay.",
+    "rearNote": "Hai gối giữ thẳng khép sát; gập sâu lưng về phía trước, hai tay duỗi thẳng xuống chạm mũi giày (bật X-quang hoặc xoay nghiêng để đối chiếu hình phụ SGK).",
+    "angleRef": "Gập thân ~117° • Gối 180° • Chạm mũi chân",
+    "rootYaw": 0,
+    "torsoBend": 117,
+    "torsoSide": 0,
+    "headPitch": -24,
+    "headYaw": 0,
+    "squat": 0,
+    "stance": 0.082,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 6,
+      "fwd": 85,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 6,
+      "fwd": 85,
+      "palm": "in",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 0,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 19",
+    "shortTitle": "Ngồi gót, chống tay xuống đất",
+    "caption": "Ngồi trên hai gót chân, hai tay duỗi thẳng chống đất bằng cả bàn tay, mắt nhìn tay.",
+    "rearNote": "Hạ hông ngồi sát lên hai gót chân kiễng; hai tay duỗi thẳng chống cả lòng bàn tay sát mặt đất ở hai bên ngoài đầu gối.",
+    "angleRef": "Gối ~42° • Khuỷu 180° • Bàn tay áp đất",
+    "rootYaw": 0,
+    "torsoBend": 57,
+    "torsoSide": 0,
+    "headPitch": -22,
+    "headYaw": 0,
+    "squat": 1,
+    "stance": 0.095,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    },
+    "legR": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    }
+  },
+  {
+    "code": "Nhịp 20",
+    "shortTitle": "Bật duỗi chân trái sang ngang",
+    "caption": "Bật hai chân, đưa nhanh chân trái sang ngang, chân và bàn chân duỗi thẳng, gót chân chạm đất, đầu quay sang trái, mắt nhìn theo chân.",
+    "rearNote": "Chân TRÁI bật duỗi thẳng sang bên TRÁI màn hình, gót chạm đất; chân phải giữ ngồi gót, hai tay chống thẳng, đầu quay nhìn sang trái.",
+    "angleRef": "Gối trái 180° • Gối phải ~45° • Đầu quay trái",
+    "rootYaw": 0,
+    "torsoBend": 55,
+    "torsoSide": 0,
+    "headPitch": -10,
+    "headYaw": 64,
+    "squat": 1,
+    "stance": 0.095,
+    "rootShiftX": -0.18,
+    "armL": {
+      "out": 14,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 18,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0,
+      "out": 1,
+      "kneeBend": 0
+    },
+    "legR": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    }
+  },
+  {
+    "code": "Nhịp 21",
+    "shortTitle": "Thu chân trái về nhịp 19",
+    "caption": "Bật hai chân, thu chân trái trở về nhịp 19.",
+    "rearNote": "Bật nhẹ thu chân trái về ngồi gọn trên hai gót chân, hai tay giữ thẳng chống cả bàn tay xuống đất.",
+    "angleRef": "Gối ~42° • Khuỷu 180° • Bàn tay áp đất",
+    "rootYaw": 0,
+    "torsoBend": 57,
+    "torsoSide": 0,
+    "headPitch": -22,
+    "headYaw": 0,
+    "squat": 1,
+    "stance": 0.095,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    },
+    "legR": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    }
+  },
+  {
+    "code": "Nhịp 22",
+    "shortTitle": "Bật duỗi chân phải sang ngang",
+    "caption": "Bật hai chân, đưa nhanh chân phải sang ngang, chân và bàn chân duỗi thẳng, gót chân chạm đất, đầu quay sang phải, mắt nhìn theo chân.",
+    "rearNote": "Chân PHẢI bật duỗi thẳng sang bên PHẢI màn hình, gót chạm đất; chân trái giữ ngồi gót, hai tay chống thẳng, đầu quay nhìn sang phải.",
+    "angleRef": "Gối phải 180° • Gối trái ~45° • Đầu quay phải",
+    "rootYaw": 0,
+    "torsoBend": 55,
+    "torsoSide": 0,
+    "headPitch": -10,
+    "headYaw": -64,
+    "squat": 1,
+    "stance": 0.095,
+    "rootShiftX": 0.18,
+    "armL": {
+      "out": 18,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 14,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    },
+    "legR": {
+      "tiptoe": 0,
+      "out": 1,
+      "kneeBend": 0
+    }
+  },
+  {
+    "code": "Nhịp 23",
+    "shortTitle": "Thu chân phải về nhịp 21",
+    "caption": "Bật hai chân, thu chân phải trở về nhịp 21.",
+    "rearNote": "Bật nhẹ thu chân phải về ngồi trên hai gót chân, hai tay duỗi thẳng chống đất bằng cả bàn tay, mắt nhìn tay.",
+    "angleRef": "Gối ~42° • Khuỷu 180° • Bàn tay áp đất",
+    "rootYaw": 0,
+    "torsoBend": 57,
+    "torsoSide": 0,
+    "headPitch": -22,
+    "headYaw": 0,
+    "squat": 1,
+    "stance": 0.095,
+    "rootShiftX": 0,
+    "armL": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "armR": {
+      "out": 15,
+      "fwd": 38,
+      "palm": "down",
+      "onHip": 0,
+      "plant": 1
+    },
+    "legL": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    },
+    "legR": {
+      "tiptoe": 0.85,
+      "out": 0,
+      "kneeBend": 1
+    }
+  }
+];
+
+const RIG = {
+  pelvisStandY: 0.83,
+  pelvisSquatY: 0.285,
+  hipHalfW: 0.092,
+  waistHalfW: 0.112,
+  shoulderHalfW: 0.162,
+  torsoLower: 0.21,
+  torsoUpper: 0.24,
+  neckLen: 0.06,
+  headR: 0.105,
+  thighLen: 0.395,
+  shinLen: 0.375,
+  upperArmLen: 0.275,
+  forearmLen: 0.255,
+  handLen: 0.125
+};
+
+const state = {
+  t: 1, // Start directly on Nhịp 12 (user can click TTCB or slide back to 0)
+  playing: false,
+  speed: 1,
+  splitMode: false,
+  camPreset: 'rear',
+  showSkeleton: false,
+  xray: false,
+  showGrid: true,
+  transparentExport: true,
+  lastTs: null,
+  overrides: {},
+  // Custom orbit spherical angles around target (theta=Math.PI => rear view at -Z looking +Z)
+  orbit: {
+    theta: Math.PI,
+    phi: 0.10,
+    radius: 3.35,
+    targetY: 0.86
+  }
+};
+
+function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function smoothstep(t) { const x = clamp(t, 0, 1); return x * x * (3 - 2 * x); }
+function deg2rad(d) { return d * Math.PI / 180; }
+function rad2deg(r) { return r * 180 / Math.PI; }
+
+function getPoseBase(idx) {
+  const base = POSES[idx];
+  const ov = state.overrides[idx];
+  if (!ov) return base;
+  return Object.assign({}, base, ov);
+}
+
+function lerpArm(a, b, u) {
+  return {
+    out: lerp(a.out, b.out, u),
+    fwd: lerp(a.fwd, b.fwd, u),
+    onHip: lerp(a.onHip, b.onHip, u),
+    plant: lerp(a.plant, b.plant, u),
+    palm: u < 0.5 ? a.palm : b.palm
+  };
+}
+
+function lerpLeg(a, b, u) {
+  return {
+    tiptoe: lerp(a.tiptoe, b.tiptoe, u),
+    out: lerp(a.out, b.out, u),
+    kneeBend: lerp(a.kneeBend, b.kneeBend, u)
+  };
+}
+
+function samplePose(t) {
+  const n = POSES.length;
+  const wrapped = ((t % n) + n) % n;
+  const i0 = Math.floor(wrapped) % n;
+  const i1 = (i0 + 1) % n;
+  const frac = wrapped - Math.floor(wrapped);
+  const u = smoothstep((frac - 0.12) / 0.80);
+
+  const p0 = getPoseBase(i0);
+  const p1 = getPoseBase(i1);
+  const nearestIdx = Math.round(wrapped) % n;
+  const meta = getPoseBase(nearestIdx);
+
+  const isHop = (p0.legL.out !== p1.legL.out) || (p0.legR.out !== p1.legR.out);
+  const hopY = isHop ? Math.sin(u * Math.PI) * 0.065 : 0;
+
+  return {
+    nearestIdx,
+    code: meta.code,
+    shortTitle: meta.shortTitle,
+    caption: meta.caption,
+    rearNote: meta.rearNote,
+    angleRef: meta.angleRef,
+    rootYaw: lerp(p0.rootYaw, p1.rootYaw, u),
+    torsoBend: lerp(p0.torsoBend, p1.torsoBend, u),
+    torsoSide: lerp(p0.torsoSide, p1.torsoSide, u),
+    headPitch: lerp(p0.headPitch, p1.headPitch, u),
+    headYaw: lerp(p0.headYaw, p1.headYaw, u),
+    squat: lerp(p0.squat, p1.squat, u),
+    stance: lerp(p0.stance, p1.stance, u),
+    rootShiftX: lerp(p0.rootShiftX, p1.rootShiftX, u),
+    hopY,
+    armL: lerpArm(p0.armL, p1.armL, u),
+    armR: lerpArm(p0.armR, p1.armR, u),
+    legL: lerpLeg(p0.legL, p1.legL, u),
+    legR: lerpLeg(p0.legR, p1.legR, u)
+  };
+}
+
+if (typeof THREE === 'undefined') {
+  document.getElementById('errBanner').style.display = 'block';
+} else {
+  init3D();
+}
+
+function init3D() {
+  const canvas = document.getElementById('glCanvas');
+  const shell = document.getElementById('viewportShell');
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: true,
+    preserveDrawingBuffer: true
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+
+  // Telephoto FOV (30 deg) minimizes perspective distortion so rear view matches textbook proportions
+  const cameraMain = new THREE.PerspectiveCamera(30, 1, 0.1, 30);
+  const cameraFront = new THREE.PerspectiveCamera(30, 1, 0.1, 30);
+
+  // Studio 3-point lighting for crisp textbook readability
+  const hemi = new THREE.HemisphereLight(0xFFFFFF, 0xD9E4F0, 0.88);
+  hemi.position.set(0, 4, 0);
+  scene.add(hemi);
+
+  const keyLight = new THREE.DirectionalLight(0xFFFDF8, 0.78);
+  keyLight.position.set(2.2, 4.2, -3.2);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 1024;
+  keyLight.shadow.mapSize.height = 1024;
+  keyLight.shadow.camera.near = 0.5;
+  keyLight.shadow.camera.far = 12;
+  keyLight.shadow.camera.left = -1.6;
+  keyLight.shadow.camera.right = 1.6;
+  keyLight.shadow.camera.top = 2.2;
+  keyLight.shadow.camera.bottom = -0.6;
+  keyLight.shadow.bias = -0.0005;
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0xE0F2FE, 0.52);
+  fillLight.position.set(-2.4, 2.5, 3.4);
+  scene.add(fillLight);
+
+  // Ground shadow catcher + subtle grid
+  const shadowFloor = new THREE.Mesh(
+    new THREE.PlaneGeometry(6, 6),
+    new THREE.ShadowMaterial({ opacity: 0.18 })
+  );
+  shadowFloor.rotation.x = -Math.PI / 2;
+  shadowFloor.receiveShadow = true;
+  scene.add(shadowFloor);
+
+  const gridHelper = new THREE.GridHelper(3.2, 16, 0x94A3B8, 0xCBD5E1);
+  gridHelper.position.y = 0.001;
+  gridHelper.material.transparent = true;
+  gridHelper.material.opacity = 0.45;
+  scene.add(gridHelper);
+
+  // Materials matching exact SGK Kết nối tri thức uniform
+  const mats = {
+    skin: new THREE.MeshStandardMaterial({ color: 0xF5C29B, roughness: 0.65 }),
+    hair: new THREE.MeshStandardMaterial({ color: 0x2F3640, roughness: 0.78 }),
+    hairTie: new THREE.MeshStandardMaterial({ color: 0x1868B7, roughness: 0.5 }),
+    shirtWhite: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.68 }),
+    shirtYellow: new THREE.MeshStandardMaterial({ color: 0xFFEB00, roughness: 0.62 }),
+    collarBlue: new THREE.MeshStandardMaterial({ color: 0x1868B7, roughness: 0.55 }),
+    pantsBlue: new THREE.MeshStandardMaterial({ color: 0x146BC0, roughness: 0.62 }),
+    stripeWhite: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.5 }),
+    sockYellow: new THREE.MeshStandardMaterial({ color: 0xFDE047, roughness: 0.7 }),
+    shoeOrange: new THREE.MeshStandardMaterial({ color: 0xF97316, roughness: 0.52 }),
+    soleWhite: new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.6 }),
+    eyeDark: new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.3 }),
+    mouth: new THREE.MeshStandardMaterial({ color: 0xC26D5E, roughness: 0.5 }),
+    aiJoint: new THREE.MeshBasicMaterial({ color: 0xEA580C, depthTest: false }),
+    aiBone: new THREE.MeshBasicMaterial({ color: 0x0284C7, depthTest: false })
+  };
+
+  const translucentMats = [mats.shirtWhite, mats.shirtYellow, mats.collarBlue, mats.pantsBlue, mats.stripeWhite];
+
+  // Root character group (rotated by rootYaw)
+  const charRoot = new THREE.Group();
+  scene.add(charRoot);
+
+  // Helper: create a smooth tapered limb segment aligned along +Y from y=0 to y=1
+  function makeLimbMesh(rBot, rTop, mat, hasStripe, stripeSide) {
+    const g = new THREE.Group();
+    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, 1, 20), mat);
+    cyl.position.y = 0.5;
+    cyl.castShadow = true;
+    g.add(cyl);
+
+    const cap0 = new THREE.Mesh(new THREE.SphereGeometry(rBot * 0.99, 16, 14), mat);
+    cap0.castShadow = true;
+    g.add(cap0);
+
+    const cap1 = new THREE.Mesh(new THREE.SphereGeometry(rTop * 0.99, 16, 14), mat);
+    cap1.position.y = 1.0;
+    cap1.castShadow = true;
+    g.add(cap1);
+
+    if (hasStripe) {
+      const sGeo = new THREE.BoxGeometry(0.011, 0.96, 0.016);
+      const stripe = new THREE.Mesh(sGeo, mats.stripeWhite);
+      stripe.position.set(stripeSide * ((rBot + rTop) * 0.5 - 0.002), 0.5, 0);
+      g.add(stripe);
+    }
+    return g;
+  }
+
+  // Helper: build sleeve over upper half of upper arm
+  function makeSleeveMesh() {
+    const g = new THREE.Group();
+    const sleeve = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.056, 0.46, 20), mats.shirtWhite);
+    sleeve.position.y = 0.23;
+    sleeve.castShadow = true;
+    g.add(sleeve);
+
+    const shoulderCap = new THREE.Mesh(new THREE.SphereGeometry(0.056, 16, 14), mats.shirtWhite);
+    shoulderCap.castShadow = true;
+    g.add(shoulderCap);
+
+    const trim = new THREE.Mesh(new THREE.CylinderGeometry(0.053, 0.054, 0.045, 20), mats.collarBlue);
+    trim.position.y = 0.46;
+    g.add(trim);
+    return g;
+  }
+
+  // Helper: sculpted 3D hand with thumb so palm orientation is unmistakable
+  function makeHandMesh(leftSign) {
+    const g = new THREE.Group();
+    // Palm (+Y = from wrist toward fingertips; +Z = palm inner surface in local frame)
+    const palm = new THREE.Mesh(new THREE.BoxGeometry(0.058, 0.072, 0.022), mats.skin);
+    palm.position.set(0, 0.04, 0);
+    palm.castShadow = true;
+    g.add(palm);
+
+    // Rounded fingers block
+    const fingers = new THREE.Mesh(new THREE.BoxGeometry(0.054, 0.055, 0.018), mats.skin);
+    fingers.position.set(0, 0.098, 0);
+    fingers.castShadow = true;
+    g.add(fingers);
+
+    // Thumb on medial/inner edge
+    const thumb = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.011, 0.046, 10), mats.skin);
+    thumb.position.set(-leftSign * 0.036, 0.042, 0.008);
+    thumb.rotation.z = leftSign * 0.48;
+    thumb.castShadow = true;
+    g.add(thumb);
+    return g;
+  }
+
+  // Helper: sculpted 3D sneaker + yellow sock (origin at ankle; toe points along +Z, sole at y = -0.06)
+  function makeShoeMesh() {
+    const g = new THREE.Group();
+    // Yellow sock cuff
+    const sock = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.038, 0.065, 16), mats.sockYellow);
+    sock.position.set(0, -0.01, 0);
+    sock.castShadow = true;
+    g.add(sock);
+
+    // Orange upper body
+    const upper = new THREE.Mesh(new THREE.BoxGeometry(0.084, 0.054, 0.195), mats.shoeOrange);
+    upper.position.set(0, -0.034, 0.052);
+    upper.castShadow = true;
+    g.add(upper);
+
+    // Rounded toe cap
+    const toeCap = new THREE.Mesh(new THREE.SphereGeometry(0.042, 16, 12), mats.shoeOrange);
+    toeCap.scale.set(1.0, 0.62, 1.15);
+    toeCap.position.set(0, -0.038, 0.145);
+    toeCap.castShadow = true;
+    g.add(toeCap);
+
+    // Heel counter accent (clearly visible from rear!)
+    const heelBack = new THREE.Mesh(new THREE.SphereGeometry(0.042, 14, 12), mats.shoeOrange);
+    heelBack.scale.set(0.98, 0.72, 0.7);
+    heelBack.position.set(0, -0.034, -0.042);
+    heelBack.castShadow = true;
+    g.add(heelBack);
+
+    // White sole base
+    const sole = new THREE.Mesh(new THREE.BoxGeometry(0.090, 0.018, 0.228), mats.soleWhite);
+    sole.position.set(0, -0.058, 0.054);
+    sole.castShadow = true;
+    g.add(sole);
+
+    // White shoelace stripes on top
+    for (let i = 0; i < 2; i++) {
+      const lace = new THREE.Mesh(new THREE.BoxGeometry(0.046, 0.008, 0.014), mats.soleWhite);
+      lace.position.set(0, -0.005, 0.055 + i * 0.032);
+      g.add(lace);
+    }
+    return g;
+  }
+
+  // Build Pelvis (blue PE shorts/hip cap)
+  const pelvisMesh = new THREE.Group();
+  const pelvisCore = new THREE.Mesh(new THREE.SphereGeometry(0.132, 24, 18), mats.pantsBlue);
+  pelvisCore.scale.set(1.12, 0.72, 0.82);
+  pelvisCore.castShadow = true;
+  pelvisMesh.add(pelvisCore);
+  charRoot.add(pelvisMesh);
+
+  // Build Lower Torso (yellow half of polo shirt) & Upper Torso (white half + blue polo collar)
+  const torsoLowerMesh = new THREE.Group();
+  const yellowBody = new THREE.Mesh(new THREE.CylinderGeometry(0.142, 0.138, 1, 24), mats.shirtYellow);
+  yellowBody.scale.set(1.06, 1, 0.74);
+  yellowBody.position.y = 0.5;
+  yellowBody.castShadow = true;
+  torsoLowerMesh.add(yellowBody);
+  const yellowHipHem = new THREE.Mesh(new THREE.SphereGeometry(0.138, 20, 14), mats.shirtYellow);
+  yellowHipHem.scale.set(1.06, 0.35, 0.74);
+  yellowHipHem.position.y = 0.04;
+  torsoLowerMesh.add(yellowHipHem);
+  charRoot.add(torsoLowerMesh);
+
+  const torsoUpperMesh = new THREE.Group();
+  const whiteBody = new THREE.Mesh(new THREE.CylinderGeometry(0.162, 0.144, 1, 24), mats.shirtWhite);
+  whiteBody.scale.set(1.08, 1, 0.75);
+  whiteBody.position.y = 0.5;
+  whiteBody.castShadow = true;
+  torsoUpperMesh.add(whiteBody);
+
+  // Rounded shoulders cap
+  const shoulderCap = new THREE.Mesh(new THREE.SphereGeometry(0.162, 22, 16), mats.shirtWhite);
+  shoulderCap.scale.set(1.08, 0.38, 0.74);
+  shoulderCap.position.y = 0.96;
+  shoulderCap.castShadow = true;
+  torsoUpperMesh.add(shoulderCap);
+
+  // Royal blue polo collar wrap (visible clearly from BOTH rear and front!)
+  const collarRing = new THREE.Mesh(new THREE.TorusGeometry(0.068, 0.018, 12, 24), mats.collarBlue);
+  collarRing.rotation.x = Math.PI / 2;
+  collarRing.position.set(0, 1.06, 0.005);
+  torsoUpperMesh.add(collarRing);
+
+  const collarBackFlap = new THREE.Mesh(new THREE.BoxGeometry(0.125, 0.045, 0.025), mats.collarBlue);
+  collarBackFlap.position.set(0, 1.01, -0.068);
+  torsoUpperMesh.add(collarBackFlap);
+
+  const collarFrontPlacket = new THREE.Mesh(new THREE.BoxGeometry(0.042, 0.11, 0.024), mats.collarBlue);
+  collarFrontPlacket.position.set(0, 0.93, 0.105);
+  torsoUpperMesh.add(collarFrontPlacket);
+  charRoot.add(torsoUpperMesh);
+
+  // Neck
+  const neckMesh = makeLimbMesh(0.044, 0.042, mats.skin, false, 0);
+  charRoot.add(neckMesh);
+
+  // Sculpted Head + Ponytail matching SGK Grade 6 girl (p.54-56)
+  const headGroup = new THREE.Group();
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR, 26, 22), mats.skin);
+  skull.scale.set(0.92, 1.04, 0.96);
+  skull.castShadow = true;
+  headGroup.add(skull);
+
+  // Ears
+  [-1, 1].forEach(s => {
+    const ear = new THREE.Mesh(new THREE.SphereGeometry(0.021, 12, 10), mats.skin);
+    ear.scale.set(0.55, 1.1, 0.8);
+    ear.position.set(s * 0.096, -0.005, -0.005);
+    headGroup.add(ear);
+  });
+
+  // Hair cap covering top & back of head cleanly
+  const hairCap = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR * 1.035, 26, 22, 0, Math.PI * 2, 0, Math.PI * 0.62), mats.hair);
+  hairCap.scale.set(0.93, 1.05, 0.98);
+  hairCap.rotation.x = -0.34;
+  hairCap.castShadow = true;
+  headGroup.add(hairCap);
+
+  // Hair back fullness
+  const hairBack = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR * 0.96, 20, 16), mats.hair);
+  hairBack.scale.set(0.90, 0.95, 0.72);
+  hairBack.position.set(0, -0.008, -0.036);
+  hairBack.castShadow = true;
+  headGroup.add(hairBack);
+
+  // Ponytail hair tie + sculpted ponytail at back of head (matches SGK p.54-56!)
+  const hairTie = new THREE.Mesh(new THREE.TorusGeometry(0.022, 0.007, 10, 18), mats.hairTie);
+  hairTie.position.set(0, -0.018, -0.102);
+  headGroup.add(hairTie);
+
+  const pony = new THREE.Group();
+  pony.position.set(0, -0.022, -0.108);
+  const ponyUpper = new THREE.Mesh(new THREE.SphereGeometry(0.034, 14, 12), mats.hair);
+  ponyUpper.scale.set(0.9, 1.25, 0.85);
+  ponyUpper.position.set(0, -0.024, -0.015);
+  ponyUpper.castShadow = true;
+  pony.add(ponyUpper);
+  const ponyTail = new THREE.Mesh(new THREE.ConeGeometry(0.032, 0.115, 14), mats.hair);
+  ponyTail.rotation.x = Math.PI + 0.16;
+  ponyTail.position.set(0, -0.088, -0.026);
+  ponyTail.castShadow = true;
+  pony.add(ponyTail);
+  headGroup.add(pony);
+
+  // Subtle front face features (for Front & Side SGK cross-check!)
+  [-1, 1].forEach(s => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.010, 10, 10), mats.eyeDark);
+    eye.position.set(s * 0.034, 0.008, 0.094);
+    headGroup.add(eye);
+  });
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.011, 10, 10), mats.skin);
+  nose.scale.set(0.8, 1.1, 1.2);
+  nose.position.set(0, -0.012, 0.102);
+  headGroup.add(nose);
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.006, 0.008), mats.mouth);
+  mouth.position.set(0, -0.044, 0.095);
+  headGroup.add(mouth);
+
+  charRoot.add(headGroup);
+
+  // Build Limbs (Left = +1, Right = -1)
+  const parts = {
+    thighL: makeLimbMesh(0.068, 0.054, mats.pantsBlue, true, 1),
+    shinL:  makeLimbMesh(0.052, 0.042, mats.pantsBlue, true, 1),
+    shoeL:  makeShoeMesh(),
+    thighR: makeLimbMesh(0.068, 0.054, mats.pantsBlue, true, -1),
+    shinR:  makeLimbMesh(0.052, 0.042, mats.pantsBlue, true, -1),
+    shoeR:  makeShoeMesh(),
+    upperArmL: makeLimbMesh(0.042, 0.036, mats.skin, false, 0),
+    sleeveL:   makeSleeveMesh(),
+    foreArmL:  makeLimbMesh(0.035, 0.028, mats.skin, false, 0),
+    handL:     makeHandMesh(1),
+    upperArmR: makeLimbMesh(0.042, 0.036, mats.skin, false, 0),
+    sleeveR:   makeSleeveMesh(),
+    foreArmR:  makeLimbMesh(0.035, 0.028, mats.skin, false, 0),
+    handR:     makeHandMesh(-1)
+  };
+  Object.values(parts).forEach(m => charRoot.add(m));
+
+  // AI 3D Skeleton Overlay (12 joints + 12 bones)
+  const aiGroup = new THREE.Group();
+  const aiJointMeshes = [];
+  for (let i = 0; i < 12; i++) {
+    const s = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 10), mats.aiJoint);
+    s.renderOrder = 999;
+    aiGroup.add(s);
+    aiJointMeshes.push(s);
+  }
+  const aiBoneMeshes = [];
+  for (let i = 0; i < 12; i++) {
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 1, 8), mats.aiBone);
+    b.renderOrder = 998;
+    aiGroup.add(b);
+    aiBoneMeshes.push(b);
+  }
+  charRoot.add(aiGroup);
+
+  // 3D Vector Math helpers
+  const UP_Y = new THREE.Vector3(0, 1, 0);
+  function alignLimb(mesh, pStart, pEnd, extraTwistRad) {
+    const dir = new THREE.Vector3().subVectors(pEnd, pStart);
+    const len = Math.max(dir.length(), 1e-4);
+    mesh.position.copy(pStart);
+    mesh.scale.set(1, len, 1);
+    const q = new THREE.Quaternion().setFromUnitVectors(UP_Y, dir.clone().normalize());
+    if (extraTwistRad) {
+      const qTwist = new THREE.Quaternion().setFromAxisAngle(UP_Y, extraTwistRad);
+      q.multiply(qTwist);
+    }
+    mesh.quaternion.copy(q);
+  }
+
+  function solveTwoBoneIK(root, target, l1, l2, hintDir) {
+    const diff = new THREE.Vector3().subVectors(target, root);
+    const dist = clamp(diff.length(), Math.abs(l1 - l2) + 0.01, l1 + l2 - 0.002);
+    const dir = diff.clone().normalize();
+    const cosA = clamp((l1 * l1 + dist * dist - l2 * l2) / (2 * l1 * dist), -1, 1);
+    const sinA = Math.sqrt(Math.max(0, 1 - cosA * cosA));
+    const perp = hintDir.clone().addScaledVector(dir, -hintDir.dot(dir));
+    if (perp.lengthSq() < 1e-6) perp.set(0, 0, 1);
+    perp.normalize();
+    return root.clone().addScaledVector(dir, l1 * cosA).addScaledVector(perp, l1 * sinA);
+  }
+
+  function jointAngleDeg(a, b, c) {
+    const v1 = new THREE.Vector3().subVectors(a, b).normalize();
+    const v2 = new THREE.Vector3().subVectors(c, b).normalize();
+    return Math.round(rad2deg(Math.acos(clamp(v1.dot(v2), -1, 1))));
+  }
+
+  // Apply Pose to 3D Rig & return telemetry
+  function applyPose3D(pose) {
+    const R = RIG;
+    const bendRad = deg2rad(pose.torsoBend);
+    const sideRad = deg2rad(pose.torsoSide);
+    const squat = clamp(pose.squat, 0, 1);
+    const stance = pose.stance;
+    const shiftX = pose.rootShiftX;
+    const hopY = pose.hopY || 0;
+
+    charRoot.rotation.y = deg2rad(pose.rootYaw);
+
+    const fold = clamp(pose.torsoBend / 117, 0, 1) * (1 - squat);
+    const hipY = lerp(R.pelvisStandY, R.pelvisSquatY, squat) - fold * 0.025 - Math.abs(sideRad) * 0.018 + hopY;
+    const hipZ = -0.11 * fold - 0.14 * squat;
+    const pelvis = new THREE.Vector3(shiftX, hipY, hipZ);
+
+    // Orthonormal torso basis: +X = left, +Y = up, +Z = front
+    const upSide = new THREE.Vector3(Math.sin(sideRad), Math.cos(sideRad), 0);
+    const torsoUp = new THREE.Vector3(
+      upSide.x * Math.cos(bendRad * 0.35),
+      upSide.y * Math.cos(bendRad),
+      Math.sin(bendRad)
+    ).normalize();
+    const torsoLeft = new THREE.Vector3(
+      Math.cos(sideRad),
+      -Math.sin(sideRad) * Math.cos(bendRad * 0.6),
+      0
+    ).normalize();
+    const torsoFwd = new THREE.Vector3().crossVectors(torsoLeft, torsoUp).normalize();
+
+    const waist = pelvis.clone().addScaledVector(torsoUp, R.torsoLower);
+    const chest = waist.clone().addScaledVector(torsoUp, R.torsoUpper);
+    const shoulderL = chest.clone().addScaledVector(torsoLeft, R.shoulderHalfW);
+    const shoulderR = chest.clone().addScaledVector(torsoLeft, -R.shoulderHalfW);
+    const hipL = pelvis.clone().add(new THREE.Vector3(R.hipHalfW, -0.02, 0));
+    const hipR = pelvis.clone().add(new THREE.Vector3(-R.hipHalfW, -0.02, 0));
+
+    // Align Pelvis & Torso halves
+    pelvisMesh.position.copy(pelvis);
+    const torsoMat4 = new THREE.Matrix4().makeBasis(torsoLeft, torsoUp, torsoFwd);
+    const torsoQuat = new THREE.Quaternion().setFromRotationMatrix(torsoMat4);
+
+    torsoLowerMesh.position.copy(pelvis);
+    torsoLowerMesh.quaternion.copy(torsoQuat);
+    torsoLowerMesh.scale.set(1, R.torsoLower, 1);
+
+    torsoUpperMesh.position.copy(waist);
+    torsoUpperMesh.quaternion.copy(torsoQuat);
+    torsoUpperMesh.scale.set(1, R.torsoUpper, 1);
+
+    // Neck & Head
+    const neckBase = chest.clone().addScaledVector(torsoUp, 0.015);
+    const headPitchRad = deg2rad(pose.headPitch);
+    const headYawRad = deg2rad(pose.headYaw);
+
+    // Head orientation starts from torso frame, pitched & yawed cleanly
+    const headLocalQuat = new THREE.Quaternion()
+      .setFromEuler(new THREE.Euler(-headPitchRad, headYawRad, 0, 'YXZ'));
+    const headQuat = torsoQuat.clone().multiply(headLocalQuat);
+    const headUp = UP_Y.clone().applyQuaternion(headQuat);
+    const neckTop = neckBase.clone().addScaledVector(torsoUp, R.neckLen);
+    const headCenter = neckTop.clone().addScaledVector(headUp, R.headR * 0.88);
+
+    alignLimb(neckMesh, neckBase, neckTop, 0);
+    headGroup.position.copy(headCenter);
+    headGroup.quaternion.copy(headQuat);
+
+    // Legs (leftSign = +1 Left, -1 Right)
+    function updateLeg(hipPt, spec, leftSign, thighM, shinM, shoeM) {
+      const out = clamp(spec.out, 0, 1);
+      const tiptoe = clamp(spec.tiptoe, 0, 1);
+      const kb = clamp(Math.max(spec.kneeBend, squat * (1 - out)), 0, 1);
+
+      const baseAnk = new THREE.Vector3(
+        shiftX + leftSign * stance,
+        0.062 + tiptoe * 0.052 + hopY,
+        lerp(0, -0.075, kb)
+      );
+      const outAnk = new THREE.Vector3(
+        shiftX + leftSign * 0.77,
+        0.058 + hopY,
+        0.035
+      );
+      const ankle = baseAnk.clone().lerp(outAnk, out);
+
+      let knee;
+      if (out > 0.5) {
+        const straightMid = hipPt.clone().lerp(ankle, 0.51);
+        const ikK = solveTwoBoneIK(hipPt, ankle, R.thighLen, R.shinLen, new THREE.Vector3(leftSign * 0.2, 0.1, 1));
+        knee = ikK.lerp(straightMid, smoothstep((out - 0.35) / 0.45));
+      } else if (kb > 0.05) {
+        knee = solveTwoBoneIK(hipPt, ankle, R.thighLen, R.shinLen, new THREE.Vector3(leftSign * 0.32, 0.16, 1));
+      } else {
+        const mid = hipPt.clone().lerp(ankle, 0.51);
+        knee = mid.add(new THREE.Vector3(0, 0, 0.012));
+      }
+
+      alignLimb(thighM, hipPt, knee, 0);
+      alignLimb(shinM, knee, ankle, 0);
+
+      // Shoe placement & pitch/yaw
+      shoeM.position.copy(ankle);
+      if (out > 0.4) {
+        // Extended sideways leg: heel on ground, foot pointed sideways outward
+        const qFlat = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, leftSign * 0.08, 0));
+        const qSide = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.18, leftSign * Math.PI * 0.48, 0, 'YXZ'));
+        shoeM.quaternion.copy(qFlat).slerp(qSide, smoothstep((out - 0.25) / 0.55));
+      } else {
+        // Standing or tiptoe (heel lifted, toe stays on floor y=0!)
+        const pitch = tiptoe * 0.58;
+        shoeM.quaternion.setFromEuler(new THREE.Euler(pitch, leftSign * 0.08, 0, 'YXZ'));
+        if (tiptoe > 0.05) {
+          shoeM.position.y -= tiptoe * 0.008;
+        }
+      }
+      return { hip: hipPt, knee, ankle };
+    }
+
+    const lgL = updateLeg(hipL, pose.legL, 1, parts.thighL, parts.shinL, parts.shoeL);
+    const lgR = updateLeg(hipR, pose.legR, -1, parts.thighR, parts.shinR, parts.shoeR);
+
+    // Arms (leftSign = +1 Left, -1 Right)
+    function updateArm(shPt, spec, leftSign, upM, slvM, foreM, handM) {
+      const outRad = deg2rad(spec.out);
+      const fwdRad = deg2rad(spec.fwd);
+      const onHip = clamp(spec.onHip, 0, 1);
+      const plant = clamp(spec.plant, 0, 1);
+
+      // FK arm direction in torso frame
+      const dirFK = new THREE.Vector3()
+        .addScaledVector(torsoUp, -Math.cos(outRad) * Math.cos(fwdRad))
+        .addScaledVector(torsoLeft, leftSign * Math.sin(outRad) * Math.cos(fwdRad))
+        .addScaledVector(torsoFwd, Math.sin(fwdRad))
+        .normalize();
+
+      const elFK = shPt.clone().addScaledVector(dirFK, R.upperArmLen);
+      const wrFK = elFK.clone().addScaledVector(dirFK, R.forearmLen);
+
+      // On-hip target (Beats 13 & 15)
+      const hipTgt = waist.clone()
+        .addScaledVector(torsoLeft, leftSign * (R.waistHalfW + 0.025))
+        .addScaledVector(torsoFwd, 0.015);
+      const elHip = shPt.clone().lerp(hipTgt, 0.48).addScaledVector(torsoLeft, leftSign * 0.175);
+
+      // Ground / toe-touch plant target (Beat 18 & Beats 19-23)
+      const isCrouch = squat > 0.35;
+      let wrPlant;
+      if (isCrouch) {
+        const spread = (pose.legL.out > 0.4 || pose.legR.out > 0.4) ? 0.135 : 0.205;
+        wrPlant = new THREE.Vector3(shiftX + leftSign * spread, 0.030 + hopY * 0.4, 0.21);
+      } else {
+        wrPlant = new THREE.Vector3(shiftX + leftSign * (stance + 0.01), 0.125, 0.185);
+      }
+      const elPlant = solveTwoBoneIK(
+        shPt, wrPlant, R.upperArmLen, R.forearmLen,
+        new THREE.Vector3(leftSign * 0.3, 0.1, -0.8)
+      );
+
+      let elbow = elFK.clone().lerp(elHip, onHip);
+      let wrist = wrFK.clone().lerp(hipTgt, onHip);
+      elbow.lerp(elPlant, plant);
+      wrist.lerp(wrPlant, plant);
+
+      alignLimb(upM, shPt, elbow, 0);
+      alignLimb(slvM, shPt, elbow, 0);
+      alignLimb(foreM, elbow, wrist, 0);
+
+      // Hand orientation
+      handM.position.copy(wrist);
+      if (plant > 0.6 && isCrouch) {
+        // Flat palm planted on floor facing forward (+Z)
+        handM.quaternion.setFromEuler(new THREE.Euler(Math.PI / 2, 0, 0));
+        handM.position.y = 0.016 + hopY * 0.4;
+      } else if (onHip > 0.6) {
+        // Hand resting inward on waist/hip
+        const toWaist = waist.clone().sub(wrist).normalize();
+        handM.quaternion.setFromUnitVectors(UP_Y, toWaist);
+      } else {
+        const armDir = wrist.clone().sub(elbow).normalize();
+        const qBase = new THREE.Quaternion().setFromUnitVectors(UP_Y, armDir);
+        let twist = 0;
+        if (spec.palm === 'up') twist = leftSign * Math.PI * 0.5;
+        else if (spec.palm === 'down') twist = -leftSign * Math.PI * 0.5;
+        else if (spec.palm === 'in') twist = leftSign > 0 ? Math.PI * 0.5 : -Math.PI * 0.5;
+        const qTwist = new THREE.Quaternion().setFromAxisAngle(UP_Y, twist);
+        handM.quaternion.copy(qBase).multiply(qTwist);
+      }
+
+      return { shoulder: shPt, elbow, wrist };
+    }
+
+    const arL = updateArm(shoulderL, pose.armL, 1, parts.upperArmL, parts.sleeveL, parts.foreArmL, parts.handL);
+    const arR = updateArm(shoulderR, pose.armR, -1, parts.upperArmR, parts.sleeveR, parts.foreArmR, parts.handR);
+
+    // Update AI Skeleton 3D overlay
+    aiGroup.visible = state.showSkeleton;
+    if (state.showSkeleton) {
+      const jList = [
+        arL.shoulder, arR.shoulder, arL.elbow, arR.elbow, arL.wrist, arR.wrist,
+        lgL.hip, lgR.hip, lgL.knee, lgR.knee, lgL.ankle, lgR.ankle
+      ];
+      const bPairs = [
+        [0,1],[0,2],[2,4],[1,3],[3,5],[0,6],[1,7],[6,7],[6,8],[8,10],[7,9],[9,11]
+      ];
+      jList.forEach((p, i) => aiJointMeshes[i].position.copy(p));
+      bPairs.forEach(([a, b], i) => alignLimb(aiBoneMeshes[i], jList[a], jList[b], 0));
+    }
+
+    // Real-time 3D angle telemetry
+    return {
+      shL: jointAngleDeg(lgL.hip, arL.shoulder, arL.elbow),
+      shR: jointAngleDeg(lgR.hip, arR.shoulder, arR.elbow),
+      elL: jointAngleDeg(arL.shoulder, arL.elbow, arL.wrist),
+      elR: jointAngleDeg(arR.shoulder, arR.elbow, arR.wrist),
+      knL: jointAngleDeg(lgL.hip, lgL.knee, lgL.ankle),
+      knR: jointAngleDeg(lgR.hip, lgR.knee, lgR.ankle),
+      bend: Math.round(pose.torsoBend),
+      side: Math.round(pose.torsoSide)
+    };
+  }
+
+  function setXray(enabled) {
+    translucentMats.forEach(m => {
+      m.transparent = enabled;
+      m.opacity = enabled ? 0.34 : 1.0;
+      m.depthWrite = !enabled;
+      m.needsUpdate = true;
+    });
+  }
+
+  function updateCameras(w, h) {
+    const o = state.orbit;
+    const x = o.radius * Math.sin(o.theta) * Math.cos(o.phi);
+    const y = o.targetY + o.radius * Math.sin(o.phi);
+    const z = o.radius * Math.cos(o.theta) * Math.cos(o.phi);
+    cameraMain.position.set(x, y, z);
+    cameraMain.lookAt(0, o.targetY, 0);
+
+    // Front verification camera locked directly in front (+Z)
+    cameraFront.position.set(0, 0.86 + 3.35 * Math.sin(0.08), 3.35 * Math.cos(0.08));
+    cameraFront.lookAt(0, 0.86, 0);
+
+    if (state.splitMode) {
+      const halfW = w * 0.5;
+      cameraFront.aspect = halfW / h;
+      cameraFront.updateProjectionMatrix();
+      cameraMain.aspect = halfW / h;
+      cameraMain.updateProjectionMatrix();
+    } else {
+      cameraMain.aspect = w / h;
+      cameraMain.updateProjectionMatrix();
+    }
+  }
+
+  function renderScene() {
+    const rect = shell.getBoundingClientRect();
+    const w = Math.max(100, Math.floor(rect.width));
+    const h = Math.max(100, Math.floor(rect.height));
+    if (canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())) {
+      renderer.setSize(w, h, false);
+    }
+    updateCameras(w, h);
+
+    if (state.splitMode) {
+      const halfW = Math.floor(w / 2);
+      renderer.setScissorTest(true);
+
+      // Left half: Front view (compare against SGK!)
+      renderer.setViewport(0, 0, halfW, h);
+      renderer.setScissor(0, 0, halfW, h);
+      renderer.render(scene, cameraFront);
+
+      // Right half: Rear view (exact export view!)
+      cameraMain.position.set(0, 0.86 + 3.35 * Math.sin(0.08), -3.35 * Math.cos(0.08));
+      cameraMain.lookAt(0, 0.86, 0);
+      renderer.setViewport(halfW, 0, w - halfW, h);
+      renderer.setScissor(halfW, 0, w - halfW, h);
+      renderer.render(scene, cameraMain);
+
+      renderer.setScissorTest(false);
+    } else {
+      renderer.setScissorTest(false);
+      renderer.setViewport(0, 0, w, h);
+      renderer.render(scene, cameraMain);
+    }
+  }
+
+  // Camera presets
+  const CAM_PRESETS = {
+    rear:    { theta: Math.PI, phi: 0.08, radius: 3.35, label: 'GÓC NHÌN PHÍA SAU • 180°', isRear: true },
+    front:   { theta: 0,       phi: 0.08, radius: 3.35, label: 'GÓC NHÌN CHÍNH DIỆN (SO SGK)', isRear: false },
+    left:    { theta: Math.PI * 0.5,  phi: 0.08, radius: 3.35, label: 'GÓC NHÌN NGHIÊNG TRÁI • 90°', isRear: false },
+    right:   { theta: -Math.PI * 0.5, phi: 0.08, radius: 3.35, label: 'GÓC NHÌN NGHIÊNG PHẢI • 90°', isRear: false },
+    isoRear: { theta: Math.PI * 0.78, phi: 0.24, radius: 3.50, label: 'CHÉO 3/4 PHÍA SAU', isRear: true }
+  };
+
+  function applyCamPreset(name) {
+    state.camPreset = name;
+    state.splitMode = false;
+    const p = CAM_PRESETS[name];
+    state.orbit.theta = p.theta;
+    state.orbit.phi = p.phi;
+    state.orbit.radius = p.radius;
+    document.querySelectorAll('#camBtns .cam-btn').forEach(b => b.classList.toggle('active', b.dataset.cam === name));
+    document.getElementById('btnSplit').classList.remove('active');
+    document.getElementById('splitDivider').classList.remove('show');
+    document.getElementById('hudRight').style.display = 'none';
+    const hl = document.getElementById('hudLeft');
+    hl.textContent = p.label;
+    hl.className = 'hud-pill ' + (p.isRear ? 'rear' : 'front');
+    document.getElementById('tagLeft').style.visibility = p.isRear ? 'visible' : 'hidden';
+    document.getElementById('tagRight').style.visibility = p.isRear ? 'visible' : 'hidden';
+    renderScene();
+  }
+
+  // Pointer Orbit Drag + Wheel Zoom
+  let dragging = false, lastX = 0, lastY = 0;
+  canvas.addEventListener('pointerdown', e => {
+    if (state.splitMode) return;
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    state.orbit.theta -= dx * 0.008;
+    state.orbit.phi = clamp(state.orbit.phi + dy * 0.006, -0.15, 1.15);
+    document.getElementById('hudLeft').textContent = 'GÓC QUAY TỰ DO 360°';
+    renderScene();
+  });
+  canvas.addEventListener('pointerup', () => { dragging = false; });
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    state.orbit.radius = clamp(state.orbit.radius + e.deltaY * 0.0022, 1.8, 5.5);
+    renderScene();
+  }, { passive: false });
+
+  // UI Wiring
+  const beatsGrid = document.getElementById('beatsGrid');
+  POSES.forEach((p, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'beat-btn';
+    btn.textContent = p.code.replace('Nhịp ', 'N');
+    btn.title = p.code + ' — ' + p.shortTitle;
+    btn.addEventListener('click', () => {
+      state.playing = false;
+      state.t = idx;
+      syncPlayBtn();
+      refreshAll();
+    });
+    beatsGrid.appendChild(btn);
+  });
+
+  const scrubber = document.getElementById('scrubber');
+  scrubber.max = String(POSES.length);
+
+  function syncPlayBtn() {
+    document.getElementById('btnPlay').textContent = state.playing ? '⏸ Tạm dừng' : '▶ Chạy liền mạch';
+  }
+
+  function syncTunerSliders(idx) {
+    const p = getPoseBase(idx);
+    document.getElementById('slYaw').value = p.rootYaw;
+    document.getElementById('vYaw').textContent = p.rootYaw + '°';
+    document.getElementById('slBend').value = p.torsoBend;
+    document.getElementById('vBend').textContent = p.torsoBend + '°';
+    document.getElementById('slSide').value = p.torsoSide;
+    document.getElementById('vSide').textContent = p.torsoSide + '°';
+    document.getElementById('slHead').value = p.headYaw;
+    document.getElementById('vHead').textContent = p.headYaw + '°';
+  }
+
+  function refreshAll() {
+    const pose = samplePose(state.t);
+    const tel = applyPose3D(pose);
+    renderScene();
+
+    document.getElementById('poseCode').textContent = pose.code;
+    document.getElementById('poseTitle').textContent = pose.shortTitle;
+    document.getElementById('poseCaption').textContent = pose.caption;
+    document.getElementById('angleRef').textContent = pose.angleRef;
+    document.getElementById('rearNote').textContent = pose.rearNote;
+
+    document.getElementById('telShoulder').textContent = `${tel.shL}° / ${tel.shR}°`;
+    document.getElementById('telElbow').textContent = `${tel.elL}° / ${tel.elR}°`;
+    document.getElementById('telKnee').textContent = `${tel.knL}° / ${tel.knR}°`;
+    document.getElementById('telTorso').textContent = `${tel.bend}° / ${tel.side}°`;
+
+    scrubber.value = state.t.toFixed(2);
+    document.getElementById('timeLabel').textContent = `${state.t.toFixed(1)} / ${POSES.length}.0`;
+    beatsGrid.querySelectorAll('.beat-btn').forEach((b, i) => b.classList.toggle('active', i === pose.nearestIdx));
+    syncTunerSliders(pose.nearestIdx);
+  }
+
+  document.querySelectorAll('#camBtns .cam-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyCamPreset(btn.dataset.cam));
+  });
+
+  document.getElementById('btnSplit').addEventListener('click', () => {
+    state.splitMode = !state.splitMode;
+    document.getElementById('btnSplit').classList.toggle('active', state.splitMode);
+    document.getElementById('splitDivider').classList.toggle('show', state.splitMode);
+    document.getElementById('hudRight').style.display = state.splitMode ? 'inline-block' : 'none';
+    if (state.splitMode) {
+      document.querySelectorAll('#camBtns .cam-btn').forEach(b => b.classList.remove('active'));
+      const hl = document.getElementById('hudLeft');
+      hl.textContent = 'CHÍNH DIỆN (SO ẢNH SGK)';
+      hl.className = 'hud-pill front';
+      document.getElementById('tagLeft').style.visibility = 'hidden';
+      document.getElementById('tagRight').style.visibility = 'hidden';
+    } else {
+      applyCamPreset('rear');
+    }
+    renderScene();
+  });
+
+  document.getElementById('btnPlay').addEventListener('click', () => {
+    state.playing = !state.playing;
+    state.lastTs = null;
+    syncPlayBtn();
+  });
+  document.getElementById('btnPrev').addEventListener('click', () => {
+    state.playing = false; syncPlayBtn();
+    const cur = samplePose(state.t).nearestIdx;
+    state.t = (cur - 1 + POSES.length) % POSES.length;
+    refreshAll();
+  });
+  document.getElementById('btnNext').addEventListener('click', () => {
+    state.playing = false; syncPlayBtn();
+    const cur = samplePose(state.t).nearestIdx;
+    state.t = (cur + 1) % POSES.length;
+    refreshAll();
+  });
+  const speeds = [0.5, 1, 1.5];
+  document.getElementById('btnSpeed').addEventListener('click', () => {
+    state.speed = speeds[(speeds.indexOf(state.speed) + 1) % speeds.length];
+    document.getElementById('btnSpeed').textContent = state.speed + 'x';
+  });
+  scrubber.addEventListener('input', () => {
+    state.playing = false; syncPlayBtn();
+    state.t = parseFloat(scrubber.value) % POSES.length;
+    refreshAll();
+  });
+
+  document.getElementById('chkSkeleton').addEventListener('change', e => {
+    state.showSkeleton = e.target.checked;
+    refreshAll();
+  });
+  document.getElementById('chkXray').addEventListener('change', e => {
+    state.xray = e.target.checked;
+    setXray(state.xray);
+    renderScene();
+  });
+  document.getElementById('chkGrid').addEventListener('change', e => {
+    state.showGrid = e.target.checked;
+    gridHelper.visible = state.showGrid;
+    renderScene();
+  });
+  document.getElementById('chkTransparent').addEventListener('change', e => {
+    state.transparentExport = e.target.checked;
+  });
+
+  // Fine-tuner bindings
+  function bindTuner(id, key) {
+    document.getElementById(id).addEventListener('input', e => {
+      state.playing = false; syncPlayBtn();
+      const idx = samplePose(state.t).nearestIdx;
+      state.t = idx;
+      if (!state.overrides[idx]) state.overrides[idx] = {};
+      state.overrides[idx][key] = parseFloat(e.target.value);
+      refreshAll();
+    });
+  }
+  bindTuner('slYaw', 'rootYaw');
+  bindTuner('slBend', 'torsoBend');
+  bindTuner('slSide', 'torsoSide');
+  bindTuner('slHead', 'headYaw');
+  document.getElementById('btnResetTune').addEventListener('click', () => {
+    const idx = samplePose(state.t).nearestIdx;
+    delete state.overrides[idx];
+    refreshAll();
+  });
+
+  // Dedicated Offscreen High-Res Rear-View Renderer (Locked 180° Rear View, 900x1040 crisp!)
+  function renderLockedRearDataURL(poseIdx, width, height, transparentBg) {
+    const offRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    offRenderer.setSize(width, height, false);
+    offRenderer.shadowMap.enabled = true;
+    offRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    offRenderer.outputEncoding = THREE.sRGBEncoding;
+
+    const prevGrid = gridHelper.visible;
+    const prevBg = scene.background;
+    gridHelper.visible = !transparentBg && state.showGrid;
+    scene.background = transparentBg ? null : new THREE.Color(0xF8FAFC);
+
+    const camExp = new THREE.PerspectiveCamera(28, width / height, 0.1, 30);
+    camExp.position.set(0, 0.88 + 3.45 * Math.sin(0.06), -3.45 * Math.cos(0.06));
+    camExp.lookAt(0, 0.84, 0);
+
+    const pose = samplePose(poseIdx);
+    applyPose3D(pose);
+    offRenderer.render(scene, camExp);
+    const dataUrl = offRenderer.domElement.toDataURL('image/png');
+
+    // Restore live state
+    gridHelper.visible = prevGrid;
+    scene.background = prevBg;
+    offRenderer.dispose();
+    applyPose3D(samplePose(state.t));
+    renderScene();
+    return dataUrl;
+  }
+
+  function triggerDownload(filename, dataUrl) {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  const statusMsg = document.getElementById('statusMsg');
+
+  document.getElementById('btnExportOne').addEventListener('click', () => {
+    const idx = samplePose(state.t).nearestIdx;
+    const p = POSES[idx];
+    const slug = p.code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const url = renderLockedRearDataURL(idx, 900, 1040, state.transparentExport);
+    triggerDownload(`g6-td-12-23-sau-${slug}.png`, url);
+    statusMsg.textContent = `✓ Đã xuất ảnh phía sau chuẩn 180° cho ${p.code} (900×1040 PNG).`;
+  });
+
+  document.getElementById('btnExportSheet').addEventListener('click', async () => {
+    statusMsg.textContent = 'Đang kết xuất 13 tư thế phía sau từ mô hình 3D...';
+    const cols = 4, rows = Math.ceil(POSES.length / cols);
+    const cellW = 480, cellH = 580;
+    const out = document.createElement('canvas');
+    out.width = cols * cellW;
+    out.height = rows * cellH;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#F8FAFC';
+    ctx.fillRect(0, 0, out.width, out.height);
+
+    for (let i = 0; i < POSES.length; i++) {
+      const c = i % cols;
+      const r = Math.floor(i / cols);
+      const x0 = c * cellW, y0 = r * cellH;
+
+      // Card background
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#CBD5E1';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(x0 + 12, y0 + 12, cellW - 24, cellH - 24, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      const dataUrl = renderLockedRearDataURL(i, 440, 480, true);
+      await new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, x0 + 20, y0 + 20, 440, 480);
+          resolve();
+        };
+        img.src = dataUrl;
+      });
+
+      // Labels
+      ctx.fillStyle = '#0284C7';
+      ctx.font = 'bold 20px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${POSES[i].code} — ${POSES[i].shortTitle}`, x0 + cellW / 2, y0 + 528);
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = '600 14px system-ui, sans-serif';
+      ctx.fillText('◀ TRÁI   •   Góc nhìn từ phía sau   •   PHẢI ▶', x0 + cellW / 2, y0 + 552);
+    }
+
+    triggerDownload('g6-td-12-23-bang-13-tu-the-phia-sau-3d.png', out.toDataURL('image/png'));
+    statusMsg.textContent = '✓ Đã tải xong bảng tổng hợp 13 tư thế góc nhìn phía sau (PNG siêu nét).';
+  });
+
+  document.getElementById('btnExportAllZip').addEventListener('click', async () => {
+    statusMsg.textContent = 'Đang tải lần lượt 13 file PNG góc nhìn phía sau...';
+    for (let i = 0; i < POSES.length; i++) {
+      const slug = POSES[i].code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const num = String(i).padStart(2, '0');
+      const url = renderLockedRearDataURL(i, 900, 1040, state.transparentExport);
+      triggerDownload(`g6-td-12-23-sau-${num}-${slug}.png`, url);
+      await new Promise(r => setTimeout(r, 260));
+    }
+    statusMsg.textContent = '✓ Hoàn tất xuất 13 ảnh PNG riêng lẻ (g6-td-12-23-sau-00 đến 12).';
+  });
+
+  // Animation loop
+  function tick(ts) {
+    if (state.playing) {
+      if (state.lastTs !== null) {
+        const dt = (ts - state.lastTs) / 1000;
+        state.t = (state.t + dt * 0.62 * state.speed) % POSES.length;
+        refreshAll();
+      }
+      state.lastTs = ts;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', renderScene);
+  applyCamPreset('rear');
+  refreshAll();
+  requestAnimationFrame(tick);
+}
+</script>
+<script src="../js/fig3d-bridge.js"></script>
+</body>
+</html>

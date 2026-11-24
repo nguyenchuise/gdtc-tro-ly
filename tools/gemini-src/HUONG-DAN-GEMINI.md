@@ -78,3 +78,23 @@ Trả về 1 tệp HTML hoàn chỉnh, mở bằng trình duyệt là chạy đ�
 Số tư thế và thứ tự phải giống bảng, vì phần chấm điểm ở mục **4. Tự tập** đi theo đúng các nhịp này.
 Lớp 8 và 9 có nhiều động tác: điền tên động tác vào trường `group` của mỗi tư thế.
 Bài dài (22–32 tư thế) có thể nhờ Gemini làm từng động tác rồi ghép, miễn tệp cuối cùng đủ số tư thế.
+
+## Mô hình 3D (Three.js) — cách đang dùng cho các bài thể dục
+
+Từ bản 0.22, thầy cô gửi **tệp mô hình 3D** dựng bằng Gemini, giống 5 tệp đã ghép:
+`g6-tay-dua-cao.3d.html`, `g6-the-duc-nhip-24-30.3d.html`, `g7-td-1-10.3d.html`, `g9-nhip-dieu-1.3d.html`, `g9-nhip-dieu-2.3d.html`
+(các tệp gốc nằm ngay thư mục này). Ghép bằng:
+
+```bash
+node tools/import-3d-figure.mjs <mã-bài> <tệp-3d.html>
+```
+
+Tệp mới cần **giữ đúng khung** của các tệp mẫu để trang điều khiển được và chạy cùng nhịp với ảnh SGK:
+
+- Biến toàn cục `const state = { t, playing, speed, … }` và hàm `samplePose(…)` trả về tư thế có `nearestIdx`.
+- Danh sách tư thế `const POSES = [...]`. Bài có nhiều động tác (lớp 8, 9) thì dùng `const EXERCISES = [{ tabLabel, poses: [...] }, …]` với các tab `#exTabs`.
+- Mỗi tư thế có `code` ghi **"TTCB"** hoặc **"Nhịp n"**, đúng như trong SGK. Tên động tác trong `tabLabel` giống tên trong SGK, ví dụ "a) Đặt gót", "b1) Bước đuổi (Lần 1)". Trang ghép từng nhịp với hình trong sách theo các tên này.
+- Có các phần tử `#btnPlay`, `#btnSpeed`, `#beatsGrid` (nút từng nhịp), `#chkSkeleton` (khớp AI), `#viewportShell` và canvas `#glCanvas`, cùng nút camera `data-cam="rear"`.
+- Tải Three.js từ `https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js`. Công cụ ghép tự đổi sang bản lưu sẵn trong trang.
+
+Bài còn chờ tệp 3D: `g7-td-11-20`, `g7-td-21-30`, `g8-nhip-dieu-1`, `g8-nhip-dieu-2`.

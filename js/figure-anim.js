@@ -18,7 +18,7 @@ const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2);
 
 export const hasVectorFigure = (ex) => Boolean(ex?.vectorFigure);
 /** Bài có "bạn mẫu" ở mục Video: hình vector (Gemini) hoặc tạm thời hình nộm vẽ từ góc chấm điểm. */
-export const hasFigure = (ex) => Boolean(ex?.vectorFigure || ex?.scoring?.rules?.length || ex?.scoring?.reps || ex?.scoring?.steps?.length);
+export const hasFigure = (ex) => Boolean(ex?.figure3d || ex?.vectorFigure || ex?.scoring?.rules?.length || ex?.scoring?.reps || ex?.scoring?.steps?.length);
 
 const shortOf = (p, k) => (/^TTCB/i.test(p.code || '') ? 'TTCB' : (String(p.code || '').match(/\d+/)?.[0] || String(k)));
 
@@ -192,6 +192,7 @@ function bookOnly(ex, num) {
 
 /** Tạo trình phát; trả về { el, stop }. Tải hình vẽ của bài theo nhu cầu (chỉ khi mở tab Video). */
 export async function createFigurePlayer(ex, { num = 0 } = {}) {
+  if (ex.figure3d) { const { create3DPlayer } = await import('./figure3d-player.js'); return create3DPlayer(ex, { num }); }
   if (!hasFigure(ex)) return bookOnly(ex, num);
   const src = ex.vectorFigure ? await vectorSource(ex) : await stickSource(ex);
   const N = src.N;

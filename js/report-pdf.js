@@ -93,7 +93,7 @@ async function drawReport(info) {
   const steps = r.steps || [];
   const chipW = 74, chipGap = 8, perRow = Math.floor((W - 2 * M + chipGap) / (chipW + chipGap));
   const stepsH = steps.length ? 50 + Math.ceil(steps.length / perRow) * (44 + chipGap) : 0;
-  const teacherH = 250, footH = 70;
+  const teacherH = 250, footH = 96;
   const imgMaxH = H - y - 30 - tableH - stepsH - teacherH - footH - 40;
 
   // Ảnh lúc tập
@@ -160,8 +160,9 @@ async function drawReport(info) {
 
   // Chân trang
   g.fillStyle = C.muted; g.font = `400 18px ${FONT}`;
-  g.fillText('Điểm do máy chấm tự động từ camera, chỉ để tham khảo; giáo viên quyết định kết quả cuối cùng.', M, H - 40);
-  g.fillText('Hình ảnh chỉ xử lý trên máy của em, không gửi đi. Tạo bằng GDTC Trợ lý tập luyện.', M, H - 16);
+  g.fillText('Điểm do máy chấm tự động từ camera, chỉ để tham khảo; giáo viên quyết định kết quả cuối cùng.', M, H - 64);
+  g.fillText('Hình ảnh chỉ xử lý trên máy của em, không gửi đi. Tạo bằng GDTC Trợ lý tập luyện.', M, H - 40);
+  g.fillText('Tác giả: Cô Quý Anh – Trường THCS Nguyễn Tất Thành (nguyenthuyquyanh@gmail.com).', M, H - 16);
   return c;
 }
 

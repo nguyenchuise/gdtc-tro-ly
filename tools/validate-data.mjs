@@ -80,6 +80,13 @@ for (const [i, e] of (data.exercises || []).entries()) {
     }
   }
 }
+// Mô hình 3D (mục 2. Video, cột ①): tệp phải có và đã gắn cầu nối.
+for (const e of (data.exercises || []).filter((x) => x.figure3d)) {
+  const f = `${root}figures3d/${e.id}.html`;
+  if (!existsSync(f)) errors.push(`Bài ${e.id} (figure3d): thiếu figures3d/${e.id}.html — chạy tools/import-3d-figure.mjs.`);
+  else if (!readFileSync(f, 'utf8').includes('fig3d-bridge.js')) errors.push(`Bài ${e.id} (figure3d): tệp 3D chưa gắn js/fig3d-bridge.js.`);
+}
+if ((data.exercises || []).some((x) => x.figure3d) && !existsSync(`${root}vendor/three-0.147.0.min.js`)) errors.push('Thiếu vendor/three-0.147.0.min.js (thư viện Three.js tự lưu cho mô hình 3D).');
 // Bạn mẫu vector (mục 2. Video): hai tệp hình phải có, cùng số tư thế, vẽ được mà không ra NaN.
 for (const e of (data.exercises || []).filter((x) => x.vectorFigure)) {
   const at = `Bài ${e.id} (vectorFigure)`;

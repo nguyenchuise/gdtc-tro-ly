@@ -7,6 +7,7 @@ import { isTeacherUnlocked, renderTeacherGate } from './teacher-gate.js';
 import { esc, $, $$, debounce } from './util.js';
 import { hasBookAnim } from './book-anim.js';
 import { hasFigure } from './figure-anim.js';
+import { initMusic } from './music.js';
 
 const state = { grade: null, chapter: null, q: '' };
 const closed = new Set(); // các nhóm Lớp/Phần đang thu gọn (nhớ trong lúc dùng trang)
@@ -533,6 +534,7 @@ async function route() {
 }
 
 async function main() {
+  initMusic();
   try {
     await loadData();
   } catch (err) {

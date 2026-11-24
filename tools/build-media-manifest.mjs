@@ -23,3 +23,11 @@ if (existsSync(dir)) {
 }
 writeFileSync(join(root, 'data', 'media.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(`media.json: ${Object.keys(manifest).length} bài có ảnh trong media/sach/`);
+
+// Nhạc nền: tệp đầu tiên (theo tên) trong media/nhac/ → data/music.json. Không có tệp → trang dùng giai điệu tự soạn.
+const nhac = join(root, 'media', 'nhac');
+const AUD = /\.(mp3|m4a|aac|ogg|oga|wav)$/i;
+const songs = existsSync(nhac) ? readdirSync(nhac).filter((f) => AUD.test(f)).sort((a, b) => a.localeCompare(b, 'vi', { numeric: true })) : [];
+const music = songs.length ? { file: `media/nhac/${encodeURIComponent(songs[0])}`, title: songs[0].replace(AUD, '') } : {};
+writeFileSync(join(root, 'data', 'music.json'), `${JSON.stringify(music, null, 2)}\n`);
+console.log(`music.json: ${songs.length ? `nhạc nền = ${songs[0]}` : 'chưa có tệp nhạc trong media/nhac/ → dùng giai điệu tự soạn'}`);

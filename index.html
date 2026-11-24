@@ -6,6 +6,8 @@
   <title>GDTC Trợ lý tập luyện</title>
   <meta name="description" content="Trợ lý tập luyện Giáo dục thể chất THCS: tìm bài bằng chữ hoặc giọng nói, xem video, trang sách và tự chấm tư thế bằng camera ngay trên máy.">
   <meta name="theme-color" content="#0b7350">
+  <meta name="author" content="Cô Quý Anh – Trường THCS Nguyễn Tất Thành, Phường Đông Gia Nghĩa, Tỉnh Lâm Đồng">
+  <meta name="copyright" content="© 2026 Cô Quý Anh (nguyenthuyquyanh@gmail.com) – Trường THCS Nguyễn Tất Thành">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f8a5f'/%3E%3Ccircle cx='32' cy='14' r='6' fill='white'/%3E%3Cpath d='M12 26h40M32 26v16M32 42l-10 14M32 42l10 14' stroke='white' stroke-width='6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +18,14 @@
 <body>
   <a class="skip-link" href="#main">Đến nội dung chính</a>
 
+  <div class="ownership-ribbon" role="note" aria-label="Tác giả">
+    <div class="container ownership-ribbon__inner">
+      <svg class="laurel" viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 40c-7-4-10-11-9-19M31 40c7-4 10-11 9-19"/><path d="M9 30c3 0 5 1 6 3M8 24c3-1 5 0 7 2M9 18c3-1 5 1 6 3M39 30c-3 0-5 1-6 3M40 24c-3-1-5 0-7 2M39 18c-3-1-5 1-6 3"/></g><path fill="currentColor" d="M24 9l2.6 5.6 6 .7-4.5 4.1 1.2 6-5.3-3-5.3 3 1.2-6-4.5-4.1 6-.7z"/></svg>
+      <p><span class="ownership-ribbon__kicker">Tác giả</span>
+        <strong>Cô Quý Anh</strong><span class="ownership-ribbon__sep" aria-hidden="true">—</span><span class="ownership-ribbon__school">Trường THCS Nguyễn Tất Thành</span></p>
+      <svg class="laurel laurel--flip" viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 40c-7-4-10-11-9-19M31 40c7-4 10-11 9-19"/><path d="M9 30c3 0 5 1 6 3M8 24c3-1 5 0 7 2M9 18c3-1 5 1 6 3M39 30c-3 0-5 1-6 3M40 24c-3-1-5 0-7 2M39 18c-3-1-5 1-6 3"/></g><path fill="currentColor" d="M24 9l2.6 5.6 6 .7-4.5 4.1 1.2 6-5.3-3-5.3 3 1.2-6-4.5-4.1 6-.7z"/></svg>
+    </div>
+  </div>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#" aria-label="GDTC Trợ lý tập luyện — Trang chủ">
@@ -25,6 +35,8 @@
         <span class="brand__text"><span class="hide-sm">GDTC </span><strong>Trợ lý tập luyện</strong></span>
       </a>
       <nav aria-label="Điều hướng chính">
+        <button type="button" class="nav-link nav-link--top music-btn" data-music aria-pressed="true" title="Bật / tắt nhạc nền">
+          <span class="music-btn__note" aria-hidden="true">♪</span><span>Nhạc</span><span class="music-btn__state hide-sm">Bật</span></button>
         <a class="nav-link nav-link--top" href="#giao-vien" data-nav="teacher">
           <svg class="icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v3h6V7a3 3 0 0 0-3-3z"/></svg>
           Giáo viên</a>
@@ -142,8 +154,22 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p><strong>Bản demo.</strong> Bài tập là mẫu, chưa đối chiếu sách giáo khoa. Điểm chỉ để tự luyện, không thay thầy cô chấm.</p>
-      <p>Không đăng nhập. Hình camera chỉ xử lý trên máy em, không lưu, không gửi đi.</p>
+      <section class="ownership-card" aria-labelledby="own-title">
+        <div class="ownership-card__seal"><svg class="laurel" viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M17 40c-7-4-10-11-9-19M31 40c7-4 10-11 9-19"/><path d="M9 30c3 0 5 1 6 3M8 24c3-1 5 0 7 2M9 18c3-1 5 1 6 3M39 30c-3 0-5 1-6 3M40 24c-3-1-5 0-7 2M39 18c-3-1-5 1-6 3"/></g><path fill="currentColor" d="M24 9l2.6 5.6 6 .7-4.5 4.1 1.2 6-5.3-3-5.3 3 1.2-6-4.5-4.1 6-.7z"/></svg></div>
+        <div class="ownership-card__body">
+          <p class="ownership-card__kicker" id="own-title">Tác giả</p>
+          <p class="ownership-card__name">Cô Quý Anh</p>
+          <p class="ownership-card__school">Trường THCS Nguyễn Tất Thành</p>
+          <address class="ownership-card__addr">
+            <span>Tổ 01, Phường Đông Gia Nghĩa, Tỉnh Lâm Đồng</span>
+            <span>Liên hệ: <a href="mailto:nguyenthuyquyanh@gmail.com">nguyenthuyquyanh@gmail.com</a></span>
+          </address>
+        </div>
+      </section>
+      <p class="footer-note">Nội dung bám theo SGK Giáo dục thể chất 6–9 (Kết nối tri thức với cuộc sống); ảnh sách hiển thị trực tiếp từ NXB Giáo dục Việt Nam.
+        Điểm chỉ để em tự luyện, không thay thầy cô chấm. Không đăng nhập; hình camera chỉ xử lý trên máy em, không lưu, không gửi đi.</p>
+      <p class="footer-note">Nhạc nền: giai điệu vui do trang tự soạn, không vướng bản quyền. Nhạc tự tắt khi em bật camera tự tập.</p>
+      <p class="footer-copy">© 2026 Cô Quý Anh – Trường THCS Nguyễn Tất Thành. Mọi quyền được bảo lưu.</p>
     </div>
   </footer>
 
@@ -154,6 +180,7 @@
         <div class="sheet__grip" aria-hidden="true"></div>
         <p class="crumbs" id="lesson-crumbs"></p>
         <h2 id="lesson-title"></h2>
+        <button type="button" class="icon-btn sheet__music music-btn" data-music aria-pressed="true" title="Bật / tắt nhạc nền" aria-label="Bật / tắt nhạc nền"><span class="music-btn__note" aria-hidden="true">♪</span></button>
         <button type="button" class="icon-btn sheet__close" data-close aria-label="Đóng">
           <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4z"/></svg>
         </button>

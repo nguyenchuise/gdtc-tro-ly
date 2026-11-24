@@ -44,6 +44,7 @@ export function videoFacade(v, { autoplay = true } = {}) {
   btn.innerHTML = `<img src="${thumbUrl(v.id)}" alt="" loading="lazy" decoding="async" width="480" height="360">
     <span class="play-icon" aria-hidden="true"><svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7A8.5 8.5 0 0 0 60.5 1.7C55.2.3 34 .3 34 .3S12.8.3 7.5 1.7A8.5 8.5 0 0 0 1.5 7.7C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="#e00"/><path d="M45 24 27 14v20z" fill="#fff"/></svg></span>`;
   btn.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('gdtc:video')); // tạm dừng nhạc nền khi em xem video
     const iframe = document.createElement('iframe');
     const params = new URLSearchParams({ rel: '0', modestbranding: '1', playsinline: '1' });
     if (autoplay) params.set('autoplay', '1');

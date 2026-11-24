@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.22.0] - 2026-11-24: Mô hình 3D cho 5 bài thể dục, thông tin tác giả, nhạc nền
+
+### Thêm
+- **Mô hình 3D (Three.js) của thầy cô** ở cột ① mục 2. Video cho 5 bài:
+  - Lớp 6 nhịp 12–23 và nhịp 24–30.
+  - Lớp 7 nhịp 1–10.
+  - Lớp 9 thể dục nhịp điệu phần 1 và phần 2.
+- **Cách hoạt động của mô hình 3D:**
+  - Camera phía sau, bật sẵn khớp AI; kéo ngang trên hình để xoay xem các phía.
+  - Chạy **cùng nhịp** với ảnh gốc SGK ở cột ②. Nhịp được ghép theo tên động tác và "Nhịp n", kể cả bài lớp 9 nhiều động tác.
+  - Nhịp SGK không in hình (TTCB, các nhịp lặp lại) thì ghi rõ "SGK không in hình nhịp này".
+  - Chỉ chạy khi khung đang hiện trên màn hình.
+  - Thư viện Three.js được lưu sẵn trong trang.
+  - Công cụ ghép: `tools/import-3d-figure.mjs`.
+- **Thông tin tác giả:**
+  - Dải trang trọng ở đầu trang và thẻ viền vàng ở cuối trang: Cô Quý Anh, Trường THCS Nguyễn Tất Thành, địa chỉ, email liên hệ.
+  - Thêm một dòng ở chân phiếu PDF gửi thầy cô.
+- **Nhạc nền vui:**
+  - Tự bật ở lần chạm đầu tiên.
+  - **Tự tắt khi em bật camera hoặc video tự tập** (chỉ còn giọng nói hướng dẫn), phát lại khi tập xong; dừng khi em xem video hướng dẫn.
+  - Nút ♪ ở thanh tiêu đề và trong hộp bài.
+  - Mặc định là giai điệu tự soạn, không vướng bản quyền. Thầy cô có thể thả tệp nhạc có quyền sử dụng vào `media/nhac/`.
+
+### Thay đổi
+- Chân trang: ghi đúng "Nội dung bám theo SGK Giáo dục thể chất 6–9", bỏ chữ "bản demo".
+
 ## [0.21.0] - 2026-11-24: Hình động cắt từ SGK cho toàn học phần (mục Video và Tự tập)
 
 ### Thêm

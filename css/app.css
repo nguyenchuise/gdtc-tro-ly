@@ -848,3 +848,63 @@ details { margin: 10px 0; }
   .vfig--free .vfig__book .bookanim__ctrl [data-a="speed"] { display: none; }
   .vfig__book .bookanim__groups { justify-content: flex-start; }
 }
+/* Mô hình 3D (iframe Three.js) ở cột ① */
+.vfig__3d { position: relative; width: 100%; aspect-ratio: 360 / 430; max-height: min(54vh, 470px); }
+.vfig__3d iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: transparent; }
+.vfig__pane--book { position: relative; }
+.vfig__nobook { position: absolute; left: 8px; right: 8px; top: 50%; transform: translateY(-50%); margin: 0; text-align: center;
+  background: rgba(255,255,255,.94); border: 2px dashed var(--line); border-radius: 12px; padding: 10px 8px; font-weight: 700; color: var(--ink-2); font-size: .9rem; }
+.vfig__pane--book.is-nobook .vfig__book { opacity: .3; }
+.vfig__stages { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.vfig__phead { flex-wrap: wrap; min-width: 0; }
+
+/* ---------- Chủ quyền sáng kiến (đầu trang + chân trang) ---------- */
+:root { --gold: #9a6b12; --gold-2: #c9a043; --gold-bg: #fbf6e8; --navy: #123b2e; }
+.ownership-ribbon { background: linear-gradient(90deg, #0b5e42, #0f8a5f 45%, #0b5e42); color: #fff; border-bottom: 2px solid var(--gold-2); }
+.ownership-ribbon__inner { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 34px; padding-block: 4px; }
+.ownership-ribbon p { margin: 0; display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 4px 8px; font-size: .86rem; line-height: 1.3; text-align: center; }
+.ownership-ribbon__kicker { font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #f6e3a8; }
+.ownership-ribbon strong { font-weight: 800; letter-spacing: .01em; }
+.ownership-ribbon__sep { opacity: .7; }
+.ownership-ribbon .laurel { color: #f2d27a; flex: none; }
+.laurel--flip { transform: scaleX(-1); }
+@media (max-width: 559px) {
+  .ownership-ribbon__inner { gap: 6px; }
+  .ownership-ribbon p { font-size: .78rem; gap: 2px 6px; }
+  .ownership-ribbon__kicker { font-size: .62rem; }
+  .ownership-ribbon .laurel { width: 18px; height: 18px; }
+}
+.ownership-card { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center;
+  background: var(--gold-bg); border: 1.5px solid var(--gold-2); border-radius: 18px; padding: 18px 20px; margin: 4px 0 16px;
+  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 6px rgba(201,160,67,.45); }
+.ownership-card__seal { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; color: var(--gold);
+  background: radial-gradient(circle at 30% 30%, #fffaf0, #f3e2b3); border: 2px solid var(--gold-2); }
+.ownership-card__body p { margin: 0; }
+.ownership-card__kicker { font-size: .74rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.ownership-card__name { font-size: 1.35rem; font-weight: 800; color: var(--navy); line-height: 1.25; margin-top: 2px !important; }
+.ownership-card__school { font-weight: 700; color: var(--brand-dark); }
+.ownership-card__addr { font-style: normal; display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 6px; color: var(--ink-2); font-size: .92rem; }
+.ownership-card__addr a { color: var(--brand-dark); font-weight: 700; word-break: break-all; }
+.footer-note { font-size: .86rem; color: var(--muted); margin: 0 0 6px; }
+.footer-copy { font-size: .84rem; font-weight: 700; color: var(--navy); margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+@media (max-width: 559px) {
+  .ownership-card { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 16px 14px; }
+  .ownership-card__addr { justify-content: center; flex-direction: column; align-items: center; }
+  .ownership-card__seal { width: 64px; height: 64px; }
+  .ownership-card__seal .laurel { width: 46px; height: 46px; }
+}
+
+/* ---------- Nhạc nền ---------- */
+.music-btn { font: inherit; cursor: pointer; color: inherit; }
+@media (max-width: 759px) {
+  .nav-link--top.music-btn { display: inline-flex; min-height: 44px; padding: 0 12px; }
+}
+.music-btn__note { font-size: 1.05rem; color: var(--achieve); }
+.music-btn[aria-pressed="false"] .music-btn__note { color: var(--muted); text-decoration: line-through; }
+.music-btn__state { font-weight: 700; }
+.sheet__music { position: absolute; top: 10px; right: 62px; font-size: 1.2rem; border: 0; }
+.sheet__music[aria-pressed="false"] .music-btn__note { color: var(--muted); text-decoration: line-through; }
+
+.sheet__music { right: 64px; width: 44px; height: 44px; min-height: 44px; padding: 0; background: #f1f4f2; z-index: 5; }
+@media (min-width: 760px) { .sheet__music { top: 16px; right: 72px; } }
+.sheet__head .crumbs { margin-right: 112px; }

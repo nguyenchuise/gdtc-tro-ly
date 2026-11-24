@@ -240,10 +240,19 @@ export function mountPractice(root, ex) {
     setProgress(0);
   }
 
+  // Nhạc nền tạm dừng khi đang tập bằng camera / video (chỉ còn giọng nói hướng dẫn) — xem js/music.js.
+  let musicHeld = false;
+  const holdMusic = (on) => {
+    if (musicHeld === on) return;
+    musicHeld = on;
+    window.dispatchEvent(new CustomEvent('gdtc:practice', { detail: { active: on } }));
+  };
   async function startCamera() {
-    stop();
+    holdMusic(true);
+    stop(false);
     if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
       setStatus('Camera chỉ chạy trên trang https. Em dùng nút “Chọn video” nhé.');
+      holdMusic(false);
       return;
     }
     setStatus('Đang mở camera…');
@@ -260,6 +269,7 @@ export function mountPractice(root, ex) {
         NotReadableError: 'Camera đang bận. Em tắt ứng dụng khác rồi thử lại.',
       }[err.name];
       setStatus(msg || 'Không mở được camera. Em thử lại nhé.');
+      holdMusic(false);
       return;
     }
     source = 'camera';
@@ -290,7 +300,8 @@ export function mountPractice(root, ex) {
 
   async function startFile(file) {
     if (!file) return;
-    stop();
+    holdMusic(true);
+    stop(false);
     source = 'file';
     objectUrl = URL.createObjectURL(file);
     video.srcObject = null;
@@ -857,9 +868,10 @@ export function mountPractice(root, ex) {
     sa.classList.toggle('is-good', /^(Đúng rồi|Tốt)/.test(t));
   }
 
-  function stop() {
+  function stop(releaseMusic = true) {
     running = false;
     stopVoice();
+    if (releaseMusic) holdMusic(false);
     cancelAnimationFrame(raf);
     stream?.getTracks().forEach((t) => t.stop());
     stream = null;

@@ -207,7 +207,19 @@ Hình động trong sách (`bookAnim`) có ở 75/89 bài.
 - Ở mục 4. Tự tập, các khung này cũng là hình mẫu trước khi tập và trong khung camera.
 - 14 bài luyện tập phối hợp hoặc bổ trợ chưa có, vì SGK các bài đó chỉ có hình trò chơi.
 
-Thêm hình phía sau cho một bài:
+Cột ① của 6 bài thể dục dùng hình dựng nhân tạo:
+- Lớp 6 nhịp 1–11: hình vector 2.5D.
+- Lớp 6 nhịp 12–23 và 24–30, lớp 7 nhịp 1–10, lớp 9 phần 1 và 2: **mô hình 3D (Three.js)**.
+
+Mô hình 3D được nhúng từ `figures3d/<mã-bài>.html` và điều khiển qua `js/fig3d-bridge.js`. Nhịp được ghép với ảnh SGK theo tên; nhịp nào SGK không in hình thì ghi rõ. Ghép tệp 3D mới:
+
+```bash
+node tools/import-3d-figure.mjs <mã-bài> <tệp-3d.html>
+```
+
+Thư viện Three.js 0.147.0 (giấy phép MIT) được lưu sẵn ở `vendor/`, để mạng trường chặn CDN vẫn chạy được.
+
+Thêm hình phía sau (bản vector 2.5D cũ) cho một bài:
 1. Nhờ Gemini vẽ theo `tools/gemini-src/HUONG-DAN-GEMINI.md`. Chỉ cần một tệp, góc nhìn phía sau.
 2. Ghép vào trang:
 
@@ -216,6 +228,14 @@ node tools/import-gemini-figure.mjs <mã-bài> <tệp-phía-sau.html>
 ```
 
 Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp với ảnh SGK; công cụ báo lỗi nếu lệch. Chỗ nào lệch so với hình SGK thì chỉnh trong `tools/gemini-src/<mã-bài>.fix.json` rồi chạy lại lệnh trên. Không sửa tay các tệp trong `js/figures/`.
+
+### Tác giả và nhạc nền
+
+- Thông tin tác giả nằm ở dải đầu trang, thẻ cuối trang và chân phiếu PDF: Cô Quý Anh, Trường THCS Nguyễn Tất Thành. Sửa trong `index.html` và `js/report-pdf.js`.
+- Nhạc nền (`js/music.js`):
+  - Tự bật ở lần chạm đầu tiên; tắt khi em bật camera hoặc video tự tập; nút ♪ để bật, tắt.
+  - Mặc định là giai điệu do trang tự soạn bằng WebAudio, không vướng bản quyền.
+  - Muốn dùng bài khác, thả một tệp nhạc có quyền sử dụng vào `media/nhac/` (xem `media/nhac/HUONG-DAN.md`). Khi deploy, trang tự dùng tệp đó.
 
 ## 7. Quyền riêng tư
 

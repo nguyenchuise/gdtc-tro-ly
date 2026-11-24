@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GDTC Lớp 9 — Bài 1: Bài thể dục nhịp điệu (Phần 1) • Mô hình 3D Chuẩn SGK</title>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"
+          onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'"></script>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --muted: #475569;
+      --teal: #0F766E;
+      --teal-dark: #115E59;
+      --teal-soft: #CCFBF1;
+      --charcoal: #272B30;
+      --accent: #EA580C;
+      --accent-dark: #C2410C;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 18px 16px 40px; }
+    .topbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 14px;
+    }
+    .badge {
+      display: inline-block; background: var(--teal-soft); color: var(--teal-dark);
+      font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.03em;
+    }
+    .badge-uni { background: #E2E8F0; color: #1E293B; margin-left: 6px; }
+    h1 { margin: 4px 0 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { margin: 2px 0 0; font-size: 13.5px; color: var(--muted); }
+
+    .ex-tabs {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 900px) { .ex-tabs { grid-template-columns: repeat(2, 1fr); } }
+    .ex-tab {
+      border: 1.5px solid var(--border); background: var(--card); color: var(--text);
+      font-weight: 800; font-size: 13.5px; padding: 10px 11px; border-radius: 14px;
+      cursor: pointer; min-height: 52px; display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: center; gap: 2px; text-align: left;
+    }
+    .ex-tab small { font-size: 11px; font-weight: 600; color: var(--muted); }
+    .ex-tab:hover { border-color: var(--teal); }
+    .ex-tab.active {
+      background: var(--teal); border-color: var(--teal); color: #fff;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.22);
+    }
+    .ex-tab.active small { color: #CCFBF1; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.18fr) minmax(320px, 0.82fr);
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .stage-toolbar {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cam-group { display: flex; flex-wrap: wrap; gap: 6px; }
+    .cam-btn {
+      border: 1px solid var(--border); background: #F8FAFC; color: var(--text);
+      font-weight: 700; font-size: 13px; padding: 7px 11px; border-radius: 10px;
+      cursor: pointer; min-height: 38px;
+    }
+    .cam-btn:hover { background: #E2E8F0; }
+    .cam-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+    .viewport-shell {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #FFFFFF 0%, #EFF7F6 65%, #DFECEA 100%);
+      user-select: none;
+      touch-action: none;
+    }
+    @media (max-width: 640px) { .viewport-shell { height: 420px; } }
+    #glCanvas { width: 100%; height: 100%; display: block; cursor: grab; }
+    #glCanvas:active { cursor: grabbing; }
+
+    .hud-top {
+      position: absolute; top: 10px; left: 12px; right: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none;
+    }
+    .hud-pill {
+      background: rgba(15, 23, 42, 0.82); color: #fff;
+      font-size: 12px; font-weight: 800; padding: 5px 10px; border-radius: 999px;
+      letter-spacing: 0.03em; backdrop-filter: blur(4px);
+    }
+    .hud-pill.rear { background: rgba(15, 118, 110, 0.92); }
+    .hud-pill.side { background: rgba(234, 88, 12, 0.92); }
+    .hud-pill.front { background: rgba(39, 43, 48, 0.92); }
+
+    .split-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+      background: rgba(15, 23, 42, 0.22); pointer-events: none; display: none;
+    }
+    .split-divider.show { display: block; }
+
+    .hud-lr {
+      position: absolute; bottom: 12px; left: 14px; right: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none;
+    }
+    .lr-tag {
+      background: rgba(255, 255, 255, 0.92); color: #0F172A; border: 1px solid #CBD5E1;
+      font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 8px;
+    }
+    .hint-tag {
+      background: rgba(255, 255, 255, 0.86); color: #475569;
+      font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 8px;
+    }
+
+    .telemetry {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      margin-top: 10px;
+    }
+    @media (max-width: 560px) { .telemetry { grid-template-columns: repeat(2, 1fr); } }
+    .tel-box {
+      background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 10px; text-align: center;
+    }
+    .tel-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .tel-val { font-size: 15.5px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    .pose-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .pose-code {
+      background: var(--teal); color: #fff; font-weight: 800; font-size: 14px;
+      padding: 5px 12px; border-radius: 10px; white-space: nowrap;
+    }
+    .pose-title { margin: 0; font-size: 18.5px; font-weight: 800; }
+    .pose-caption { margin: 8px 0 10px; font-size: 14.5px; color: #1E293B; }
+
+    .view-box {
+      background: #F0FDFA; border-left: 4px solid var(--teal);
+      padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #134E4A;
+      margin-bottom: 12px;
+    }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .rec-pill {
+      display: inline-block; background: #0F172A; color: #FFFFFF;
+      font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 7px;
+    }
+    .angle-pill {
+      display: inline-block; background: #FEF3C7; color: #92400E;
+      font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 7px;
+    }
+
+    .controls-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .btn {
+      border: 1px solid var(--border); background: var(--card); color: var(--text);
+      font-weight: 700; font-size: 14px; padding: 9px 14px; border-radius: 12px;
+      cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { background: #F1F5F9; }
+    .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-dark); }
+    .btn-teal { background: var(--teal); border-color: var(--teal); color: #fff; }
+    .btn-teal:hover { background: var(--teal-dark); }
+    .btn-dark { background: var(--charcoal); border-color: var(--charcoal); color: #fff; }
+    .btn-dark:hover { background: #111827; }
+
+    .scrubber-wrap { margin: 10px 0 12px; }
+    .scrubber-label {
+      display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: var(--muted);
+      margin-bottom: 4px;
+    }
+    input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; }
+
+    .toggles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F1F5F9; padding: 7px 11px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; cursor: pointer; min-height: 40px; user-select: none;
+    }
+    .chip input { width: 16px; height: 16px; accent-color: var(--teal); }
+
+    .beats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 6px; margin-bottom: 14px;
+    }
+    .beat-btn {
+      border: 1px solid var(--border); background: #F8FAFC; color: var(--text);
+      font-weight: 700; font-size: 13px; padding: 9px 4px; border-radius: 10px;
+      cursor: pointer; min-height: 44px;
+    }
+    .beat-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+    details.tuner {
+      background: #F8FAFC; border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px 12px; margin-bottom: 14px;
+    }
+    details.tuner summary { font-size: 13.5px; font-weight: 800; cursor: pointer; color: #334155; }
+    .tuner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin-top: 10px; }
+    .tuner-item label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted); }
+
+    .export-box {
+      border-top: 1px solid var(--border); padding-top: 12px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .export-title { font-size: 13px; font-weight: 800; color: #334155; }
+    .export-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .status-msg { font-size: 12.5px; font-weight: 700; color: var(--teal); min-height: 18px; }
+    .error-banner {
+      display: none; background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B;
+      padding: 12px; border-radius: 12px; margin-bottom: 12px; font-size: 14px; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <span class="badge">GDTC LỚP 9 • CHỦ ĐỀ 4 • BÀI 1: BÀI THỂ DỤC NHỊP ĐIỆU (PHẦN 1)</span>
+      <span class="badge badge-uni">NGƯỜI MẪU NỮ & ĐỒNG PHỤC LỚP 9 (ÁO TRẮNG VIỀN XANH NGỌC • QUẦN ĐEN SỌC XANH NGỌC)</span>
+      <h1>Mô hình 3D Góc nhìn Bổ trợ: Giậm chân • Thu chân–tay cao • Bật tách chụm • Vặn mình</h1>
+      <p class="subtitle">Khớp trọn bộ 4 động tác theo SGK Lớp 9 trang 41–44. Góc PHÍA SAU 180° giữ cùng chiều Trái/Phải và hiển thị rõ hai tay co sau đầu ở động tác Vặn mình, kèm nút chuyển Ngang 90° & Chéo 3/4 để soi độ nâng gối.</p>
+    </div>
+  </div>
+
+  <div id="errBanner" class="error-banner">
+    Không tải được thư viện Three.js. Vui lòng kiểm tra kết nối mạng rồi tải lại trang (F5).
+  </div>
+
+  <div class="ex-tabs" id="exTabs"></div>
+
+  <div class="layout">
+    <!-- LEFT: 3D STAGE -->
+    <div class="card">
+      <div class="stage-toolbar">
+        <div class="cam-group" id="camBtns">
+          <button class="cam-btn active" data-cam="rear">Phía sau 180° (Chuẩn)</button>
+          <button class="cam-btn" data-cam="front">Chính diện (So SGK)</button>
+          <button class="cam-btn" data-cam="isoRear">Chéo 3/4 sau</button>
+          <button class="cam-btn" data-cam="right">Ngang 90° (Soi gối)</button>
+          <button class="cam-btn" data-cam="left">Ngang đối diện</button>
+        </div>
+        <button class="cam-btn" id="btnSplit">◫ So sánh SGK | Phía sau</button>
+      </div>
+
+      <div class="viewport-shell" id="viewportShell">
+        <canvas id="glCanvas"></canvas>
+        <div class="split-divider" id="splitDivider"></div>
+        <div class="hud-top">
+          <span class="hud-pill rear" id="hudLeft">GÓC NHÌN PHÍA SAU • 180° (CÙNG CHIỀU)</span>
+          <span class="hud-pill rear" id="hudRight" style="display:none">PHÍA SAU 180° (XUẤT ẢNH)</span>
+        </div>
+        <div class="hud-lr">
+          <span class="lr-tag" id="tagLeft">◀ BÊN TRÁI</span>
+          <span class="hint-tag">Kéo để xoay 360° • Cuộn để thu phóng</span>
+          <span class="lr-tag" id="tagRight">BÊN PHẢI ▶</span>
+        </div>
+      </div>
+
+      <div class="telemetry">
+        <div class="tel-box"><div class="tel-label">Vai Trái / Phải</div><div class="tel-val" id="telShoulder">0° / 0°</div></div>
+        <div class="tel-box"><div class="tel-label">Khuỷu Trái / Phải</div><div class="tel-val" id="telElbow">180° / 180°</div></div>
+        <div class="tel-box"><div class="tel-label">Gối Trái / Phải</div><div class="tel-val" id="telKnee">180° / 180°</div></div>
+        <div class="tel-box"><div class="tel-label">Vặn thân (Twist)</div><div class="tel-val" id="telTwist">0°</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTROLS & EXPORT -->
+    <div class="card">
+      <div class="pose-head">
+        <span class="pose-code" id="poseCode">Nhịp 1</span>
+        <h2 class="pose-title" id="poseTitle"></h2>
+      </div>
+      <p class="pose-caption" id="poseCaption"></p>
+
+      <div class="view-box">
+        <div class="pill-row">
+          <span class="rec-pill" id="recPill"></span>
+          <span class="angle-pill" id="angleRef"></span>
+        </div>
+        <div id="viewNote"></div>
+      </div>
+
+      <div class="controls-row">
+        <button class="btn btn-accent" id="btnPlay">▶ Chạy liền mạch</button>
+        <button class="btn" id="btnPrev">◀ Trước</button>
+        <button class="btn" id="btnNext">Sau ▶</button>
+        <button class="btn" id="btnSpeed">1x</button>
+      </div>
+
+      <div class="scrubber-wrap">
+        <div class="scrubber-label">
+          <span id="scrubberTitle">Thanh tua liên hoàn 60fps</span>
+          <span id="timeLabel">0.0 / 8.0</span>
+        </div>
+        <input type="range" id="scrubber" min="0" max="8" step="0.02" value="0" />
+      </div>
+
+      <div class="toggles">
+        <label class="chip"><input type="checkbox" id="chkSkeleton" /> Khớp AI 3D</label>
+        <label class="chip"><input type="checkbox" id="chkXray" /> X-quang thân (thấy bắt chéo bụng)</label>
+        <label class="chip"><input type="checkbox" id="chkGrid" checked /> Lưới sàn</label>
+        <label class="chip"><input type="checkbox" id="chkBoyHair" /> Đổi tóc nam</label>
+        <label class="chip"><input type="checkbox" id="chkTransparent" checked /> PNG nền trong suốt</label>
+      </div>
+
+      <div class="beats-grid" id="beatsGrid"></div>
+
+      <details class="tuner">
+        <summary>⚙ Tinh chỉnh vi góc nhịp hiện tại (phòng giám khảo góp ý)</summary>
+        <div class="tuner-grid">
+          <div class="tuner-item">
+            <label><span>Vặn xoắn thân (Twist)</span><span id="vTwist">0°</span></label>
+            <input type="range" id="slTwist" min="-70" max="70" step="1" value="0" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Độ cao hông (Y)</span><span id="vPelvisY">0.83m</span></label>
+            <input type="range" id="slPelvisY" min="0.58" max="0.95" step="0.01" value="0.83" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Dịch ngang hông (X)</span><span id="vPelvisX">0.00m</span></label>
+            <input type="range" id="slPelvisX" min="-0.25" max="0.25" step="0.01" value="0" />
+          </div>
+          <div class="tuner-item">
+            <label><span>Ngửa / Cúi đầu</span><span id="vHeadPitch">0°</span></label>
+            <input type="range" id="slHeadPitch" min="-25" max="35" step="1" value="0" />
+          </div>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="cam-btn" id="btnResetTune">↺ Khôi phục chuẩn SGK</button>
+        </div>
+      </details>
+
+      <div class="export-box">
+        <div class="export-title">Xuất ảnh PNG siêu nét (900×1040, ống kính tele ít méo):</div>
+        <div class="export-row">
+          <button class="btn btn-teal" id="btnExportOneRear">⬇ Tải PNG Phía sau 180° (nhịp này)</button>
+          <button class="btn btn-dark" id="btnExportOneCurrent">⬇ Tải PNG góc đang xem</button>
+        </div>
+        <div class="export-row">
+          <button class="btn btn-accent" id="btnExportSheetEx">⬇ Tải bảng toàn bộ nhịp động tác này (PNG)</button>
+        </div>
+        <div class="export-row">
+          <button class="btn" id="btnExportAllEx">⬇ Tải lần lượt các PNG lẻ của động tác này</button>
+        </div>
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const EXERCISES = [
+  {
+    "id": "giam-chan-lan-1",
+    "tabLabel": "a1) Giậm chân (Lần 1)",
+    "title": "a) Động tác giậm chân tại chỗ — 8 nhịp lần 1 (Hình 2)",
+    "defaultCam": "rear",
+    "recLabel": "Phía sau 180°",
+    "poses": [
+      {
+        "code": "Nhịp 1",
+        "shortTitle": "Giậm chân trái, hai tay chống hông",
+        "caption": "Giậm chân trái (chân trái tiếp đất, chân phải co nhẹ nâng lên), hai tay chống hông.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Cùng chiều người tập: chân TRÁI giậm xuống sàn bên trái, hai tay chống gọn hai bên hông.",
+        "angleRef": "Giậm chân trái • Hai tay chống hông",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "onHip"
+        }
+      },
+      {
+        "code": "Nhịp 2",
+        "shortTitle": "Giậm chân phải, hai tay chống hông",
+        "caption": "Giậm chân phải (chân phải tiếp đất, chân trái co nhẹ nâng lên), hai tay chống hông.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Đổi nhịp sang chân PHẢI giậm xuống sàn bên phải, hai tay giữ nguyên chống hông.",
+        "angleRef": "Giậm chân phải • Hai tay chống hông",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "onHip"
+        }
+      },
+      {
+        "code": "Nhịp 3",
+        "shortTitle": "Giậm chân trái, hai tay chống hông (như N1)",
+        "caption": "Thực hiện như nhịp 1: giậm chân trái, hai tay chống hông.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Tiếp tục nhịp giậm chân TRÁI đều đặn, thân trên giữ thẳng.",
+        "angleRef": "Giậm chân trái • Hai tay chống hông",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "onHip"
+        }
+      },
+      {
+        "code": "Nhịp 4",
+        "shortTitle": "Giậm chân phải, hai tay chống hông (như N2)",
+        "caption": "Thực hiện như nhịp 2: giậm chân phải, hai tay chống hông.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Giậm chân PHẢI đều nhịp, chuẩn bị đưa tay phải chếch cao ở nhịp 5.",
+        "angleRef": "Giậm chân phải • Hai tay chống hông",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "onHip"
+        }
+      },
+      {
+        "code": "Nhịp 5",
+        "shortTitle": "Giậm chân trái, tay phải đưa chếch lên cao",
+        "caption": "Giậm chân trái, tay phải đưa từ dưới sang ngang chếch lên cao, lòng bàn tay hướng ngoài; tay trái giữ chống hông.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Rất dễ theo dõi cùng chiều: chân TRÁI giậm xuống, tay PHẢI (bên phải màn hình) vươn thẳng chếch lên cao, tay trái giữ chống hông.",
+        "angleRef": "Giậm chân trái • Tay phải chếch cao ~150° • Tay trái chống hông",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        }
+      },
+      {
+        "code": "Nhịp 6",
+        "shortTitle": "Giậm chân phải, giữ nguyên tay như nhịp 5",
+        "caption": "Giậm chân phải, hai tay giữ tư thế như nhịp 5 (tay phải chếch lên cao, tay trái chống hông).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Chuyển sang giậm chân PHẢI, giữ vững tay phải chếch cao và tay trái chống hông.",
+        "angleRef": "Giậm chân phải • Giữ tay phải chếch cao",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "onHip"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        }
+      },
+      {
+        "code": "Nhịp 7",
+        "shortTitle": "Giậm chân trái, tay trái đưa chếch lên cao thành chữ V",
+        "caption": "Giậm chân trái, tay trái đưa từ dưới sang ngang chếch lên cao thành hai tay chếch chữ V, lòng bàn tay hướng ngoài.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Đưa tiếp tay TRÁI lên cao đối xứng tạo thành chữ V cân đối với tay phải, chân trái giậm nhịp.",
+        "angleRef": "Giậm chân trái • Hai tay chữ V (lòng bàn tay hướng ngoài)",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        }
+      },
+      {
+        "code": "Nhịp 8",
+        "shortTitle": "Giậm chân phải, giữ hai tay chữ V như nhịp 7",
+        "caption": "Giậm chân phải, hai tay giữ tư thế chữ V như nhịp 7 (chuyển tiếp sang 8 nhịp lần 2).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Giậm chân PHẢI, giữ hai tay chữ V thẳng khuỷu kết thúc 8 nhịp lần 1.",
+        "angleRef": "Giậm chân phải • Hai tay chữ V",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 174,
+          "spread": 30,
+          "palm": "out"
+        }
+      }
+    ]
+  },
+  {
+    "id": "giam-chan-lan-2",
+    "tabLabel": "a2) Giậm chân (Lần 2)",
+    "title": "a) Động tác giậm chân tại chỗ — 8 nhịp lần 2 (Hình 3)",
+    "defaultCam": "rear",
+    "recLabel": "Phía sau 180°",
+    "poses": [
+      {
+        "code": "Nhịp 1",
+        "shortTitle": "Giậm chân trái, hai tay hạ ngang vai sấp",
+        "caption": "Giậm chân trái, hai tay hạ ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Hạ hai tay từ chữ V về dang ngang vai (90°), lòng bàn tay sấp, giậm chân trái.",
+        "angleRef": "Giậm chân trái • Vai 90° • Bàn tay sấp",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 2",
+        "shortTitle": "Giậm chân phải, hai tay bắt chéo trước bụng",
+        "caption": "Giậm chân phải, hai tay hạ thành tư thế bắt chéo trước bụng, lòng bàn tay hướng trong.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Bật X-quang thân để thấy rõ hai cánh tay bắt chéo gọn trước bụng trong khi giậm chân phải.",
+        "angleRef": "Giậm chân phải • Hai tay bắt chéo trước bụng",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "crossBelly"
+        },
+        "armR": {
+          "mode": "crossBelly"
+        }
+      },
+      {
+        "code": "Nhịp 3",
+        "shortTitle": "Giậm chân trái, hai tay bắt chéo trên cao",
+        "caption": "Giậm chân trái, hai tay đưa ra trước lên cao thành tư thế bắt chéo trên cao, lòng bàn tay hướng trước.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Hai cánh tay vươn thẳng bắt chéo cổ tay trên đỉnh đầu (lòng bàn tay hướng trước), giậm chân trái.",
+        "angleRef": "Giậm chân trái • Hai tay bắt chéo trên cao",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "crossHigh"
+        },
+        "armR": {
+          "mode": "crossHigh"
+        }
+      },
+      {
+        "code": "Nhịp 4",
+        "shortTitle": "Giậm chân phải, hai tay hạ bắt chéo trước bụng",
+        "caption": "Giậm chân phải, hai tay hạ về tư thế như nhịp 2 (bắt chéo trước bụng, lòng bàn tay hướng trong).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Hạ nhịp nhàng hai tay về bắt chéo trước bụng (bật X-quang để soi vị trí cổ tay), giậm chân phải.",
+        "angleRef": "Giậm chân phải • Hai tay bắt chéo trước bụng",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "crossBelly"
+        },
+        "armR": {
+          "mode": "crossBelly"
+        }
+      },
+      {
+        "code": "Nhịp 5",
+        "shortTitle": "Giậm chân trái, hai tay bắt chéo trên cao (như N3)",
+        "caption": "Thực hiện như nhịp 3: giậm chân trái, hai tay đưa lên cao bắt chéo trên cao, lòng bàn tay hướng trước.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Tiếp tục đưa hai tay lên bắt chéo trên đỉnh đầu đồng bộ với nhịp giậm chân trái.",
+        "angleRef": "Giậm chân trái • Hai tay bắt chéo trên cao",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "crossHigh"
+        },
+        "armR": {
+          "mode": "crossHigh"
+        }
+      },
+      {
+        "code": "Nhịp 6",
+        "shortTitle": "Giậm chân phải, hai tay bắt chéo trước bụng (như N4)",
+        "caption": "Thực hiện như nhịp 4: giậm chân phải, hai tay hạ bắt chéo trước bụng.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Hạ hai tay bắt chéo trước bụng đồng bộ nhịp giậm chân phải.",
+        "angleRef": "Giậm chân phải • Hai tay bắt chéo trước bụng",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": 0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "crossBelly"
+        },
+        "armR": {
+          "mode": "crossBelly"
+        }
+      },
+      {
+        "code": "Nhịp 7",
+        "shortTitle": "Giậm chân trái, hai tay bắt chéo trên cao (như N5)",
+        "caption": "Thực hiện như nhịp 5: giậm chân trái, hai tay bắt chéo trên cao, lòng bàn tay hướng trước.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Đưa hai tay bắt chéo trên cao lần cuối trước khi mở vòng về đứng nghiêm ở nhịp 8.",
+        "angleRef": "Giậm chân trái • Hai tay bắt chéo trên cao",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.082,
+          "y": 0.255,
+          "z": -0.075,
+          "shoePitch": 0.62,
+          "shoeYaw": -0.04,
+          "straight": 0,
+          "highKnee": 0.35
+        },
+        "armL": {
+          "mode": "crossHigh"
+        },
+        "armR": {
+          "mode": "crossHigh"
+        }
+      },
+      {
+        "code": "Nhịp 8",
+        "shortTitle": "Đưa tay qua ngang hạ dọc thân, về TTCB",
+        "caption": "Hai tay đưa qua ngang, hạ dọc thân, chân phải hạ xuống về TTCB (đứng nghiêm).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (kèm NGANG 90° soi độ nâng gối)",
+        "viewNote": "Kết thúc 2 lần 8 nhịp Giậm chân tại chỗ: đứng nghiêm, hai tay khép sát dọc thân.",
+        "angleRef": "Đứng nghiêm • Thân thẳng 0° • Về TTCB",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.078,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        }
+      }
+    ]
+  },
+  {
+    "id": "thu-chan-tay-cao",
+    "tabLabel": "b) Thu chân – tay cao",
+    "title": "b) Động tác thu chân, tay cao (1 lần 8 nhịp • Hình 4)",
+    "defaultCam": "rear",
+    "recLabel": "Phía sau 180°",
+    "poses": [
+      {
+        "code": "Nhịp 1",
+        "shortTitle": "Chân trái bước sang ngang rộng hơn vai, hai tay ngang vai sấp",
+        "caption": "Chân trái bước sang ngang rộng hơn vai, hai tay ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (Cùng chiều Trái/Phải)",
+        "viewNote": "Chân TRÁI bước mở sang bên trái rộng hơn vai; hai gối thẳng, hai tay dang ngang vai bàn tay sấp.",
+        "angleRef": "Chân rộng hơn vai • Vai 90° • Bàn tay sấp",
+        "pelvisX": 0.0,
+        "pelvisY": 0.815,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 2",
+        "shortTitle": "Thu chân phải kiễng gót sát chân trái, tay phải lên cao áp sát tai",
+        "caption": "Chân phải thu sát chân trái, tiếp đất bằng nửa trước bàn chân; tay phải đưa lên cao áp sát tai, lòng bàn tay hướng trong; tay trái giữ ngang vai sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Bắt buộc: PHÍA SAU 180° (Chống nhầm tay/chân)",
+        "viewNote": "Dồn trụ sang chân TRÁI (bên trái), thu chân PHẢI kiễng mũi chạm sát bên chân trái; tay PHẢI vươn thẳng đứng áp sát tai, tay TRÁI giữ dang ngang sang trái.",
+        "angleRef": "Tay phải 180° áp tai • Tay trái 90° ngang • Gót phải kiễng",
+        "pelvisX": 0.14,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.22,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": 0.065,
+          "y": 0.108,
+          "z": 0.01,
+          "shoePitch": 0.56,
+          "shoeYaw": -0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 180,
+          "spread": 4,
+          "palm": "in"
+        }
+      },
+      {
+        "code": "Nhịp 3",
+        "shortTitle": "Về tư thế nhịp 1 (rộng hơn vai, tay dang ngang sấp)",
+        "caption": "Về tư thế như nhịp 1: bước chân phải mở rộng hơn vai, hai tay dang ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Bước mở chân phải về tư thế rộng hơn vai cân đối, hạ tay phải về ngang vai bàn tay sấp.",
+        "angleRef": "Chân rộng hơn vai • Vai 90° • Bàn tay sấp",
+        "pelvisX": 0.0,
+        "pelvisY": 0.815,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 4",
+        "shortTitle": "Đổi bên: thu chân trái kiễng gót sát chân phải, tay trái áp sát tai",
+        "caption": "Thực hiện như nhịp 2 nhưng đổi bên: chân trái thu sát chân phải, tiếp đất bằng nửa trước bàn chân; tay trái đưa lên cao áp sát tai, lòng bàn tay hướng trong; tay phải giữ ngang vai sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Bắt buộc: PHÍA SAU 180° (Chống nhầm tay/chân)",
+        "viewNote": "Đổi bên đối xứng: trụ chân PHẢI (bên phải), thu chân TRÁI kiễng mũi sát chân phải; tay TRÁI vươn thẳng đứng áp sát tai, tay PHẢI giữ ngang vai.",
+        "angleRef": "Tay trái 180° áp tai • Tay phải 90° ngang • Gót trái kiễng",
+        "pelvisX": -0.14,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": -0.065,
+          "y": 0.108,
+          "z": 0.01,
+          "shoePitch": 0.56,
+          "shoeYaw": 0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.22,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 180,
+          "spread": 4,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 5",
+        "shortTitle": "Về tư thế nhịp 3 (rộng hơn vai, tay dang ngang sấp)",
+        "caption": "Về tư thế như nhịp 3: bước chân trái mở rộng hơn vai, hai tay dang ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Mở chân trái trở về tư thế đứng rộng hơn vai, hai tay dang ngang vai bàn tay sấp.",
+        "angleRef": "Chân rộng hơn vai • Vai 90° • Bàn tay sấp",
+        "pelvisX": 0.0,
+        "pelvisY": 0.815,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 6",
+        "shortTitle": "Thu chân phải kiễng gót sát chân trái, hai tay lên cao chữ V",
+        "caption": "Chân phải thu sát chân trái, tiếp đất bằng nửa trước bàn chân; hai tay đưa lên cao chếch chữ V, lòng bàn tay hướng vào nhau.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Thu chân PHẢI kiễng mũi chạm sát bên chân trái, đồng thời vươn cả hai tay lên cao tạo hình chữ V cân đối, lòng bàn tay hướng vào nhau.",
+        "angleRef": "Hai tay chữ V (~150°) • Gót phải kiễng sát chân trái",
+        "pelvisX": 0.14,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 14,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.22,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": 0.065,
+          "y": 0.108,
+          "z": 0.01,
+          "shoePitch": 0.56,
+          "shoeYaw": -0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 176,
+          "spread": 28,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 176,
+          "spread": 28,
+          "palm": "in"
+        }
+      },
+      {
+        "code": "Nhịp 7",
+        "shortTitle": "Về tư thế nhịp 5 (rộng hơn vai, tay dang ngang sấp)",
+        "caption": "Về tư thế như nhịp 5: bước chân phải rộng hơn vai, hai tay dang ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Mở rộng chân phải về tư thế rộng hơn vai, hạ hai tay ngang vai bàn tay sấp.",
+        "angleRef": "Chân rộng hơn vai • Vai 90° • Bàn tay sấp",
+        "pelvisX": 0.0,
+        "pelvisY": 0.815,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 8",
+        "shortTitle": "Hạ tay dọc thân, thu chân trái sát chân phải về TTCB",
+        "caption": "Hai tay hạ dọc thân, chân trái thu sát chân phải về TTCB (đứng nghiêm).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Thu chân trái khép sát chân phải, hạ thẳng hai tay dọc thân về đứng nghiêm kết thúc 8 nhịp Thu chân – tay cao.",
+        "angleRef": "Đứng nghiêm • Thân thẳng 0° • Về TTCB",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        }
+      }
+    ]
+  },
+  {
+    "id": "bat-tach-chum",
+    "tabLabel": "c) Bật tách chụm",
+    "title": "c) Động tác bật tách chụm (1 lần 8 nhịp • N5–8 lặp lại N1–4 • Hình 5)",
+    "defaultCam": "rear",
+    "recLabel": "Phía sau 180°",
+    "poses": [
+      {
+        "code": "Nhịp 1",
+        "shortTitle": "Bật tách ngang rộng hơn vai, gối khuỵu, tay dang ngang sấp",
+        "caption": "Bật tách ngang rộng hơn vai, gối khuỵu. Hai tay dang ngang, bàn tay sấp. (Nhịp 5 lặp lại nhịp 1).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Bật tách hai chân rộng hơn vai đồng thời hạ hông khuỵu đều hai gối (~110°), lưng giữ thẳng, hai tay dang ngang bàn tay sấp.",
+        "angleRef": "Gối khuỵu rộng ~110° • Vai 90° • Lưng thẳng",
+        "pelvisX": 0.0,
+        "pelvisY": 0.675,
+        "pelvisZ": -0.04,
+        "torsoBend": 4,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": -4,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.28,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.28,
+          "straight": 0,
+          "highKnee": 0,
+          "wideKnee": 1
+        },
+        "legR": {
+          "x": -0.28,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.28,
+          "straight": 0,
+          "highKnee": 0,
+          "wideKnee": 1
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 2",
+        "shortTitle": "Bật chụm gối thẳng, hai tay đưa lên cao vỗ vào nhau",
+        "caption": "Bật chụm, gối thẳng. Hai tay đưa lên cao vỗ vào nhau, mắt nhìn phía trước. (Nhịp 6 lặp lại nhịp 2).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Bật chụm sát hai chân thẳng gối, vươn thẳng hai tay lên cao vỗ hai lòng bàn tay vào nhau ngay trên đỉnh đầu, đầu giữ thẳng.",
+        "angleRef": "Chân chụm thẳng • Vỗ tay trên cao • Mắt nhìn trước",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "clapHigh"
+        },
+        "armR": {
+          "mode": "clapHigh"
+        }
+      },
+      {
+        "code": "Nhịp 3",
+        "shortTitle": "Bật tách ngang rộng hơn vai, gối thẳng, hai tay chữ V, đầu ngửa",
+        "caption": "Bật tách ngang rộng hơn vai, gối thẳng. Hai tay chếch chữ V, lòng bàn tay hướng vào nhau, đầu ngửa. (Nhịp 7 lặp lại nhịp 3).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Bật tách hai chân rộng hơn vai nhưng giữ thẳng gối (khác nhịp 1), hai tay mở rộng hình chữ V cân đối, đầu ngửa nhẹ.",
+        "angleRef": "Chân rộng gối thẳng 180° • Tay chữ V (~148°) • Đầu ngửa",
+        "pelvisX": 0.0,
+        "pelvisY": 0.815,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 22,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.27,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.14,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 176,
+          "spread": 32,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 176,
+          "spread": 32,
+          "palm": "in"
+        }
+      },
+      {
+        "code": "Nhịp 4",
+        "shortTitle": "Bật chụm, hai tay hạ dọc thân về TTCB",
+        "caption": "Bật chụm, hai tay hạ dọc thân về TTCB (đứng nghiêm). (Nhịp 8 lặp lại nhịp 4).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Bật khép sát hai chân, hạ thẳng hai tay dọc thân về đứng nghiêm (lặp lại nhịp 5–8 như 1–4).",
+        "angleRef": "Đứng nghiêm • Gối 180° • Về TTCB",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        }
+      }
+    ]
+  },
+  {
+    "id": "van-minh",
+    "tabLabel": "d) Vặn mình",
+    "title": "d) Động tác vặn mình (1 lần 8 nhịp • N5–8 đổi bên • Hình 6)",
+    "defaultCam": "rear",
+    "recLabel": "Phía sau 180°",
+    "poses": [
+      {
+        "code": "Nhịp 1",
+        "shortTitle": "Chân phải bước chếch phải trụ thẳng; chân trái kiễng mũi; tay ngang sấp",
+        "caption": "Chân phải bước chếch sang phải; trọng lượng cơ thể dồn lên chân phải, chân trái tiếp đất bằng nửa trước bàn chân, gối thẳng. Hai tay ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (Cùng chiều Trái/Phải)",
+        "viewNote": "Dồn trọng tâm sang chân PHẢI (bên phải màn hình), chân TRÁI duỗi thẳng kiễng nửa trước bàn chân sang trái; hai tay dang thẳng ngang vai, bàn tay sấp.",
+        "angleRef": "Trụ chân phải • Kiễng mũi trái • Vai 90° sấp",
+        "pelvisX": -0.09,
+        "pelvisY": 0.825,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.22,
+          "y": 0.106,
+          "z": -0.04,
+          "shoePitch": 0.56,
+          "shoeYaw": 0.18,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.15,
+          "y": 0.062,
+          "z": 0.03,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.08,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 2",
+        "shortTitle": "Nâng gối trái ngang hông, vặn thân sang trái, hai tay co sau đầu",
+        "caption": "Chân trái nâng gối gần ngang hông, thân trên xoay sang trái. Hai tay co sau đầu, lòng bàn tay hướng trước, mắt nhìn sang trái.",
+        "viewRec": "rear",
+        "viewRecLabel": "Bắt buộc: PHÍA SAU 180° (thấy rõ hai tay đặt sau đầu & vặn trái)",
+        "viewNote": "Góc phía sau cực kỳ rõ nét: thấy trọn hai bàn tay đặt gọn sau gáy với hai khuỷu tay mở rộng, thân trên và đầu vặn sang bên TRÁI về phía gối TRÁI đang nâng gần ngang hông!",
+        "angleRef": "Nâng gối trái ~85° • Vặn thân trái ~48° • Hai tay co sau đầu",
+        "pelvisX": -0.08,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 48,
+        "headPitch": 0,
+        "headYaw": 22,
+        "legL": {
+          "x": 0.02,
+          "y": 0.445,
+          "z": 0.375,
+          "shoePitch": 0.42,
+          "shoeYaw": 0.12,
+          "straight": 0,
+          "highKnee": 1
+        },
+        "legR": {
+          "x": -0.13,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "behindHead"
+        },
+        "armR": {
+          "mode": "behindHead"
+        }
+      },
+      {
+        "code": "Nhịp 3",
+        "shortTitle": "Về tư thế nhịp 1 (hạ chân trái kiễng mũi, tay ngang vai sấp)",
+        "caption": "Về tư thế nhịp 1: hạ chân trái tiếp đất bằng nửa trước bàn chân, trọng lượng dồn lên chân phải, hai tay dang ngang vai, bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Trả thân về hướng thẳng trước, hạ chân trái chạm nửa trước bàn chân sang bên trái, mở thẳng hai tay ngang vai bàn tay sấp.",
+        "angleRef": "Trụ chân phải • Kiễng mũi trái • Vai 90° sấp",
+        "pelvisX": -0.09,
+        "pelvisY": 0.825,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.22,
+          "y": 0.106,
+          "z": -0.04,
+          "shoePitch": 0.56,
+          "shoeYaw": 0.18,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.15,
+          "y": 0.062,
+          "z": 0.03,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.08,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 4",
+        "shortTitle": "Thu chân phải sát chân trái, hạ tay dọc thân về TTCB",
+        "caption": "Chân phải thu sát chân trái. Hai tay hạ dọc thân về TTCB (đứng nghiêm).",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Thu chân phải về sát chân trái, hạ hai tay dọc thân về đứng nghiêm (chuẩn bị đổi bên sang trái ở nhịp 5–8).",
+        "angleRef": "Đứng nghiêm • Thân thẳng 0° • Về TTCB",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        }
+      },
+      {
+        "code": "Nhịp 5",
+        "shortTitle": "Đổi bên (như N1): chân trái bước chếch trái trụ thẳng; chân phải kiễng mũi",
+        "caption": "Thực hiện như nhịp 1 nhưng đổi bên: chân trái bước chếch sang trái dồn trọng lượng, chân phải tiếp đất bằng nửa trước bàn chân, gối thẳng; hai tay ngang vai sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180° (Đổi bên sang TRÁI)",
+        "viewNote": "Đổi bên đối xứng: dồn trọng tâm sang chân TRÁI (bên trái), chân PHẢI duỗi thẳng kiễng mũi sang phải, hai tay dang ngang vai sấp.",
+        "angleRef": "Trụ chân trái • Kiễng mũi phải • Vai 90° sấp",
+        "pelvisX": 0.09,
+        "pelvisY": 0.825,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.15,
+          "y": 0.062,
+          "z": 0.03,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.08,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.22,
+          "y": 0.106,
+          "z": -0.04,
+          "shoePitch": 0.56,
+          "shoeYaw": -0.18,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 6",
+        "shortTitle": "Đổi bên (như N2): nâng gối phải ngang hông, vặn thân sang phải, tay co sau đầu",
+        "caption": "Thực hiện như nhịp 2 nhưng đổi bên: chân phải nâng gối gần ngang hông, thân trên xoay sang phải, hai tay co sau đầu, lòng bàn tay hướng trước, mắt nhìn sang phải.",
+        "viewRec": "rear",
+        "viewRecLabel": "Bắt buộc: PHÍA SAU 180° (rõ tay sau đầu & vặn phải)",
+        "viewNote": "Nâng gối PHẢI gần ngang hông, vặn thân trên và hướng mắt sang bên PHẢI màn hình, hai tay co sau gáy mở khuỷu rộng.",
+        "angleRef": "Nâng gối phải ~85° • Vặn thân phải ~48° • Hai tay co sau đầu",
+        "pelvisX": 0.08,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": -48,
+        "headPitch": 0,
+        "headYaw": -22,
+        "legL": {
+          "x": 0.13,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.06,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.02,
+          "y": 0.445,
+          "z": 0.375,
+          "shoePitch": 0.42,
+          "shoeYaw": -0.12,
+          "straight": 0,
+          "highKnee": 1
+        },
+        "armL": {
+          "mode": "behindHead"
+        },
+        "armR": {
+          "mode": "behindHead"
+        }
+      },
+      {
+        "code": "Nhịp 7",
+        "shortTitle": "Về tư thế nhịp 5 (hạ chân phải kiễng mũi, tay ngang vai sấp)",
+        "caption": "Thực hiện như nhịp 3 nhưng đổi bên: về tư thế nhịp 5, hạ chân phải tiếp đất bằng nửa trước bàn chân, trụ chân trái, hai tay ngang vai bàn tay sấp.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Trả thân về hướng thẳng trước, hạ mũi chân phải chạm đất bên phải, hai tay dang ngang vai bàn tay sấp.",
+        "angleRef": "Trụ chân trái • Kiễng mũi phải • Vai 90° sấp",
+        "pelvisX": 0.09,
+        "pelvisY": 0.825,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.15,
+          "y": 0.062,
+          "z": 0.03,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.08,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.22,
+          "y": 0.106,
+          "z": -0.04,
+          "shoePitch": 0.56,
+          "shoeYaw": -0.18,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 90,
+          "palm": "down"
+        }
+      },
+      {
+        "code": "Nhịp 8",
+        "shortTitle": "Thu chân trái sát chân phải, hạ tay dọc thân về TTCB",
+        "caption": "Thực hiện như nhịp 4 nhưng đổi bên: chân trái thu sát chân phải, hai tay hạ dọc thân về TTCB (đứng nghiêm), kết thúc Phần 1.",
+        "viewRec": "rear",
+        "viewRecLabel": "Tối ưu: PHÍA SAU 180°",
+        "viewNote": "Hoàn tất 4 động tác Phần 1 lớp 9: thu chân khép sát, đứng nghiêm thẳng trục.",
+        "angleRef": "Đứng nghiêm • Thân thẳng 0° • Kết thúc Phần 1",
+        "pelvisX": 0.0,
+        "pelvisY": 0.835,
+        "pelvisZ": 0.0,
+        "torsoBend": 0,
+        "torsoSide": 0,
+        "torsoTwist": 0,
+        "headPitch": 0,
+        "headYaw": 0,
+        "legL": {
+          "x": 0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": 0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "legR": {
+          "x": -0.072,
+          "y": 0.062,
+          "z": 0.0,
+          "shoePitch": 0.0,
+          "shoeYaw": -0.04,
+          "straight": 1,
+          "highKnee": 0
+        },
+        "armL": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        },
+        "armR": {
+          "mode": "fk",
+          "pitch": 0,
+          "spread": 5,
+          "palm": "in"
+        }
+      }
+    ]
+  }
+];
+
+const RIG = {
+  hipHalfW: 0.090,
+  waistHalfW: 0.108,
+  shoulderHalfW: 0.158,
+  torsoLower: 0.21,
+  torsoUpper: 0.24,
+  neckLen: 0.06,
+  headR: 0.104,
+  thighLen: 0.395,
+  shinLen: 0.375,
+  upperArmLen: 0.275,
+  forearmLen: 0.255,
+  handLen: 0.125
+};
+
+const state = {
+  exIdx: 0,
+  t: 0,
+  playing: false,
+  speed: 1,
+  splitMode: false,
+  camPreset: 'rear',
+  showSkeleton: false,
+  xray: false,
+  showGrid: true,
+  boyHair: false,
+  transparentExport: true,
+  lastTs: null,
+  overrides: {},
+  orbit: {
+    theta: Math.PI,
+    phi: 0.06,
+    radius: 4.30,
+    targetY: 0.94
+  }
+};
+
+function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function smoothstep(t) { const x = clamp(t, 0, 1); return x * x * (3 - 2 * x); }
+function deg2rad(d) { return d * Math.PI / 180; }
+function rad2deg(r) { return r * 180 / Math.PI; }
+
+function curEx() { return EXERCISES[state.exIdx]; }
+function curPoses() { return curEx().poses; }
+
+function getPoseBase(exIdx, idx) {
+  const base = EXERCISES[exIdx].poses[idx];
+  const key = exIdx + ':' + idx;
+  const ov = state.overrides[key];
+  return ov ? Object.assign({}, base, ov) : base;
+}
+
+function lerpLeg(a, b, u, hopY) {
+  return {
+    x: lerp(a.x, b.x, u),
+    y: lerp(a.y, b.y, u) + hopY,
+    z: lerp(a.z, b.z, u),
+    shoePitch: lerp(a.shoePitch, b.shoePitch, u),
+    shoeYaw: lerp(a.shoeYaw || 0, b.shoeYaw || 0, u),
+    straight: lerp(a.straight, b.straight, u),
+    highKnee: lerp(a.highKnee || 0, b.highKnee || 0, u),
+    wideKnee: lerp(a.wideKnee || 0, b.wideKnee || 0, u)
+  };
+}
+
+function samplePose(exIdx, t) {
+  const list = EXERCISES[exIdx].poses;
+  const n = list.length;
+  const wrapped = ((t % n) + n) % n;
+  const i0 = Math.floor(wrapped) % n;
+  const i1 = (i0 + 1) % n;
+  const frac = wrapped - Math.floor(wrapped);
+  const u = smoothstep((frac - 0.12) / 0.80);
+
+  const p0 = getPoseBase(exIdx, i0);
+  const p1 = getPoseBase(exIdx, i1);
+  const nearestIdx = Math.round(wrapped) % n;
+  const meta = getPoseBase(exIdx, nearestIdx);
+
+  // Subtle jump arc for c) Bật tách chụm (exIdx === 3)
+  let hopY = 0;
+  if (exIdx === 3) {
+    hopY = Math.sin(u * Math.PI) * 0.085;
+  }
+
+  return {
+    nearestIdx,
+    i0, i1, u,
+    p0, p1,
+    code: meta.code,
+    shortTitle: meta.shortTitle,
+    caption: meta.caption,
+    viewRec: meta.viewRec,
+    viewRecLabel: meta.viewRecLabel,
+    viewNote: meta.viewNote,
+    angleRef: meta.angleRef,
+    pelvisX: lerp(p0.pelvisX || 0, p1.pelvisX || 0, u),
+    pelvisY: lerp(p0.pelvisY, p1.pelvisY, u) + hopY,
+    pelvisZ: lerp(p0.pelvisZ || 0, p1.pelvisZ || 0, u),
+    torsoBend: lerp(p0.torsoBend || 0, p1.torsoBend || 0, u),
+    torsoSide: lerp(p0.torsoSide || 0, p1.torsoSide || 0, u),
+    torsoTwist: lerp(p0.torsoTwist || 0, p1.torsoTwist || 0, u),
+    headPitch: lerp(p0.headPitch || 0, p1.headPitch || 0, u),
+    headYaw: lerp(p0.headYaw || 0, p1.headYaw || 0, u),
+    legL: lerpLeg(p0.legL, p1.legL, u, hopY),
+    legR: lerpLeg(p0.legR, p1.legR, u, hopY)
+  };
+}
+
+if (typeof THREE === 'undefined') {
+  document.getElementById('errBanner').style.display = 'block';
+} else {
+  init3D();
+}
+
+function init3D() {
+  const canvas = document.getElementById('glCanvas');
+  const shell = document.getElementById('viewportShell');
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas, antialias: true, alpha: true, preserveDrawingBuffer: true
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  const scene = new THREE.Scene();
+  const cameraMain = new THREE.PerspectiveCamera(32, 1, 0.1, 30);
+  const cameraFront = new THREE.PerspectiveCamera(32, 1, 0.1, 30);
+
+  const hemi = new THREE.HemisphereLight(0xFFFFFF, 0xDCE8E6, 0.88);
+  hemi.position.set(0, 4, 0);
+  scene.add(hemi);
+
+  const keyLight = new THREE.DirectionalLight(0xFFFDF8, 0.78);
+  keyLight.position.set(-2.4, 4.6, -2.8);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 1024;
+  keyLight.shadow.mapSize.height = 1024;
+  keyLight.shadow.camera.near = 0.5;
+  keyLight.shadow.camera.far = 14;
+  keyLight.shadow.camera.left = -2.0;
+  keyLight.shadow.camera.right = 2.0;
+  keyLight.shadow.camera.top = 2.4;
+  keyLight.shadow.camera.bottom = -0.8;
+  keyLight.shadow.bias = -0.0005;
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0xCCFBF1, 0.48);
+  fillLight.position.set(2.6, 2.8, 3.2);
+  scene.add(fillLight);
+
+  const shadowFloor = new THREE.Mesh(
+    new THREE.PlaneGeometry(7, 7),
+    new THREE.ShadowMaterial({ opacity: 0.19 })
+  );
+  shadowFloor.rotation.x = -Math.PI / 2;
+  shadowFloor.receiveShadow = true;
+  scene.add(shadowFloor);
+
+  const gridHelper = new THREE.GridHelper(3.4, 17, 0x94A3B8, 0xCBD5E1);
+  gridHelper.position.y = 0.001;
+  gridHelper.material.transparent = true;
+  gridHelper.material.opacity = 0.45;
+  scene.add(gridHelper);
+
+  // EXACT LỚP 9 SGK UNIFORM (tr.41–45):
+  // All-white polo shirt + teal-green collar & sleeve cuffs + dark charcoal-black pants with teal-green side stripe + white socks + dark charcoal sneakers with white soles!
+  const mats = {
+    skin: new THREE.MeshStandardMaterial({ color: 0xF5C29B, roughness: 0.65 }),
+    hair: new THREE.MeshStandardMaterial({ color: 0x362924, roughness: 0.78 }),
+    shirtWhite: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.68 }),
+    tealTrim: new THREE.MeshStandardMaterial({ color: 0x26A69A, roughness: 0.54 }),
+    pantsBlack: new THREE.MeshStandardMaterial({ color: 0x2F343A, roughness: 0.65 }),
+    sockWhite: new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.7 }),
+    shoeDark: new THREE.MeshStandardMaterial({ color: 0x272B30, roughness: 0.55 }),
+    soleWhite: new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.55 }),
+    eyeDark: new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.3 }),
+    mouth: new THREE.MeshStandardMaterial({ color: 0xC26D5E, roughness: 0.5 }),
+    aiJoint: new THREE.MeshBasicMaterial({ color: 0xEA580C, depthTest: false }),
+    aiBone: new THREE.MeshBasicMaterial({ color: 0x0284C7, depthTest: false })
+  };
+
+  const translucentMats = [mats.shirtWhite, mats.tealTrim, mats.pantsBlack];
+  const charRoot = new THREE.Group();
+  scene.add(charRoot);
+
+  function makeLimbMesh(rBot, rTop, mat, hasStripe, stripeSide) {
+    const g = new THREE.Group();
+    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, 1, 20), mat);
+    cyl.position.y = 0.5;
+    cyl.castShadow = true;
+    g.add(cyl);
+    const c0 = new THREE.Mesh(new THREE.SphereGeometry(rBot * 0.99, 16, 14), mat);
+    c0.castShadow = true;
+    g.add(c0);
+    const c1 = new THREE.Mesh(new THREE.SphereGeometry(rTop * 0.99, 16, 14), mat);
+    c1.position.y = 1.0;
+    c1.castShadow = true;
+    g.add(c1);
+    if (hasStripe) {
+      // Teal-green stripe down charcoal track pants (Grade 9 signature!)
+      const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.011, 0.96, 0.017), mats.tealTrim);
+      stripe.position.set(stripeSide * ((rBot + rTop) * 0.5 - 0.002), 0.5, 0);
+      g.add(stripe);
+    }
+    return g;
+  }
+
+  function makeSleeveMesh() {
+    const g = new THREE.Group();
+    const sleeve = new THREE.Mesh(new THREE.CylinderGeometry(0.051, 0.055, 0.46, 20), mats.shirtWhite);
+    sleeve.position.y = 0.23;
+    sleeve.castShadow = true;
+    g.add(sleeve);
+    const cap = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 14), mats.shirtWhite);
+    cap.castShadow = true;
+    g.add(cap);
+    const trim = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.053, 0.044, 20), mats.tealTrim);
+    trim.position.y = 0.46;
+    g.add(trim);
+    return g;
+  }
+
+  function makeHandMesh() {
+    const g = new THREE.Group();
+    const palm = new THREE.Mesh(new THREE.BoxGeometry(0.056, 0.072, 0.021), mats.skin);
+    palm.position.set(0, 0.04, 0);
+    palm.castShadow = true;
+    g.add(palm);
+    const fingers = new THREE.Mesh(new THREE.BoxGeometry(0.052, 0.055, 0.017), mats.skin);
+    fingers.position.set(0, 0.098, 0);
+    fingers.castShadow = true;
+    g.add(fingers);
+    const thumb = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.011, 0.045, 10), mats.skin);
+    thumb.position.set(0.035, 0.042, 0.007);
+    thumb.rotation.z = -0.48;
+    thumb.castShadow = true;
+    g.add(thumb);
+    return g;
+  }
+
+  function makeShoeMesh() {
+    const g = new THREE.Group();
+    const sock = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.037, 0.065, 16), mats.sockWhite);
+    sock.position.set(0, -0.01, 0);
+    sock.castShadow = true;
+    g.add(sock);
+    const upper = new THREE.Mesh(new THREE.BoxGeometry(0.082, 0.052, 0.192), mats.shoeDark);
+    upper.position.set(0, -0.034, 0.052);
+    upper.castShadow = true;
+    g.add(upper);
+    const toeCap = new THREE.Mesh(new THREE.SphereGeometry(0.041, 16, 12), mats.shoeDark);
+    toeCap.scale.set(1.0, 0.62, 1.15);
+    toeCap.position.set(0, -0.038, 0.144);
+    toeCap.castShadow = true;
+    g.add(toeCap);
+    const heelBack = new THREE.Mesh(new THREE.SphereGeometry(0.041, 14, 12), mats.shoeDark);
+    heelBack.scale.set(0.98, 0.72, 0.7);
+    heelBack.position.set(0, -0.034, -0.042);
+    heelBack.castShadow = true;
+    g.add(heelBack);
+    const sole = new THREE.Mesh(new THREE.BoxGeometry(0.088, 0.019, 0.226), mats.soleWhite);
+    sole.position.set(0, -0.058, 0.054);
+    sole.castShadow = true;
+    g.add(sole);
+    for (let i = 0; i < 2; i++) {
+      const lace = new THREE.Mesh(new THREE.BoxGeometry(0.042, 0.008, 0.013), mats.tealTrim);
+      lace.position.set(0, -0.005, 0.055 + i * 0.032);
+      g.add(lace);
+    }
+    return g;
+  }
+
+  // Pelvis & All-White Polo Torso with Teal Collar
+  const pelvisMesh = new THREE.Group();
+  const pelvisCore = new THREE.Mesh(new THREE.SphereGeometry(0.128, 24, 18), mats.pantsBlack);
+  pelvisCore.scale.set(1.12, 0.72, 0.82);
+  pelvisCore.castShadow = true;
+  pelvisMesh.add(pelvisCore);
+  charRoot.add(pelvisMesh);
+
+  const torsoLowerMesh = new THREE.Group();
+  const lowerShirt = new THREE.Mesh(new THREE.CylinderGeometry(0.138, 0.134, 1, 24), mats.shirtWhite);
+  lowerShirt.scale.set(1.06, 1, 0.74);
+  lowerShirt.position.y = 0.5;
+  lowerShirt.castShadow = true;
+  torsoLowerMesh.add(lowerShirt);
+  charRoot.add(torsoLowerMesh);
+
+  const torsoUpperMesh = new THREE.Group();
+  const whiteBody = new THREE.Mesh(new THREE.CylinderGeometry(0.156, 0.140, 1, 24), mats.shirtWhite);
+  whiteBody.scale.set(1.08, 1, 0.75);
+  whiteBody.position.y = 0.5;
+  whiteBody.castShadow = true;
+  torsoUpperMesh.add(whiteBody);
+  const shoulderCap = new THREE.Mesh(new THREE.SphereGeometry(0.156, 22, 16), mats.shirtWhite);
+  shoulderCap.scale.set(1.08, 0.38, 0.74);
+  shoulderCap.position.y = 0.96;
+  shoulderCap.castShadow = true;
+  torsoUpperMesh.add(shoulderCap);
+  const collarRing = new THREE.Mesh(new THREE.TorusGeometry(0.066, 0.018, 12, 24), mats.tealTrim);
+  collarRing.rotation.x = Math.PI / 2;
+  collarRing.position.set(0, 1.06, 0.005);
+  torsoUpperMesh.add(collarRing);
+  const collarBackFlap = new THREE.Mesh(new THREE.BoxGeometry(0.122, 0.044, 0.025), mats.tealTrim);
+  collarBackFlap.position.set(0, 1.01, -0.068);
+  torsoUpperMesh.add(collarBackFlap);
+  const collarFrontPlacket = new THREE.Mesh(new THREE.BoxGeometry(0.038, 0.105, 0.024), mats.tealTrim);
+  collarFrontPlacket.position.set(0, 0.93, 0.105);
+  torsoUpperMesh.add(collarFrontPlacket);
+  charRoot.add(torsoUpperMesh);
+
+  const neckMesh = makeLimbMesh(0.042, 0.040, mats.skin, false, 0);
+  charRoot.add(neckMesh);
+
+  // Head: NEW 9th-grade Female student model matching SGK p.42–44 (dark hair framing cheeks + neat low bun/ponytail at back with teal tie!)
+  const headGroup = new THREE.Group();
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR, 26, 22), mats.skin);
+  skull.scale.set(0.91, 1.04, 0.95);
+  skull.castShadow = true;
+  headGroup.add(skull);
+
+  [-1, 1].forEach(s => {
+    const ear = new THREE.Mesh(new THREE.SphereGeometry(0.020, 12, 10), mats.skin);
+    ear.scale.set(0.55, 1.1, 0.8);
+    ear.position.set(s * 0.094, -0.005, -0.005);
+    headGroup.add(ear);
+  });
+
+  const hairCap = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR * 1.045, 26, 22, 0, Math.PI * 2, 0, Math.PI * 0.62), mats.hair);
+  hairCap.scale.set(0.95, 1.05, 0.98);
+  hairCap.rotation.x = -0.34;
+  hairCap.castShadow = true;
+  headGroup.add(hairCap);
+
+  const hairBack = new THREE.Mesh(new THREE.SphereGeometry(RIG.headR * 0.98, 20, 16), mats.hair);
+  hairBack.scale.set(0.92, 0.96, 0.74);
+  hairBack.position.set(0, -0.008, -0.036);
+  hairBack.castShadow = true;
+  headGroup.add(hairBack);
+
+  // Female hairstyle: side framing locks + neat tied low ponytail/bun at back (clearly matches p.42-44!)
+  const girlHairGroup = new THREE.Group();
+  [-1, 1].forEach(s => {
+    const lock = new THREE.Mesh(new THREE.SphereGeometry(0.032, 14, 12), mats.hair);
+    lock.scale.set(0.58, 1.95, 0.98);
+    lock.position.set(s * 0.088, -0.045, 0.005);
+    lock.castShadow = true;
+    girlHairGroup.add(lock);
+  });
+  const hairTie = new THREE.Mesh(new THREE.TorusGeometry(0.022, 0.007, 10, 18), mats.tealTrim);
+  hairTie.position.set(0, -0.026, -0.102);
+  girlHairGroup.add(hairTie);
+  const ponyTop = new THREE.Mesh(new THREE.SphereGeometry(0.038, 14, 12), mats.hair);
+  ponyTop.scale.set(0.95, 1.20, 0.85);
+  ponyTop.position.set(0, -0.048, -0.122);
+  ponyTop.castShadow = true;
+  girlHairGroup.add(ponyTop);
+  const ponyEnd = new THREE.Mesh(new THREE.ConeGeometry(0.034, 0.11, 14), mats.hair);
+  ponyEnd.rotation.x = Math.PI + 0.14;
+  ponyEnd.position.set(0, -0.108, -0.130);
+  ponyEnd.castShadow = true;
+  girlHairGroup.add(ponyEnd);
+  headGroup.add(girlHairGroup);
+
+  [-1, 1].forEach(s => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.010, 10, 10), mats.eyeDark);
+    eye.position.set(s * 0.034, 0.008, 0.093);
+    headGroup.add(eye);
+  });
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.011, 10, 10), mats.skin);
+  nose.scale.set(0.75, 1.1, 1.3);
+  nose.position.set(0, -0.012, 0.102);
+  headGroup.add(nose);
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.030, 0.006, 0.008), mats.mouth);
+  mouth.position.set(0, -0.043, 0.094);
+  headGroup.add(mouth);
+
+  charRoot.add(headGroup);
+
+  const parts = {
+    thighL: makeLimbMesh(0.066, 0.052, mats.pantsBlack, true, 1),
+    shinL:  makeLimbMesh(0.050, 0.040, mats.pantsBlack, true, 1),
+    shoeL:  makeShoeMesh(),
+    thighR: makeLimbMesh(0.066, 0.052, mats.pantsBlack, true, -1),
+    shinR:  makeLimbMesh(0.050, 0.040, mats.pantsBlack, true, -1),
+    shoeR:  makeShoeMesh(),
+    upperArmL: makeLimbMesh(0.040, 0.034, mats.skin, false, 0),
+    sleeveL:   makeSleeveMesh(),
+    foreArmL:  makeLimbMesh(0.033, 0.027, mats.skin, false, 0),
+    handL:     makeHandMesh(),
+    upperArmR: makeLimbMesh(0.040, 0.034, mats.skin, false, 0),
+    sleeveR:   makeSleeveMesh(),
+    foreArmR:  makeLimbMesh(0.033, 0.027, mats.skin, false, 0),
+    handR:     makeHandMesh()
+  };
+  Object.values(parts).forEach(m => charRoot.add(m));
+
+  // AI 3D Skeleton Overlay
+  const aiGroup = new THREE.Group();
+  const aiJointMeshes = [];
+  for (let i = 0; i < 12; i++) {
+    const s = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 10), mats.aiJoint);
+    s.renderOrder = 999;
+    aiGroup.add(s);
+    aiJointMeshes.push(s);
+  }
+  const aiBoneMeshes = [];
+  for (let i = 0; i < 12; i++) {
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 1, 8), mats.aiBone);
+    b.renderOrder = 998;
+    aiGroup.add(b);
+    aiBoneMeshes.push(b);
+  }
+  charRoot.add(aiGroup);
+
+  const UP_Y = new THREE.Vector3(0, 1, 0);
+  function alignLimb(mesh, pStart, pEnd) {
+    const dir = new THREE.Vector3().subVectors(pEnd, pStart);
+    const len = Math.max(dir.length(), 1e-4);
+    mesh.position.copy(pStart);
+    mesh.scale.set(1, len, 1);
+    mesh.quaternion.setFromUnitVectors(UP_Y, dir.clone().normalize());
+  }
+
+  function solveTwoBoneIK(root, target, l1, l2, hintDir) {
+    const diff = new THREE.Vector3().subVectors(target, root);
+    const dist = clamp(diff.length(), Math.abs(l1 - l2) + 0.01, l1 + l2 - 0.001);
+    const dir = diff.clone().normalize();
+    const cosA = clamp((l1 * l1 + dist * dist - l2 * l2) / (2 * l1 * dist), -1, 1);
+    const sinA = Math.sqrt(Math.max(0, 1 - cosA * cosA));
+    const perp = hintDir.clone().addScaledVector(dir, -hintDir.dot(dir));
+    if (perp.lengthSq() < 1e-6) perp.set(0, 0, 1);
+    perp.normalize();
+    return root.clone().addScaledVector(dir, l1 * cosA).addScaledVector(perp, l1 * sinA);
+  }
+
+  function jointAngleDeg(a, b, c) {
+    const v1 = new THREE.Vector3().subVectors(a, b).normalize();
+    const v2 = new THREE.Vector3().subVectors(c, b).normalize();
+    return Math.round(rad2deg(Math.acos(clamp(v1.dot(v2), -1, 1))));
+  }
+
+  function orientHandMatrix(handM, wrist, elbow, palmMode, leftSign, torsoLeft, torsoFwd) {
+    const handY = wrist.clone().sub(elbow).normalize();
+    let desiredPalmZ;
+    if (palmMode === 'down') desiredPalmZ = new THREE.Vector3(0, -1, 0);
+    else if (palmMode === 'up') desiredPalmZ = new THREE.Vector3(0, 1, 0);
+    else if (palmMode === 'out') desiredPalmZ = torsoLeft.clone().multiplyScalar(leftSign);
+    else if (palmMode === 'fwd') desiredPalmZ = torsoFwd.clone();
+    else if (palmMode === 'back') desiredPalmZ = torsoFwd.clone().multiplyScalar(-1);
+    else desiredPalmZ = torsoLeft.clone().multiplyScalar(-leftSign);
+
+    const palmZ = desiredPalmZ.clone().addScaledVector(handY, -desiredPalmZ.dot(handY));
+    if (palmZ.lengthSq() < 1e-4) palmZ.set(0, 0, 1);
+    palmZ.normalize();
+
+    const handX = new THREE.Vector3().crossVectors(handY, palmZ).normalize();
+    handM.position.copy(wrist);
+    handM.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(handX, handY, palmZ));
+  }
+
+  function buildTorsoFrame(bendRad, sideRad, twistRad) {
+    const upSide = new THREE.Vector3(Math.sin(sideRad), Math.cos(sideRad), 0);
+    const u0 = new THREE.Vector3(
+      upSide.x * Math.cos(bendRad * 0.35),
+      upSide.y * Math.cos(bendRad),
+      Math.sin(bendRad)
+    ).normalize();
+    const l0 = new THREE.Vector3(Math.cos(sideRad), -Math.sin(sideRad) * Math.cos(bendRad * 0.6), 0).normalize();
+    const f0 = new THREE.Vector3().crossVectors(l0, u0).normalize();
+    // Positive twistRad rotates front (+f0) toward body LEFT (+l0)
+    const tLeft = l0.clone().multiplyScalar(Math.cos(twistRad)).addScaledVector(f0, -Math.sin(twistRad)).normalize();
+    const tFwd = l0.clone().multiplyScalar(Math.sin(twistRad)).addScaledVector(f0, Math.cos(twistRad)).normalize();
+    const quat = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(tLeft, u0, tFwd));
+    return { up: u0, left: tLeft, fwd: tFwd, quat };
+  }
+
+  // Resolve per-arm targets (supports fk, onHip, crossBelly, crossHigh, clapHigh, behindHead!)
+  function resolveSingleArm(spec, leftSign, shPt, waist, chest, headCenter, frame) {
+    const R = RIG;
+    const mode = (spec && spec.mode) || 'fk';
+
+    if (mode === 'onHip') {
+      const wrist = waist.clone()
+        .addScaledVector(frame.left, leftSign * (R.waistHalfW + 0.032))
+        .addScaledVector(frame.fwd, 0.015);
+      const elbow = shPt.clone().lerp(wrist, 0.50).addScaledVector(frame.left, leftSign * 0.175);
+      return { elbow, wrist, palm: 'in' };
+    }
+
+    if (mode === 'crossBelly') {
+      const wrist = waist.clone()
+        .addScaledVector(frame.up, -0.145)
+        .addScaledVector(frame.left, -leftSign * 0.055)
+        .addScaledVector(frame.fwd, leftSign > 0 ? 0.165 : 0.132);
+      const elbow = solveTwoBoneIK(
+        shPt, wrist, R.upperArmLen, R.forearmLen,
+        frame.left.clone().multiplyScalar(leftSign * 0.45).addScaledVector(frame.fwd, 0.55)
+      );
+      return { elbow, wrist, palm: 'back' };
+    }
+
+    if (mode === 'crossHigh') {
+      // Wrists crossed cleanly overhead above crown of head, palms facing forward!
+      const wrist = chest.clone()
+        .addScaledVector(frame.up, 0.475)
+        .addScaledVector(frame.left, -leftSign * 0.048)
+        .addScaledVector(frame.fwd, leftSign > 0 ? 0.048 : 0.016);
+      const elbow = solveTwoBoneIK(
+        shPt, wrist, R.upperArmLen, R.forearmLen,
+        frame.left.clone().multiplyScalar(leftSign * 0.85).addScaledVector(frame.fwd, 0.2)
+      );
+      return { elbow, wrist, palm: 'fwd' };
+    }
+
+    if (mode === 'clapHigh') {
+      // Hands clapping straight overhead!
+      const wrist = chest.clone()
+        .addScaledVector(frame.up, 0.492)
+        .addScaledVector(frame.left, leftSign * 0.024)
+        .addScaledVector(frame.fwd, 0.025);
+      const elbow = solveTwoBoneIK(
+        shPt, wrist, R.upperArmLen, R.forearmLen,
+        frame.left.clone().multiplyScalar(leftSign * 0.85).addScaledVector(frame.fwd, 0.15)
+      );
+      return { elbow, wrist, palm: 'in' };
+    }
+
+    if (mode === 'behindHead') {
+      // Vặn mình N2 & N6: hands behind occipital/back of head, palms facing forward, elbows flared wide out!
+      const wrist = headCenter.clone()
+        .addScaledVector(frame.up, -0.025)
+        .addScaledVector(frame.left, leftSign * 0.068)
+        .addScaledVector(frame.fwd, -0.105);
+      const elbow = solveTwoBoneIK(
+        shPt, wrist, R.upperArmLen, R.forearmLen,
+        frame.left.clone().multiplyScalar(leftSign * 1.0).addScaledVector(frame.up, 0.25).addScaledVector(frame.fwd, -0.15)
+      );
+      return { elbow, wrist, palm: 'fwd' };
+    }
+
+    // Standard FK
+    const pr = deg2rad((spec && spec.pitch) || 0);
+    const sr = deg2rad((spec && spec.spread) || 0);
+    const vSag = new THREE.Vector3()
+      .addScaledVector(frame.up, -Math.cos(pr))
+      .addScaledVector(frame.fwd, Math.sin(pr));
+    const dirFK = new THREE.Vector3()
+      .addScaledVector(vSag, Math.cos(sr))
+      .addScaledVector(frame.left, leftSign * Math.sin(sr))
+      .normalize();
+
+    const elbow = shPt.clone().addScaledVector(dirFK, R.upperArmLen);
+    const wrist = elbow.clone().addScaledVector(dirFK, R.forearmLen);
+    return { elbow, wrist, palm: (spec && spec.palm) || 'in' };
+  }
+
+  function applyPose3D(pose) {
+    const R = RIG;
+    const bendRad = deg2rad(pose.torsoBend || 0);
+    const sideRad = deg2rad(pose.torsoSide || 0);
+    const twistRad = deg2rad(pose.torsoTwist || 0);
+    const pelvis = new THREE.Vector3(pose.pelvisX, pose.pelvisY, pose.pelvisZ);
+
+    const lowFrame = buildTorsoFrame(bendRad, sideRad, twistRad * 0.35);
+    const upFrame = buildTorsoFrame(bendRad, sideRad, twistRad);
+
+    const waist = pelvis.clone().addScaledVector(lowFrame.up, R.torsoLower);
+    const chest = waist.clone().addScaledVector(upFrame.up, R.torsoUpper);
+    const shoulderL = chest.clone().addScaledVector(upFrame.left, R.shoulderHalfW);
+    const shoulderR = chest.clone().addScaledVector(upFrame.left, -R.shoulderHalfW);
+    const hipL = pelvis.clone().add(new THREE.Vector3(R.hipHalfW, -0.02, 0));
+    const hipR = pelvis.clone().add(new THREE.Vector3(-R.hipHalfW, -0.02, 0));
+
+    pelvisMesh.position.copy(pelvis);
+    torsoLowerMesh.position.copy(pelvis);
+    torsoLowerMesh.quaternion.copy(lowFrame.quat);
+    torsoLowerMesh.scale.set(1, R.torsoLower, 1);
+
+    torsoUpperMesh.position.copy(waist);
+    torsoUpperMesh.quaternion.copy(upFrame.quat);
+    torsoUpperMesh.scale.set(1, R.torsoUpper, 1);
+
+    // Neck & Head (follows upper torso twist + extra headYaw in Vặn mình!)
+    const neckBase = chest.clone().addScaledVector(upFrame.up, 0.015);
+    const headPitchRad = deg2rad(pose.headPitch || 0);
+    const headYawRad = deg2rad(pose.headYaw || 0);
+    const headLocalQuat = new THREE.Quaternion().setFromEuler(new THREE.Euler(-headPitchRad, headYawRad, 0, 'YXZ'));
+    const headQuat = upFrame.quat.clone().multiply(headLocalQuat);
+    const headUp = UP_Y.clone().applyQuaternion(headQuat);
+    const neckTop = neckBase.clone().addScaledVector(upFrame.up, R.neckLen);
+    const headCenter = neckTop.clone().addScaledVector(headUp, R.headR * 0.88);
+
+    alignLimb(neckMesh, neckBase, neckTop);
+    headGroup.position.copy(headCenter);
+    headGroup.quaternion.copy(headQuat);
+
+    // Legs (supports marching, wide plié knee bend, and hip-height knee raise!)
+    function updateLeg(hipPt, spec, leftSign, thighM, shinM, shoeM) {
+      const ankle = new THREE.Vector3(spec.x, spec.y, spec.z);
+      const hk = clamp(spec.highKnee || 0, 0, 1);
+      const wk = clamp(spec.wideKnee || 0, 0, 1);
+      const kneeHint = new THREE.Vector3(
+        leftSign * lerp(0.06, 0.45, wk),
+        lerp(0.08, 0.85, hk),
+        1.0
+      );
+      const ikKnee = solveTwoBoneIK(hipPt, ankle, R.thighLen, R.shinLen, kneeHint);
+      const straightMid = hipPt.clone().lerp(ankle, 0.51).add(new THREE.Vector3(0, 0, 0.008));
+      const knee = ikKnee.clone().lerp(straightMid, smoothstep((spec.straight - 0.82) / 0.18));
+
+      alignLimb(thighM, hipPt, knee);
+      alignLimb(shinM, knee, ankle);
+
+      shoeM.position.copy(ankle);
+      shoeM.quaternion.setFromEuler(new THREE.Euler(spec.shoePitch, spec.shoeYaw || 0, 0, 'YXZ'));
+      return { hip: hipPt, knee, ankle };
+    }
+
+    const lgL = updateLeg(hipL, pose.legL, 1, parts.thighL, parts.shinL, parts.shoeL);
+    const lgR = updateLeg(hipR, pose.legR, -1, parts.thighR, parts.shinR, parts.shoeR);
+
+    // Arms: resolve per-side p0 & p1 then blend smoothly
+    function updateArm(shPt, leftSign, upM, slvM, foreM, handM) {
+      const spec0 = leftSign > 0 ? pose.p0.armL : pose.p0.armR;
+      const spec1 = leftSign > 0 ? pose.p1.armL : pose.p1.armR;
+      const a0 = resolveSingleArm(spec0, leftSign, shPt, waist, chest, headCenter, upFrame);
+      const a1 = resolveSingleArm(spec1, leftSign, shPt, waist, chest, headCenter, upFrame);
+
+      const elbow = a0.elbow.clone().lerp(a1.elbow, pose.u);
+      const wrist = a0.wrist.clone().lerp(a1.wrist, pose.u);
+      const palm = pose.u < 0.5 ? a0.palm : a1.palm;
+
+      const elDir = elbow.clone().sub(shPt).normalize();
+      const elbowNorm = shPt.clone().addScaledVector(elDir, R.upperArmLen);
+      const wrDir = wrist.clone().sub(elbowNorm).normalize();
+      const wristNorm = elbowNorm.clone().addScaledVector(wrDir, R.forearmLen);
+
+      alignLimb(upM, shPt, elbowNorm);
+      alignLimb(slvM, shPt, elbowNorm);
+      alignLimb(foreM, elbowNorm, wristNorm);
+      orientHandMatrix(handM, wristNorm, elbowNorm, palm, leftSign, upFrame.left, upFrame.fwd);
+      return { shoulder: shPt, elbow: elbowNorm, wrist: wristNorm };
+    }
+
+    const arL = updateArm(shoulderL, 1, parts.upperArmL, parts.sleeveL, parts.foreArmL, parts.handL);
+    const arR = updateArm(shoulderR, -1, parts.upperArmR, parts.sleeveR, parts.foreArmR, parts.handR);
+
+    aiGroup.visible = state.showSkeleton;
+    if (state.showSkeleton) {
+      const jList = [
+        arL.shoulder, arR.shoulder, arL.elbow, arR.elbow, arL.wrist, arR.wrist,
+        lgL.hip, lgR.hip, lgL.knee, lgR.knee, lgL.ankle, lgR.ankle
+      ];
+      const bPairs = [
+        [0,1],[0,2],[2,4],[1,3],[3,5],[0,6],[1,7],[6,7],[6,8],[8,10],[7,9],[9,11]
+      ];
+      jList.forEach((p, i) => aiJointMeshes[i].position.copy(p));
+      bPairs.forEach(([a, b], i) => alignLimb(aiBoneMeshes[i], jList[a], jList[b]));
+    }
+
+    return {
+      shL: jointAngleDeg(lgL.hip, arL.shoulder, arL.elbow),
+      shR: jointAngleDeg(lgR.hip, arR.shoulder, arR.elbow),
+      elL: jointAngleDeg(arL.shoulder, arL.elbow, arL.wrist),
+      elR: jointAngleDeg(arR.shoulder, arR.elbow, arR.wrist),
+      knL: jointAngleDeg(lgL.hip, lgL.knee, lgL.ankle),
+      knR: jointAngleDeg(lgR.hip, lgR.knee, lgR.ankle),
+      twist: Math.round(pose.torsoTwist || 0)
+    };
+  }
+
+  function setXray(enabled) {
+    translucentMats.forEach(m => {
+      m.transparent = enabled;
+      m.opacity = enabled ? 0.34 : 1.0;
+      m.depthWrite = !enabled;
+      m.needsUpdate = true;
+    });
+  }
+
+  const CAM_PRESETS = {
+    rear:    { theta: Math.PI,        phi: 0.06, radius: 4.30, label: 'GÓC NHÌN PHÍA SAU • 180° (CÙNG CHIỀU)', cls: 'rear', tl: '◀ BÊN TRÁI', tr: 'BÊN PHẢI ▶' },
+    front:   { theta: 0,              phi: 0.06, radius: 4.30, label: 'GÓC NHÌN CHÍNH DIỆN (SO ẢNH SGK)', cls: 'front', tl: '', tr: '' },
+    isoRear: { theta: Math.PI * 0.78, phi: 0.16, radius: 4.40, label: 'CHÉO 3/4 PHÍA SAU (RÕ NÂNG GỐI & VẶN THÂN)', cls: 'rear', tl: '◀ BÊN TRÁI', tr: 'BÊN PHẢI ▶' },
+    right:   { theta: -Math.PI * 0.5, phi: 0.06, radius: 4.30, label: 'GÓC NHÌN NGANG • 90° (SOI ĐỘ NÂNG GỐI)', cls: 'side', tl: '◀ PHÍA SAU LƯNG', tr: 'PHÍA TRƯỚC MẶT ▶' },
+    left:    { theta: Math.PI * 0.5,  phi: 0.06, radius: 4.30, label: 'GÓC NHÌN NGANG ĐỐI DIỆN • 90°', cls: 'side', tl: '◀ PHÍA TRƯỚC MẶT', tr: 'PHÍA SAU LƯNG ▶' }
+  };
+
+  function updateCameras(w, h) {
+    const o = state.orbit;
+    cameraMain.position.set(
+      o.radius * Math.sin(o.theta) * Math.cos(o.phi),
+      o.targetY + o.radius * Math.sin(o.phi),
+      o.radius * Math.cos(o.theta) * Math.cos(o.phi)
+    );
+    cameraMain.lookAt(0, o.targetY, 0);
+
+    cameraFront.position.set(0, 0.94 + 4.30 * Math.sin(0.06), 4.30 * Math.cos(0.06));
+    cameraFront.lookAt(0, 0.94, 0);
+
+    if (state.splitMode) {
+      const halfW = w * 0.5;
+      cameraFront.aspect = halfW / h;
+      cameraFront.updateProjectionMatrix();
+      cameraMain.aspect = halfW / h;
+      cameraMain.updateProjectionMatrix();
+    } else {
+      cameraMain.aspect = w / h;
+      cameraMain.updateProjectionMatrix();
+    }
+  }
+
+  function renderScene() {
+    const rect = shell.getBoundingClientRect();
+    const w = Math.max(100, Math.floor(rect.width));
+    const h = Math.max(100, Math.floor(rect.height));
+    if (canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())) {
+      renderer.setSize(w, h, false);
+    }
+    updateCameras(w, h);
+
+    if (state.splitMode) {
+      const halfW = Math.floor(w / 2);
+      renderer.setScissorTest(true);
+      renderer.setViewport(0, 0, halfW, h);
+      renderer.setScissor(0, 0, halfW, h);
+      renderer.render(scene, cameraFront);
+
+      cameraMain.position.set(0, 0.94 + 4.30 * Math.sin(0.06), -4.30 * Math.cos(0.06));
+      cameraMain.lookAt(0, 0.94, 0);
+      renderer.setViewport(halfW, 0, w - halfW, h);
+      renderer.setScissor(halfW, 0, w - halfW, h);
+      renderer.render(scene, cameraMain);
+      renderer.setScissorTest(false);
+    } else {
+      renderer.setScissorTest(false);
+      renderer.setViewport(0, 0, w, h);
+      renderer.render(scene, cameraMain);
+    }
+  }
+
+  function applyCamPreset(name) {
+    state.camPreset = name;
+    state.splitMode = false;
+    const p = CAM_PRESETS[name];
+    state.orbit.theta = p.theta;
+    state.orbit.phi = p.phi;
+    state.orbit.radius = p.radius;
+    document.querySelectorAll('#camBtns .cam-btn').forEach(b => b.classList.toggle('active', b.dataset.cam === name));
+    document.getElementById('btnSplit').classList.remove('active');
+    document.getElementById('splitDivider').classList.remove('show');
+    document.getElementById('hudRight').style.display = 'none';
+    const hl = document.getElementById('hudLeft');
+    hl.textContent = p.label;
+    hl.className = 'hud-pill ' + p.cls;
+    const tl = document.getElementById('tagLeft');
+    const tr = document.getElementById('tagRight');
+    tl.textContent = p.tl; tr.textContent = p.tr;
+    tl.style.visibility = p.tl ? 'visible' : 'hidden';
+    tr.style.visibility = p.tr ? 'visible' : 'hidden';
+    renderScene();
+  }
+
+  let dragging = false, lastX = 0, lastY = 0;
+  canvas.addEventListener('pointerdown', e => {
+    if (state.splitMode) return;
+    dragging = true; lastX = e.clientX; lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    state.orbit.theta -= dx * 0.008;
+    state.orbit.phi = clamp(state.orbit.phi + dy * 0.006, -0.15, 1.15);
+    document.getElementById('hudLeft').textContent = 'GÓC QUAY TỰ DO 360°';
+    renderScene();
+  });
+  canvas.addEventListener('pointerup', () => { dragging = false; });
+  canvas.addEventListener('wheel', e => {
+    e.preventDefault();
+    state.orbit.radius = clamp(state.orbit.radius + e.deltaY * 0.0022, 2.0, 6.2);
+    renderScene();
+  }, { passive: false });
+
+  // Build 5 Exercise Tabs
+  const exTabsEl = document.getElementById('exTabs');
+  EXERCISES.forEach((ex, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ex-tab';
+    btn.innerHTML = `<span>${ex.tabLabel}</span><small>${ex.poses.length} nhịp • ${ex.recLabel}</small>`;
+    btn.addEventListener('click', () => selectExercise(i));
+    exTabsEl.appendChild(btn);
+  });
+
+  const beatsGrid = document.getElementById('beatsGrid');
+  const scrubber = document.getElementById('scrubber');
+
+  function rebuildBeatButtons() {
+    beatsGrid.innerHTML = '';
+    curPoses().forEach((p, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'beat-btn';
+      btn.textContent = p.code;
+      btn.title = p.code + ' — ' + p.shortTitle;
+      btn.addEventListener('click', () => {
+        state.playing = false;
+        state.t = idx;
+        syncPlayBtn();
+        refreshAll();
+      });
+      beatsGrid.appendChild(btn);
+    });
+    scrubber.max = String(curPoses().length);
+  }
+
+  function selectExercise(idx) {
+    state.exIdx = idx;
+    state.playing = false;
+    state.t = 0;
+    syncPlayBtn();
+    exTabsEl.querySelectorAll('.ex-tab').forEach((b, i) => b.classList.toggle('active', i === idx));
+    rebuildBeatButtons();
+    document.getElementById('scrubberTitle').textContent = curEx().title;
+    refreshAll();
+  }
+
+  function syncPlayBtn() {
+    document.getElementById('btnPlay').textContent = state.playing ? '⏸ Tạm dừng' : '▶ Chạy liền mạch';
+  }
+
+  function syncTunerSliders(idx) {
+    const p = getPoseBase(state.exIdx, idx);
+    document.getElementById('slTwist').value = p.torsoTwist || 0;
+    document.getElementById('vTwist').textContent = (p.torsoTwist || 0) + '°';
+    document.getElementById('slPelvisY').value = p.pelvisY;
+    document.getElementById('vPelvisY').textContent = p.pelvisY.toFixed(2) + 'm';
+    document.getElementById('slPelvisX').value = p.pelvisX || 0;
+    document.getElementById('vPelvisX').textContent = (p.pelvisX || 0).toFixed(2) + 'm';
+    document.getElementById('slHeadPitch').value = p.headPitch || 0;
+    document.getElementById('vHeadPitch').textContent = (p.headPitch || 0) + '°';
+  }
+
+  function refreshAll() {
+    const pose = samplePose(state.exIdx, state.t);
+    const tel = applyPose3D(pose);
+    renderScene();
+
+    document.getElementById('poseCode').textContent = pose.code;
+    document.getElementById('poseTitle').textContent = pose.shortTitle;
+    document.getElementById('poseCaption').textContent = pose.caption;
+    document.getElementById('recPill').textContent = pose.viewRecLabel;
+    document.getElementById('angleRef').textContent = pose.angleRef;
+    document.getElementById('viewNote').textContent = pose.viewNote;
+
+    document.getElementById('telShoulder').textContent = `${tel.shL}° / ${tel.shR}°`;
+    document.getElementById('telElbow').textContent = `${tel.elL}° / ${tel.elR}°`;
+    document.getElementById('telKnee').textContent = `${tel.knL}° / ${tel.knR}°`;
+    document.getElementById('telTwist').textContent = `${tel.twist}°`;
+
+    scrubber.value = state.t.toFixed(2);
+    document.getElementById('timeLabel').textContent = `${state.t.toFixed(1)} / ${curPoses().length}.0`;
+    beatsGrid.querySelectorAll('.beat-btn').forEach((b, i) => b.classList.toggle('active', i === pose.nearestIdx));
+    syncTunerSliders(pose.nearestIdx);
+  }
+
+  document.querySelectorAll('#camBtns .cam-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyCamPreset(btn.dataset.cam));
+  });
+
+  document.getElementById('btnSplit').addEventListener('click', () => {
+    state.splitMode = !state.splitMode;
+    document.getElementById('btnSplit').classList.toggle('active', state.splitMode);
+    document.getElementById('splitDivider').classList.toggle('show', state.splitMode);
+    document.getElementById('hudRight').style.display = state.splitMode ? 'inline-block' : 'none';
+    if (state.splitMode) {
+      document.querySelectorAll('#camBtns .cam-btn').forEach(b => b.classList.remove('active'));
+      const hl = document.getElementById('hudLeft');
+      hl.textContent = 'CHÍNH DIỆN (SO ẢNH SGK)';
+      hl.className = 'hud-pill front';
+      document.getElementById('tagLeft').style.visibility = 'hidden';
+      document.getElementById('tagRight').style.visibility = 'hidden';
+    } else {
+      applyCamPreset('rear');
+    }
+    refreshAll();
+  });
+
+  document.getElementById('btnPlay').addEventListener('click', () => {
+    state.playing = !state.playing; state.lastTs = null; syncPlayBtn();
+  });
+  document.getElementById('btnPrev').addEventListener('click', () => {
+    state.playing = false; syncPlayBtn();
+    const n = curPoses().length;
+    const cur = samplePose(state.exIdx, state.t).nearestIdx;
+    state.t = (cur - 1 + n) % n;
+    refreshAll();
+  });
+  document.getElementById('btnNext').addEventListener('click', () => {
+    state.playing = false; syncPlayBtn();
+    const n = curPoses().length;
+    const cur = samplePose(state.exIdx, state.t).nearestIdx;
+    state.t = (cur + 1) % n;
+    refreshAll();
+  });
+  const speeds = [0.5, 1, 1.5];
+  document.getElementById('btnSpeed').addEventListener('click', () => {
+    state.speed = speeds[(speeds.indexOf(state.speed) + 1) % speeds.length];
+    document.getElementById('btnSpeed').textContent = state.speed + 'x';
+  });
+  scrubber.addEventListener('input', () => {
+    state.playing = false; syncPlayBtn();
+    state.t = parseFloat(scrubber.value) % curPoses().length;
+    refreshAll();
+  });
+
+  document.getElementById('chkSkeleton').addEventListener('change', e => {
+    state.showSkeleton = e.target.checked; refreshAll();
+  });
+  document.getElementById('chkXray').addEventListener('change', e => {
+    state.xray = e.target.checked; setXray(state.xray); renderScene();
+  });
+  document.getElementById('chkGrid').addEventListener('change', e => {
+    state.showGrid = e.target.checked; gridHelper.visible = state.showGrid; renderScene();
+  });
+  document.getElementById('chkBoyHair').addEventListener('change', e => {
+    state.boyHair = e.target.checked; girlHairGroup.visible = !state.boyHair; renderScene();
+  });
+  document.getElementById('chkTransparent').addEventListener('change', e => {
+    state.transparentExport = e.target.checked;
+  });
+
+  function bindTuner(id, key) {
+    document.getElementById(id).addEventListener('input', e => {
+      state.playing = false; syncPlayBtn();
+      const idx = samplePose(state.exIdx, state.t).nearestIdx;
+      state.t = idx;
+      const k = state.exIdx + ':' + idx;
+      if (!state.overrides[k]) state.overrides[k] = {};
+      state.overrides[k][key] = parseFloat(e.target.value);
+      refreshAll();
+    });
+  }
+  bindTuner('slTwist', 'torsoTwist');
+  bindTuner('slPelvisY', 'pelvisY');
+  bindTuner('slPelvisX', 'pelvisX');
+  bindTuner('slHeadPitch', 'headPitch');
+  document.getElementById('btnResetTune').addEventListener('click', () => {
+    const idx = samplePose(state.exIdx, state.t).nearestIdx;
+    delete state.overrides[state.exIdx + ':' + idx];
+    refreshAll();
+  });
+
+  // Offscreen High-Res Export Renderer (900x1040 crisp!)
+  function renderLockedViewDataURL(exIdx, tVal, mode, width, height, transparentBg) {
+    const offRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    offRenderer.setSize(width, height, false);
+    offRenderer.shadowMap.enabled = true;
+    offRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    offRenderer.outputEncoding = THREE.sRGBEncoding;
+
+    const prevGrid = gridHelper.visible;
+    const prevBg = scene.background;
+    gridHelper.visible = !transparentBg && state.showGrid;
+    scene.background = transparentBg ? null : new THREE.Color(0xF8FAFC);
+
+    let theta = Math.PI, phi = 0.05, rad = 4.30;
+    if (mode === 'current') { theta = state.orbit.theta; phi = state.orbit.phi; rad = state.orbit.radius; }
+    const camExp = new THREE.PerspectiveCamera(31, width / height, 0.1, 30);
+    camExp.position.set(
+      rad * Math.sin(theta) * Math.cos(phi),
+      0.94 + rad * Math.sin(phi),
+      rad * Math.cos(theta) * Math.cos(phi)
+    );
+    camExp.lookAt(0, 0.94, 0);
+
+    applyPose3D(samplePose(exIdx, tVal));
+    offRenderer.render(scene, camExp);
+    const dataUrl = offRenderer.domElement.toDataURL('image/png');
+
+    gridHelper.visible = prevGrid;
+    scene.background = prevBg;
+    offRenderer.dispose();
+    applyPose3D(samplePose(state.exIdx, state.t));
+    renderScene();
+    return dataUrl;
+  }
+
+  function triggerDownload(filename, dataUrl) {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  const statusMsg = document.getElementById('statusMsg');
+
+  document.getElementById('btnExportOneRear').addEventListener('click', () => {
+    const ex = curEx();
+    const pose = samplePose(state.exIdx, state.t);
+    const slug = pose.code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const url = renderLockedViewDataURL(state.exIdx, state.t, 'rear', 900, 1040, state.transparentExport);
+    triggerDownload(`g9-p1-${ex.id}-${slug}-sau.png`, url);
+    statusMsg.textContent = `✓ Đã tải ảnh Phía sau 180° cho ${ex.tabLabel} — ${pose.code} (900×1040 PNG).`;
+  });
+
+  document.getElementById('btnExportOneCurrent').addEventListener('click', () => {
+    const ex = curEx();
+    const pose = samplePose(state.exIdx, state.t);
+    const slug = pose.code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const url = renderLockedViewDataURL(state.exIdx, state.t, 'current', 900, 1040, state.transparentExport);
+    triggerDownload(`g9-p1-${ex.id}-${slug}-view.png`, url);
+    statusMsg.textContent = `✓ Đã tải ảnh theo góc đang xem cho ${ex.tabLabel} — ${pose.code}.`;
+  });
+
+  document.getElementById('btnExportSheetEx').addEventListener('click', async () => {
+    const ex = curEx();
+    const list = ex.poses;
+    statusMsg.textContent = `Đang kết xuất bảng ${list.length} tư thế (Phía sau 180°) cho ${ex.tabLabel}...`;
+    const cols = 4;
+    const rows = Math.ceil(list.length / cols);
+    const cellW = 480, cellH = 580;
+    const out = document.createElement('canvas');
+    out.width = cols * cellW;
+    out.height = rows * cellH;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#F8FAFC';
+    ctx.fillRect(0, 0, out.width, out.height);
+
+    for (let i = 0; i < list.length; i++) {
+      const p = list[i];
+      const c = i % cols, r = Math.floor(i / cols);
+      const x0 = c * cellW, y0 = r * cellH;
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#CBD5E1';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(x0 + 12, y0 + 12, cellW - 24, cellH - 24, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      const dataUrl = renderLockedViewDataURL(state.exIdx, i, 'rear', 440, 480, true);
+      await new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => { ctx.drawImage(img, x0 + 20, y0 + 20, 440, 480); resolve(); };
+        img.src = dataUrl;
+      });
+
+      ctx.fillStyle = '#0F766E';
+      ctx.font = 'bold 18px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${p.code} — ${p.shortTitle.slice(0, 32)}`, x0 + cellW / 2, y0 + 526);
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = '600 13.5px system-ui, sans-serif';
+      ctx.fillText('◀ TRÁI   •   GDTC Lớp 9 (Phía sau 180°)   •   PHẢI ▶', x0 + cellW / 2, y0 + 550);
+    }
+
+    triggerDownload(`g9-p1-${ex.id}-bang-phia-sau-3d.png`, out.toDataURL('image/png'));
+    statusMsg.textContent = `✓ Đã tải xong bảng ${list.length} tư thế cho ${ex.tabLabel}.`;
+  });
+
+  document.getElementById('btnExportAllEx').addEventListener('click', async () => {
+    const ex = curEx();
+    const list = ex.poses;
+    statusMsg.textContent = `Đang xuất lần lượt ${list.length} file PNG lẻ cho ${ex.tabLabel}...`;
+    for (let i = 0; i < list.length; i++) {
+      const p = list[i];
+      const slug = p.code.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const num = String(i + 1).padStart(2, '0');
+      const url = renderLockedViewDataURL(state.exIdx, i, 'rear', 900, 1040, state.transparentExport);
+      triggerDownload(`g9-p1-${ex.id}-${num}-${slug}-sau.png`, url);
+      await new Promise(r => setTimeout(r, 260));
+    }
+    statusMsg.textContent = `✓ Hoàn tất tải ${list.length} ảnh PNG lẻ cho ${ex.tabLabel}.`;
+  });
+
+  function tick(ts) {
+    if (state.playing) {
+      if (state.lastTs !== null) {
+        const dt = (ts - state.lastTs) / 1000;
+        const rate = state.exIdx <= 1 ? 1.05 : 0.72; // Crisp marching tempo for Giậm chân
+        state.t = (state.t + dt * rate * state.speed) % curPoses().length;
+        refreshAll();
+      }
+      state.lastTs = ts;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', renderScene);
+  applyCamPreset('rear');
+  selectExercise(0);
+  requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>
