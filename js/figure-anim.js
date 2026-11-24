@@ -22,6 +22,24 @@ export const hasFigure = (ex) => Boolean(ex?.figure3d || ex?.vectorFigure || ex?
 
 const shortOf = (p, k) => (/^TTCB/i.test(p.code || '') ? 'TTCB' : (String(p.code || '').match(/\d+/)?.[0] || String(k)));
 
+// Bài có bước chân sang một bên (nhịp 8 lớp 6: "chân trái bước sang ngang"): động cơ vector dang đều hai chân quanh
+// tâm → trông như đứng rộng chân tại chỗ. Giữ CHÂN TRỤ đứng yên (dịch cả người theo chân bước) và vẽ trục giữa +
+// dấu chân ở chỗ đứng ban đầu để thấy rõ chân nào bước. Góc nhìn phía sau: chân trái ở bên trái màn hình.
+const STEP_SIDE = { 'g6-dang-tay': 'L' };
+const FOOT0 = 11.5, FOOT_PER_STANCE = 19.5, CX = 180, FLOOR = 356; // theo khung xương của tệp vector lớp 6
+function stepFrame(svg, stance, side) {
+  if (!side) return svg;
+  const d = FOOT_PER_STANCE * stance;                 // mỗi chân ra thêm d → chân bước ra 2d, chân trụ đứng yên
+  const dx = side === 'L' ? -d : d;
+  const guide = `<g aria-hidden="true">
+    <line x1="${CX}" y1="${FLOOR + 6}" x2="${CX}" y2="70" stroke="#94A3B8" stroke-width="1.6" stroke-dasharray="5 5" opacity=".75"/>
+    <text x="${CX + 4}" y="66" font-size="10" font-weight="700" fill="#64748B">trục giữa</text>
+    <ellipse cx="${CX - FOOT0}" cy="${FLOOR + 3}" rx="8" ry="3.2" fill="#CBD5E1" opacity=".9"/>
+    <ellipse cx="${CX + FOOT0}" cy="${FLOOR + 3}" rx="8" ry="3.2" fill="#CBD5E1" opacity=".9"/>
+  </g>`;
+  return `${guide}<g transform="translate(${dx.toFixed(2)} 0)">${svg}</g>`;
+}
+
 // ------------------------------------------------------------------ Nguồn 1: hình vector từ tệp Gemini
 async function vectorSource(ex) {
   const B = await import(`./figures/${ex.id}.back.js`);
@@ -41,7 +59,8 @@ async function vectorSource(ex) {
           const pb = B.sample(t);
           // Khung phụ "góc nghiêng" của Gemini (sát mép phải) quá nhỏ trên điện thoại → tắt, giữ hình chính ở giữa.
           if (o.phone && 'inset4Alpha' in pb) pb.inset4Alpha = 0;
-          return B.render(pb, o, `b${uid}_`);
+          const svg = B.render(pb, o, `b${uid}_`);
+          return stepFrame(svg, pb.stanceWidth || 0, STEP_SIDE[ex.id]);
         } },
     ],
     note: 'Bên trái là bạn mẫu dựng nhân tạo nhìn <b>từ phía sau</b> (tay trái ở bên trái màn hình, em làm y hệt). Bên phải là <b>ảnh gốc trong SGK</b>, chạy cùng nhịp để đối chiếu. Chấm cam là <b>điểm khớp máy chấm</b>.',

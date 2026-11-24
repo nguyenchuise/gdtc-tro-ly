@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.23.0] - 2026-11-24: Đủ 10 bài thể dục có bạn mẫu dựng hình; 3D sắc nét như tranh SGK; nhịp 8 lớp 6 rõ bước trái
+
+### Thêm
+- **Mô hình 3D cho 4 bài còn lại**: lớp 7 nhịp 11–20 và 21–30, lớp 8 thể dục nhịp điệu bài 1 và bài 2.
+  Cả 10 bài thể dục nay đều có bạn mẫu dựng hình ở cột ①, chạy cùng nhịp với ảnh gốc SGK ở cột ②.
+
+### Thay đổi
+- **Mô hình 3D sắc nét kiểu tranh SGK** (`js/fig3d-style.js`, áp cho cả 9 tệp 3D, không sửa lõi của Gemini):
+  - Màu phẳng tươi, đúng mã màu đồng phục. Trước đây màu bị "pha trắng" do lệch chuẩn màu sRGB.
+  - Nét viền đậm #1E293B như bản vector lớp 6.
+  - Vẽ đủ độ phân giải màn hình điện thoại.
+- **Lớp 6 nhịp 8 (chân trái bước sang ngang):**
+  - Chân phải đứng yên, chân trái bước ra, thân dịch theo. Trước đây hai chân dang đều ra hai bên, trông như đứng tại chỗ.
+  - Thêm **trục giữa** nét đứt và **dấu chân** ở chỗ đứng ban đầu.
+- Ghép nhịp 3D với ảnh SGK theo tên động tác chính xác hơn: ưu tiên tên trùng khớp hoàn toàn, bỏ chữ "Động tác" ở đầu tên.
+
 ## [0.22.0] - 2026-11-24: Mô hình 3D cho 5 bài thể dục, thông tin tác giả, nhạc nền
 
 ### Thêm

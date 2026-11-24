@@ -3682,6 +3682,7 @@
     },
     {
       "id": "g7-td-11-20",
+      "figure3d": true,
       "grade": 7,
       "chapter": "g7-c4",
       "order": 2,
@@ -3855,6 +3856,7 @@
     },
     {
       "id": "g7-td-21-30",
+      "figure3d": true,
       "grade": 7,
       "chapter": "g7-c4",
       "order": 3,
@@ -5686,6 +5688,7 @@
     },
     {
       "id": "g8-nhip-dieu-1",
+      "figure3d": true,
       "grade": 8,
       "chapter": "g8-c4",
       "order": 1,
@@ -6047,6 +6050,7 @@
     },
     {
       "id": "g8-nhip-dieu-2",
+      "figure3d": true,
       "grade": 8,
       "chapter": "g8-c4",
       "order": 2,

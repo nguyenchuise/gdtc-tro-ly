@@ -10,7 +10,7 @@ const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
   .toLowerCase().replace(/^[a-z]\d?\)\s*/, '').replace(/[^a-z0-9() ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const lanOf = (s) => Number(norm(s).match(/\(lan (\d)\)/)?.[1] || 0);
-const baseOf = (s) => norm(s).replace(/\(lan \d\)/, '').replace(/\b(tai cho)\b/, '').replace(/\s+/g, ' ').trim();
+const baseOf = (s) => norm(s).replace(/\(lan \d\)/, '').replace(/^dong tac /, '').replace(/\b(tai cho)\b/, '').replace(/\s+/g, ' ').trim();
 const beatNo = (code) => String(code || '').match(/\d+/)?.[0] || (/ttcb/i.test(code) ? 'TTCB' : '');
 const shortCode = (code) => (/^ttcb/i.test(code) ? 'TTCB' : beatNo(code) || code);
 
@@ -20,7 +20,17 @@ function mapFrames(poses, frames) {
   const groupFor = (g3) => {
     if (!g3) return groups.length === 1 ? groups[0] : null;
     const b3 = baseOf(g3), l3 = lanOf(g3);
-    const cands = groups.filter((g) => { const b = baseOf(g); return b && (b.startsWith(b3) || b3.startsWith(b) || b.split(' ').slice(0, 2).join(' ') === b3.split(' ').slice(0, 2).join(' ')); });
+    // Độ giống tên: trùng hẳn (3) > tên này bắt đầu bằng tên kia (2) > trùng hai chữ đầu (1)
+    const score = (g) => {
+      const b = baseOf(g);
+      if (!b) return 0;
+      if (b === b3) return 3;
+      if (b.startsWith(b3) || b3.startsWith(b)) return 2;
+      return b.split(' ').slice(0, 2).join(' ') === b3.split(' ').slice(0, 2).join(' ') ? 1 : 0;
+    };
+    const best = Math.max(0, ...groups.map(score));
+    if (!best) return null;
+    const cands = groups.filter((g) => score(g) === best);
     return cands.find((g) => lanOf(g) === l3) ?? cands.find((g) => !lanOf(g) && l3 <= 1) ?? cands.find((g) => !lanOf(g)) ?? null;
   };
   return poses.map((p) => {

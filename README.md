@@ -207,9 +207,11 @@ Hình động trong sách (`bookAnim`) có ở 75/89 bài.
 - Ở mục 4. Tự tập, các khung này cũng là hình mẫu trước khi tập và trong khung camera.
 - 14 bài luyện tập phối hợp hoặc bổ trợ chưa có, vì SGK các bài đó chỉ có hình trò chơi.
 
-Cột ① của 6 bài thể dục dùng hình dựng nhân tạo:
-- Lớp 6 nhịp 1–11: hình vector 2.5D.
-- Lớp 6 nhịp 12–23 và 24–30, lớp 7 nhịp 1–10, lớp 9 phần 1 và 2: **mô hình 3D (Three.js)**.
+Cột ① của cả 10 bài thể dục dùng hình dựng nhân tạo:
+- Lớp 6 nhịp 1–11: hình vector 2.5D, có trục giữa và dấu chân để thấy rõ bước trái ở nhịp 8.
+- 9 bài còn lại (lớp 6 nhịp 12–23 và 24–30, lớp 7 cả 3 bài, lớp 8 hai bài, lớp 9 hai bài): **mô hình 3D (Three.js)**.
+
+Mô hình 3D được tô kiểu tranh SGK (màu phẳng, nét viền đậm) bằng `js/fig3d-style.js`.
 
 Mô hình 3D được nhúng từ `figures3d/<mã-bài>.html` và điều khiển qua `js/fig3d-bridge.js`. Nhịp được ghép với ảnh SGK theo tên; nhịp nào SGK không in hình thì ghi rõ. Ghép tệp 3D mới:
 

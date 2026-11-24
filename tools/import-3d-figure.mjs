@@ -6,7 +6,7 @@
 //  1. Chép tệp thành figures3d/<mã-bài>.html, giữ nguyên lõi 3D của Gemini.
 //  2. Đổi đường dẫn Three.js sang bản tự lưu vendor/three-0.147.0.min.js (mạng trường hay chặn CDN);
 //     vẫn giữ CDN làm dự phòng.
-//  3. Gắn js/fig3d-bridge.js: khi nhúng thì ẩn giao diện riêng, bật khớp AI, báo nhịp ra ngoài để ảnh SGK
+//  3. Gắn js/fig3d-style.js (màu phẳng + nét viền đậm như tranh SGK) và js/fig3d-bridge.js: khi nhúng thì ẩn giao diện riêng, bật khớp AI, báo nhịp ra ngoài để ảnh SGK
 //     bên cạnh chạy cùng nhịp.
 //  4. Kiểm tra tệp có đủ chỗ để điều khiển (state, samplePose, POSES hoặc EXERCISES, #btnPlay, #beatsGrid…).
 //  5. Bật "figure3d": true cho bài trong data/exercises.json.
@@ -40,6 +40,9 @@ const n0 = html.length;
 html = html.replace(/<script\s+src="https:\/\/cdn\.jsdelivr\.net\/npm\/three@[^"]+"\s*(onerror="[^"]*")?\s*><\/script>/,
   '<script src="../vendor/three-0.147.0.min.js" onerror="this.onerror=null;this.src=\'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js\'"></script>');
 if (html.length === n0) console.warn('⚠️  Không thấy thẻ Three.js từ jsdelivr để đổi sang bản tự lưu — giữ nguyên.');
+// Phong cách tranh SGK (màu phẳng, nét viền đậm, sắc nét) — chạy ngay sau Three.js, trước lõi 3D
+html = html.replace(/(<script[^>]*three[^>]*\.js[^>]*><\/script>)/i, '$1\n  <script src="../js/fig3d-style.js"></script>');
+if (!html.includes('fig3d-style.js')) console.warn('⚠️  Không gắn được js/fig3d-style.js (phong cách tranh SGK).');
 // Cầu nối (chạy sau lõi 3D)
 html = html.replace(/<\/body>\s*<\/html>\s*$/i, '<script src="../js/fig3d-bridge.js"></script>\n</body>\n</html>\n');
 if (!html.includes('fig3d-bridge.js')) fail('Không gắn được cầu nối (thiếu </body></html> ở cuối tệp).');

@@ -97,4 +97,4 @@ Tệp mới cần **giữ đúng khung** của các tệp mẫu để trang đi�
 - Có các phần tử `#btnPlay`, `#btnSpeed`, `#beatsGrid` (nút từng nhịp), `#chkSkeleton` (khớp AI), `#viewportShell` và canvas `#glCanvas`, cùng nút camera `data-cam="rear"`.
 - Tải Three.js từ `https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js`. Công cụ ghép tự đổi sang bản lưu sẵn trong trang.
 
-Bài còn chờ tệp 3D: `g7-td-11-20`, `g7-td-21-30`, `g8-nhip-dieu-1`, `g8-nhip-dieu-2`.
+Cả 10 bài thể dục đã có hình dựng (9 bài 3D + bài lớp 6 nhịp 1–11 bản vector).
