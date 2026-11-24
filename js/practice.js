@@ -182,13 +182,19 @@ export function mountPractice(root, ex) {
     const hint = isSeq ? 'Xem trước các nhịp trong sách. Khi tập, khung hình mẫu sẽ dừng ở đúng nhịp máy đang chấm.'
       : focus.label
       ? `Các nhịp trong sách chạy lần lượt. Khung viền cam “Máy chấm nhịp này” là ${esc(focus.label)}: em làm giống hình đó.`
-      : focus.group ? `Đang chiếu động tác “${esc(focus.group)}” mà máy đếm số lần. Bấm “Tất cả” để xem cả bài.` : 'Các nhịp trong sách chạy lần lượt.';
+      : focus.group ? `Đang chiếu động tác “${esc(focus.group)}” mà máy đếm số lần. Bấm “Tất cả” để xem cả bài.`
+      : 'Các hình trong sách chạy lần lượt. Máy chấm các bộ phận dưới đây:';
     root.querySelectorAll('.figure-card').forEach((c) => {
       c.classList.add('figure-card--book');
       c.querySelector('.figure-card__title').textContent = 'Hình mẫu trong sách';
       const h = c.querySelector('.figure-card__hint');
       if (h) h.innerHTML = hint;
-      c.querySelector('[data-fig-legend]')?.replaceChildren();
+      // Bài đếm nhịp: hình trong sách là đủ. Bài khác: giữ danh sách góc máy chấm (không còn số trên hình).
+      const lg = c.querySelector('[data-fig-legend]');
+      if (lg) {
+        if (isSeq) lg.replaceChildren();
+        else { try { lg.innerHTML = figureLegend(figureModel(sc), sc).replace('<ol class="fig-legend">', '<ol class="fig-legend fig-legend--plain">'); } catch { lg.replaceChildren(); } }
+      }
     });
     root.querySelector('.stage-figure')?.classList.add('stage-figure--book');
     preloadBookAnim(ex).then(() => {

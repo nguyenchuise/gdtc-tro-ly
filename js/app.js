@@ -6,7 +6,7 @@ import { videoFacade, watchUrl, searchUrl } from './youtube.js';
 import { isTeacherUnlocked, renderTeacherGate } from './teacher-gate.js';
 import { esc, $, $$, debounce } from './util.js';
 import { hasBookAnim } from './book-anim.js';
-import { hasVectorFigure, hasFigure } from './figure-anim.js';
+import { hasFigure } from './figure-anim.js';
 
 const state = { grade: null, chapter: null, q: '' };
 const closed = new Set(); // các nhóm Lớp/Phần đang thu gọn (nhớ trong lúc dùng trang)
@@ -297,7 +297,7 @@ const figureWait = (e, why = 'Bài này chưa có bạn mẫu chuyển động.'
       <p class="muted small vfig__bookwait">Chưa có hình động ghép từ sách. Xem ảnh ở <a href="#bai/${encodeURIComponent(e.id)}/sach">mục 1. Sách</a>.</p></figure>
   </div>`;
 function panelVideo(e, root) {
-  const secFigure = hasFigure(e)
+  const secFigure = hasFigure(e) || hasBookAnim(e)
     ? '<section class="vsec vfig" data-vfig><p class="muted small">Đang tải bạn mẫu…</p></section>'
     : `<section class="vsec vfig vfig--wait">${figureWait(e)}</section>`;
   const cleanup = mountMotion(e, root);
@@ -469,7 +469,7 @@ function openLesson(id, tabId) {
     const st = contentStatus(ex);
     $('#lesson-tabs').innerHTML = tabs.map((t) => {
       const n = TABS.indexOf(t) + 1; // số thứ tự cố định: 1. Sách 2. Video 3. Hướng dẫn 4. Tự tập
-      const waiting = (t.id === 'video' && !st.video && !hasVectorFigure(ex) && !hasBookAnim(ex)) || (t.id === 'sach' && !st.book);
+      const waiting = (t.id === 'video' && !st.video) || (t.id === 'sach' && !st.book); // chấm cam: chưa có video thật
       return `<button type="button" role="tab" id="tab-${t.id}" data-tab="${t.id}" aria-controls="panel-${t.id}" aria-selected="false" tabindex="-1">${svg(t.icon, 18)}<span><span class="tab-num">${n}.</span> ${t.label}</span>${waiting ? '<span class="tab-dot" title="Sắp có"><span class="visually-hidden"> (sắp có)</span></span>' : ''}</button>`;
     }).join('');
     $('#lesson-body').replaceChildren();

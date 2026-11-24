@@ -201,6 +201,12 @@ Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của 
 
 Ảnh trang sách tĩnh và ý chính chỉ nằm ở **mục 1. Sách**.
 
+Hình động trong sách (`bookAnim`) có ở 75/89 bài.
+- Khung được cắt từ ảnh trang SGK theo chú thích "Hình N": đọc chữ bằng tesseract, tách từng người trong chuỗi động tác.
+- Hình trò chơi, sơ đồ sân và đội hình tập không được lấy.
+- Ở mục 4. Tự tập, các khung này cũng là hình mẫu trước khi tập và trong khung camera.
+- 14 bài luyện tập phối hợp hoặc bổ trợ chưa có, vì SGK các bài đó chỉ có hình trò chơi.
+
 Thêm hình phía sau cho một bài:
 1. Nhờ Gemini vẽ theo `tools/gemini-src/HUONG-DAN-GEMINI.md`. Chỉ cần một tệp, góc nhìn phía sau.
 2. Ghép vào trang:

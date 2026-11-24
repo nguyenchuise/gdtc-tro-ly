@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.21.0] - 2026-11-24: Hình động cắt từ SGK cho toàn học phần (mục Video và Tự tập)
+
+### Thêm
+- **Hình động "Động tác trong sách" cho 65 bài nữa**, tổng 75/89 bài.
+  - 445 khung cắt từ ảnh gốc trang SGK.
+  - Mỗi hình kĩ thuật "Hình N" được tách thành từng người trong chuỗi động tác, chạy lần lượt.
+  - Có nút chọn từng hình: "Hình 2", "Hình 3"…
+  - Ảnh vẫn lấy trực tiếp từ máy chủ NXB, không sao chép vào kho mã.
+  - Bỏ hình trò chơi khởi động, sơ đồ sân và đội hình luyện tập, vì không phải động tác của bài.
+  - 14 bài luyện tập phối hợp hoặc bổ trợ chưa có hình động, vì SGK các bài này chỉ có hình trò chơi.
+- **Mục 4. Tự tập** của các bài này dùng ảnh sách làm hình mẫu, giống các bài đếm nhịp.
+  - Thẻ "Hình mẫu trong sách" trước khi tập.
+  - Khung hình mẫu nhỏ ngay trong camera.
+  - Bài giữ tư thế hoặc đếm lần vẫn giữ danh sách góc máy chấm dưới hình.
+  - Không tải được ảnh sách thì tự quay về hình nộm như cũ.
+
+### Thay đổi
+- **Mục 2. Video:** cột phải ② hiện ảnh gốc SGK cho mọi bài có hình.
+  - Bài đếm nhịp: chạy **cùng nhịp** với bạn mẫu bên trái.
+  - Bài khác: tự chạy lần lượt, có nút ‹ › và dừng riêng.
+- **Hình động trong sách:** mỗi hình trong sách có tỉ lệ phóng riêng, nên hình cận cảnh (bàn chân, tay cầm vợt) và hình toàn thân đều vừa khung.
+- Chấm cam trên tab 2. Video giờ chỉ báo **chưa có video thật**.
+
 ## [0.20.0] - 2026-11-24: Bạn mẫu phía sau (nhân tạo) bên trái, ảnh gốc SGK bên phải, chạy cùng nhịp
 
 ### Thay đổi

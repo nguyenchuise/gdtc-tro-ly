@@ -76,14 +76,25 @@ export function createBookAnim(ex, { mode = 'full', practice = false, controlled
 
   function build() {
     const L = list();
-    const maxW = Math.max(...L.map((f) => f.box[2] * PW));
-    const maxH = Math.max(...L.map((f) => f.box[3] * PH));
-    const ar = Math.min(1.7, Math.max(0.55, maxW / maxH));
+    const gKey = (f) => f.group || '';
+    const multi = new Set(L.map(gKey)).size > 1;
+    const dims = (F) => [Math.max(...F.map((f) => f.box[2] * PW)), Math.max(...F.map((f) => f.box[3] * PH))];
+    const [maxW, maxH] = dims(L);
+    // Khung sân khấu: một hình → theo hình đó; nhiều hình trong sách → theo tỉ lệ khung phổ biến (trung vị).
+    const med = (a) => { const b = [...a].sort((x, y) => x - y); return b[Math.floor(b.length / 2)]; };
+    const ar = Math.min(1.7, Math.max(0.55, multi ? med(L.map((f) => (f.box[2] * PW) / (f.box[3] * PH))) * 1.15 : maxW / maxH));
     stage.style.setProperty('--ar', ar.toFixed(3));
-    // Cùng tỉ lệ thu phóng cho mọi khung, chân đặt cùng một mặt sàn → nhìn như một người đang chuyển động.
+    // Cùng tỉ lệ thu phóng cho mọi khung của CÙNG MỘT HÌNH trong sách, chân đặt cùng một mặt sàn → nhìn như một người
+    // đang chuyển động. Hình khác (cận cảnh, toàn cảnh) có tỉ lệ riêng để luôn vừa khung.
     // kích thước sân khấu theo điểm ảnh trang (chừa 6% lề trên để hình cao nhất không chạm viền)
-    const unitW = Math.max(maxW, maxH * ar) / 0.94, unitH = unitW / ar;
+    const unit = new Map();
+    for (const g of new Set(L.map(gKey))) {
+      const [gw, gh] = multi ? dims(L.filter((f) => gKey(f) === g)) : [maxW, maxH];
+      const uW = Math.max(gw, gh * ar) / 0.94;
+      unit.set(g, [uW, uW / ar]);
+    }
     stage.replaceChildren(...L.map((f) => {
+      const [unitW, unitH] = unit.get(gKey(f));
       const d = document.createElement('div');
       d.className = 'bookanim__frame';
       d.style.cssText = `${cropStyle(imageOf(ex, f.page), f.box)};width:${((f.box[2] * PW) / unitW) * 100}%;height:${((f.box[3] * PH) / unitH) * 100}%`;
@@ -100,7 +111,8 @@ export function createBookAnim(ex, { mode = 'full', practice = false, controlled
     const f = L[i];
     [...stage.children].forEach((c, k) => c.classList.toggle('is-on', k === i));
     const name = `${f.group ? `${f.group} · ` : ''}${f.label}`;
-    el.querySelector('.bookanim__label').innerHTML = `<strong>${esc(f.label)}</strong>${f.group && (withCap || !group) ? `<span>${esc(f.group)}</span>` : ''}${full ? `<em>${i + 1}/${L.length}</em>` : ''}`;
+    const showGroup = f.group && !f.label.startsWith(f.group) && (withCap || !group);
+    el.querySelector('.bookanim__label').innerHTML = `<strong>${esc(f.label)}</strong>${showGroup ? `<span>${esc(f.group)}</span>` : ''}${full ? `<em>${i + 1}/${L.length}</em>` : ''}`;
     stage.setAttribute('aria-label', `Hình trong sách: ${name}`);
     el.classList.toggle('is-focus', practice && isFocus(f));
     if (withCap) {

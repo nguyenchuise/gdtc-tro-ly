@@ -166,8 +166,33 @@ async function stickSource(ex) {
   };
 }
 
+/** Bài không chấm bằng camera nhưng sách có hình: cột trái "sắp có", cột phải ảnh gốc SGK tự chạy. */
+function bookOnly(ex, num) {
+  const el = document.createElement('section');
+  el.className = 'vsec vfig vfig--free';
+  el.setAttribute('aria-label', 'Bạn mẫu tập cùng em và động tác trong sách');
+  const n = (k) => (num ? `<span class="vsec__n" aria-hidden="true">${num + k}</span>` : '');
+  el.innerHTML = `<div class="vfig__stages">
+      <figure class="vfig__pane vfig__pane--wait"><figcaption><h3 class="vfig__phead">${n(0)}Bạn mẫu tập cùng em</h3><span>Phía sau</span></figcaption>
+        <p class="muted small vfig__bookwait">Bài này chưa có bạn mẫu chuyển động. Thầy cô sẽ bổ sung sau.</p></figure>
+      <figure class="vfig__pane vfig__pane--book"><figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · hình động</span></figcaption>
+        <div class="vfig__book" data-book><p class="muted small">Đang tải hình trong sách…</p></div></figure>
+    </div>`;
+  let book = null, alive = true;
+  const slot = el.querySelector('[data-book]');
+  preloadBookAnim(ex).then(() => {
+    if (!alive) return;
+    book = createBookAnim(ex, { mode: 'full' });
+    slot.replaceChildren(book.el);
+  }).catch(() => {
+    slot.innerHTML = `<p class="muted small vfig__bookwait">Chưa tải được ảnh sách từ máy chủ NXB. Xem ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`;
+  });
+  return { el, stop() { alive = false; book?.stop(); } };
+}
+
 /** Tạo trình phát; trả về { el, stop }. Tải hình vẽ của bài theo nhu cầu (chỉ khi mở tab Video). */
 export async function createFigurePlayer(ex, { num = 0 } = {}) {
+  if (!hasFigure(ex)) return bookOnly(ex, num);
   const src = ex.vectorFigure ? await vectorSource(ex) : await stickSource(ex);
   const N = src.N;
   const beatSec = src.beat || BEAT;
@@ -187,7 +212,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
         <svg viewBox="${VB_FULL}" role="img" data-view="${v.id}" aria-label="Bạn mẫu tập cùng em: ${esc(v.sub.toLowerCase())}"></svg>
       </figure>`).join('')}
       <figure class="vfig__pane vfig__pane--book">
-        <figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · hình động</span></figcaption>
+        <figcaption><h3 class="vfig__phead">${n(1)}Động tác trong sách</h3><span>Ảnh gốc SGK · ${ex.scoring?.mode === 'sequence' ? 'cùng nhịp' : 'hình động'}</span></figcaption>
         <div class="vfig__book" data-book>${hasBookAnim(ex) ? '<p class="muted small">Đang tải hình trong sách…</p>'
           : `<p class="muted small vfig__bookwait">Chưa có hình động ghép từ sách. Xem ảnh ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`}</div>
       </figure>
@@ -209,17 +234,19 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     </div>
     <p class="muted small vfig__note">${src.note}</p>`;
   const panes = src.views.map((v) => ({ v, svg: el.querySelector(`svg[data-view="${v.id}"]`) }));
-  // Ảnh gốc SGK: trình chiếu do bạn mẫu điều khiển, luôn hiện đúng nhịp đang tập.
+  // Ảnh gốc SGK. Bài đếm nhịp: trình chiếu do bạn mẫu điều khiển, luôn hiện đúng nhịp đang tập.
+  // Bài khác: các hình trong sách tự chạy lần lượt, có nút riêng (số hình trong sách khác số tư thế mẫu).
   let book = null;
-  const steps = ex.scoring?.mode === 'sequence' ? ex.scoring.steps : null;
-  const frameOf = (k) => (steps && steps.length === N ? steps[k].frame : k);
+  const steps = ex.scoring?.mode === 'sequence' && ex.scoring.steps.length === N ? ex.scoring.steps : null;
+  const frameOf = (k) => steps[k].frame;
   if (hasBookAnim(ex)) {
     const slot = el.querySelector('[data-book]');
     preloadBookAnim(ex).then(() => {
       if (!alive) return;
-      book = createBookAnim(ex, { mode: 'full', controlled: true });
+      book = createBookAnim(ex, { mode: 'full', controlled: Boolean(steps) });
       slot.replaceChildren(book.el);
-      book.go(frameOf(((Math.round(t) % N) + N) % N));
+      if (steps) book.go(frameOf(((Math.round(t) % N) + N) % N));
+      else el.classList.add('vfig--free');
     }).catch(() => {
       slot.innerHTML = `<p class="muted small vfig__bookwait">Chưa tải được ảnh sách từ máy chủ NXB. Xem ở <a href="#bai/${encodeURIComponent(ex.id)}/sach">mục 1. Sách</a>.</p>`;
     });
@@ -241,7 +268,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     const k = ((Math.round(t) % N) + N) % N;
     if (k !== lastIdx) {
       lastIdx = k;
-      book?.go(frameOf(k));
+      if (steps) book?.go(frameOf(k));
       const p = src.poses[k] || {};
       now.innerHTML = `${p.group ? `<span class="vfig__group">${esc(p.group)}</span>` : ''}<b>${esc(p.code || '')}</b> ${esc(p.caption || '')}
         ${p.tip ? `<span class="vfig__tip">${esc(p.tip)}</span>` : ''}`;

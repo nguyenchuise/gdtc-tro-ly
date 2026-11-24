@@ -836,3 +836,15 @@ details { margin: 10px 0; }
 }
 .vfig__pane figcaption .vsec__n { color: #fff; font-size: .82rem; font-weight: 800; }
 @media (max-width: 759px) { .vfig__pane figcaption .vsec__n { font-size: .74rem; } }
+/* Danh sách góc máy chấm khi hình mẫu là ảnh sách (không còn số đánh trên hình) */
+.fig-legend--plain { margin-top: 6px; }
+/* Bài không đếm nhịp: hình sách tự chạy, có nút riêng trong cột phải */
+.vfig--free .vfig__book .bookanim__ctrl { flex-wrap: wrap; justify-content: center; }
+.vfig--free .vfig__book .bookanim__ctrl .btn { min-height: 40px; }
+.vfig__book .bookanim__groups { justify-content: center; }
+.vfig__book .bookanim__groups .chip--sm { min-height: 34px; padding: 2px 9px; font-size: .8rem; }
+@media (max-width: 759px) {
+  .vfig--free .vfig__book .bookanim__ctrl .btn--icon { min-width: 40px; padding: 0 6px; }
+  .vfig--free .vfig__book .bookanim__ctrl [data-a="speed"] { display: none; }
+  .vfig__book .bookanim__groups { justify-content: flex-start; }
+}
