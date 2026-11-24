@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.25.0] - 2026-11-24: Đủ hình SGK cho mọi bài; nhạc nền "Workout Music"
+
+### Thêm
+- **Rà soát toàn bộ 79 bài ngoài chủ đề Bài tập thể dục.** Nay **cả 89/89 bài** có hình động cắt từ ảnh gốc SGK, gồm 568 khung cho 79 bài này.
+  - Lấy lại các hình trước bị lọc vì bè ngang: sân tập, đội hình luyện tập, cảnh thi đấu. Khung hình động đã phóng riêng cho từng hình nên hiện vừa khung.
+  - **Đọc lại các chú thích "Hình N" máy bỏ sót** (đọc chữ kiểu rải rác), ví dụ: Hình 3 Nâng cao đùi, Hình 3 Rút sức cuối cùng, Hình 3 Chạy đà giậm nhảy, Hình 4 Hai bước ném rổ, Hình 2 và 5 Dừng bóng bổng, Hình 2 Dẫn bóng mu ngoài.
+  - **Cắt tay 21 hình kĩ thuật và sơ đồ** máy không tự nhận ra, ví dụ vị trí chân trụ và bóng, hướng chạy đà, bàn đạp xuất phát, cách cầm vợt và cầm cầu, khung thành, sân cầu lông.
+  - **14 bài trong SGK chỉ có hình trò chơi** (luyện tập phối hợp, bổ trợ) và các bài chỉ có một hình kĩ thuật: thêm hình trò chơi của chính bài đó.
+  - Vẫn bỏ hình trò chơi khởi động đầu bài, vì không phải động tác của bài.
+- **Nhạc nền "Workout Music" (prettyjohn1)**, tệp thầy cô gửi.
+  - Nén về 128 kbps cho điện thoại tải nhanh.
+  - Phát lặp lại; tự dừng khi bật camera hoặc video tự tập, phát lại khi tập xong.
+
 ## [0.24.2] - 2026-11-24: Luôn tải bản mới nhất sau mỗi lần cập nhật
 
 ### Sửa

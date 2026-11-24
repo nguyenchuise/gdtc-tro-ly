@@ -201,11 +201,11 @@ Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của 
 
 Ảnh trang sách tĩnh và ý chính chỉ nằm ở **mục 1. Sách**.
 
-Hình động trong sách (`bookAnim`) có ở 75/89 bài.
+Hình động trong sách (`bookAnim`) có ở **cả 89/89 bài**.
 - Khung được cắt từ ảnh trang SGK theo chú thích "Hình N": đọc chữ bằng tesseract, tách từng người trong chuỗi động tác.
 - Hình trò chơi, sơ đồ sân và đội hình tập không được lấy.
 - Ở mục 4. Tự tập, các khung này cũng là hình mẫu trước khi tập và trong khung camera.
-- 14 bài luyện tập phối hợp hoặc bổ trợ chưa có, vì SGK các bài đó chỉ có hình trò chơi.
+- Bài trong SGK chỉ có hình trò chơi (luyện tập phối hợp, bổ trợ) dùng chính các hình trò chơi đó. Vẫn bỏ hình trò chơi khởi động đầu bài.
 
 Cột ① của cả 10 bài thể dục dùng hình dựng nhân tạo:
 - Lớp 6 nhịp 1–11: hình vector 2.5D, có trục giữa và dấu chân để thấy rõ bước trái ở nhịp 8.
@@ -238,7 +238,7 @@ Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp v
 - Thông tin tác giả nằm ở dải đầu trang, thẻ cuối trang và chân phiếu PDF: Cô Quý Anh, Trường THCS Nguyễn Tất Thành. Sửa trong `index.html` và `js/report-pdf.js`.
 - Nhạc nền (`js/music.js`):
   - Tự bật ở lần chạm đầu tiên; tắt khi em bật camera hoặc video tự tập; nút ♪ để bật, tắt.
-  - Mặc định là giai điệu do trang tự soạn bằng WebAudio, không vướng bản quyền.
+  - Đang dùng "Workout Music" (prettyjohn1) trong `media/nhac/`. Không có tệp nào thì trang phát giai điệu tự soạn bằng WebAudio.
   - Muốn dùng bài khác, thả một tệp nhạc có quyền sử dụng vào `media/nhac/` (xem `media/nhac/HUONG-DAN.md`). Khi deploy, trang tự dùng tệp đó.
 
 ## 7. Quyền riêng tư

@@ -1,6 +1,8 @@
 # Nhạc nền của trang
 
-Thả **một tệp nhạc** (`.mp3`, `.m4a`, `.ogg`…) vào thư mục này rồi đẩy lên GitHub.
+Đang dùng: `workout-music-prettyjohn1.mp3`, bài "Workout Music" của prettyjohn1. Thầy cô gửi kèm và cho biết là nhạc miễn phí bản quyền; tên tệp theo kiểu thư viện Pixabay. Tệp đã nén về 128 kbps, khoảng 850 KB, dài 53 giây, phát lặp lại.
+
+Muốn đổi bài: xoá tệp cũ, thả **một tệp nhạc** (`.mp3`, `.m4a`, `.ogg`…) vào thư mục này rồi đẩy lên GitHub.
 Khi deploy, trang tự dùng tệp đó làm nhạc nền. Nếu có nhiều tệp, trang lấy tệp đứng đầu theo tên.
 
 - Chỉ dùng nhạc mà thầy cô **có quyền sử dụng**: nhạc tự sáng tác, nhạc được tác giả cho phép, hoặc nhạc miễn phí bản quyền ghi rõ giấy phép (ví dụ CC0).
