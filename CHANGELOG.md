@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.19.0] - 2026-11-24: Mục Video cùng một khung cho mọi bài
+
+### Thay đổi
+- **Mục 2. Video của cả 89 bài theo đúng khung bài mẫu lớp 6**, gồm 3 phần đánh số cố định:
+  1. Bạn mẫu tập cùng em.
+  2. Động tác trong sách (hình động).
+  3. Video hướng dẫn.
+  - Phần chưa có hiện ô nét đứt "sắp có" ngay tại chỗ, nên bài nào cũng cùng thứ tự, cùng vị trí.
+  - **Ảnh trang sách chỉ ở mục 1. Sách**, hình chuyển động và video chỉ ở mục 2. Video.
+- **Hình nộm tạm** trong phần "Bạn mẫu" cho 84 bài có chấm điểm nhưng chưa có tệp Gemini.
+  - Hình vẽ từ chính các góc máy chấm, dùng cùng nút bấm như bản vector: ‹ › Dừng/Chạy, tốc độ, điểm khớp AI, chọn nhịp.
+  - 9 bài thể dục còn lại có từng nhịp TTCB, 1, 2…, chia theo động tác ở lớp 8 và 9.
+  - 15 bài quay trước có hai hình: phía sau (trái) và phía trước (phải).
+  - 60 bài quay nghiêng có một hình nhìn nghiêng.
+  - Có tệp Gemini của bài nào thì ghép bằng `tools/import-gemini-figure.mjs`, hình vector tự thay chỗ hình nộm.
+
 ## [0.18.0] - 2026-11-24: Bạn mẫu vector hai góc nhìn, hình động chuyển sang mục Video
 
 ### Thêm

@@ -186,6 +186,18 @@ tools/                Sinh media.json, kiểm tra dữ liệu, test chấm đi�
 
 Đường dẫn trực tiếp: `#bai/g8-xuat-phat-thap` (tab 1. Sách), `#bai/g8-xuat-phat-thap/video`, `#bai/g8-xuat-phat-thap/huong-dan`, `#bai/g8-xuat-phat-thap/tu-tap`, `#giao-vien/g8-xuat-phat-thap`. Thầy cô có thể dán link này vào nhóm lớp.
 
+### Mục 2. Video: cùng một khung cho mọi bài
+
+Mọi bài có mục 2. Video giống bài mẫu lớp 6 (nhịp 1–11), gồm 3 phần đánh số, đúng thứ tự:
+
+| Phần | Nội dung | Khi chưa có |
+|---|---|---|
+| ① Bạn mẫu tập cùng em | Hình người vector phía sau và phía trước (tệp Gemini) | Bài có chấm điểm: **hình nộm tạm**, vẽ từ góc máy chấm (bài quay nghiêng chỉ có một hình nhìn nghiêng). Bài không chấm điểm: ô "sắp có". |
+| ② Động tác trong sách | Hình động ghép từ hình "Nhịp" trong SGK | Ô "sắp có", kèm link sang mục 1. Sách |
+| ③ Video hướng dẫn | Video YouTube hoặc video của thầy cô | "Video sắp có" và nút tìm trên YouTube |
+
+Ảnh trang sách và ý chính chỉ nằm ở **mục 1. Sách**. Hình nộm tạm tự được thay bằng hình vector ngay khi ghép tệp Gemini của bài đó.
+
 ### Bạn mẫu vector hai góc nhìn (mục 2. Video)
 
 Bài có `"vectorFigure": true` hiện khung **Bạn mẫu tập cùng em** ở đầu mục 2. Video:

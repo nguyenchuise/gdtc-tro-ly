@@ -804,3 +804,15 @@ details { margin: 10px 0; }
 }
 .vfig__steps .chip--sm.is-gstart { margin-left: 10px; }
 .vfig__group { display: inline-block; font-size: .8rem; font-weight: 700; color: var(--achieve); background: var(--achieve-bg); border-radius: 999px; padding: 1px 8px; margin-right: 6px; vertical-align: 2px; }
+/* Hình nộm tạm (chưa có tệp vector): bài quay nghiêng chỉ một khung, giữ gọn ở giữa */
+.vfig__stages--one { grid-template-columns: minmax(0, 320px); justify-content: center; }
+.vfig--stick .vfig__pane svg { max-height: min(44vh, 360px); padding: 6px 0 4px; }
+.vfig--stick .vfig__steps .chip--sm { min-width: 52px; }
+/* Mục 2. Video: ba phần cố định, đánh số giống nhau ở mọi bài */
+.vsec { margin-bottom: 14px; }
+.vsec__head { margin: 0 0 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vsec__n { display: inline-grid; place-items: center; width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--brand); color: #fff; font-size: .95rem; font-weight: 800; }
+.vsec--wait { background: var(--surface); border: 2px dashed var(--line); border-radius: var(--radius); padding: 12px 14px; }
+.vsec__wait { margin: 0; }
+.vsec--video .waiting { margin-top: 0; }
+.vfig .vsec__head { margin: 0; }
