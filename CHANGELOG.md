@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.18.0] - 2026-11-24: Bạn mẫu vector hai góc nhìn, hình động chuyển sang mục Video
+
+### Thêm
+- **Bạn mẫu vector hai góc nhìn** ở đầu mục 2. Video (thử trước với bài lớp 6 *Bài thể dục liên hoàn, nhịp 1–11*).
+  - Bên trái là **phía sau**: tay trái bạn mẫu ở bên trái màn hình, em đứng sau làm theo, không bị ngược chiều.
+  - Bên phải là **phía trước**, như hình trong sách.
+  - Hai hình chạy cùng nhịp và tự chạy. Có sẵn **điểm khớp AI** (vai, khuỷu, cổ tay, hông, gối, cổ chân) và mũi tên nét đứt kiểu SGK; bấm để bật/tắt.
+  - Có nút ‹ ›, Dừng/Chạy, tốc độ Chậm/Vừa/Nhanh và dãy chọn nhịp TTCB, 1…11.
+  - Chỉ vẽ khi khung đang hiện trên màn hình, để đỡ tốn pin.
+  - Hình vẽ lấy từ 2 tệp thầy cô dựng bằng Gemini.
+- **Công cụ ghép tệp Gemini** `tools/import-gemini-figure.mjs`.
+  - Tự tách phần vẽ, bỏ phần giao diện riêng, chạy thử từng tư thế (không được ra NaN) và bật bài trong dữ liệu.
+  - Câu lệnh mẫu cho các bài tiếp theo nằm ở `tools/gemini-src/HUONG-DAN-GEMINI.md`.
+
+### Thay đổi
+- **Hình động ghép từ SGK chuyển từ mục 1. Sách sang mục 2. Video**, nằm dưới bạn mẫu vector. Phần "Video sắp có" vẫn ở dưới cùng.
+  - Mục 1. Sách có dòng nhắc kèm link sang mục 2. Video.
+  - Tab Video không còn chấm "sắp có" khi bài đã có hình chuyển động.
+- **Tối ưu cho điện thoại.**
+  - Khung hình được cắt bớt lề hai bên nên bạn mẫu to hơn khoảng 1,4 lần.
+  - Dãy chọn nhịp nằm ngay dưới hình và cuộn ngang được.
+  - Khung phụ "góc nghiêng" chỉ hiện trên máy tính bảng và máy tính.
+
+### Sửa cho khớp SGK (trang 49–50)
+- **Phối cảnh:** tay đưa về phía người xem (nhịp 9, 11) không còn bị vẽ như đang giơ lên cao. Tâm chiếu đặt ngang ngực, công cụ ghép tự sửa cho mọi bài.
+- **Nhịp 4:** hai tay gần thẳng, bắt chéo thấp trước đùi; khuỵu gối sâu hơn; đầu cúi nhưng mắt mở nhìn tay.
+- **Nhịp 8–11:** hai chân đứng rộng hơn vai như hình trong sách.
+
 ## [0.17.0] - 2026-11-23: Phiếu kết quả PDF, đạt nhịp khi quá nửa bộ phận đạt
 
 ### Thêm

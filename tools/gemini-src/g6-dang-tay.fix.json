@@ -1,0 +1,47 @@
+{
+  "_ghiChu": "Chỉnh hình vector cho khớp hình SGK (trang 49–50). Số là thứ tự tư thế: 0 = TTCB, 1 = Nhịp 1… Tay: [ra ngoài, lên trên, ra trước].",
+  "both": {
+    "4": {
+      "kneeBend": 0.8,
+      "headPitch": -0.5,
+      "uL": [
+        -8,
+        -42,
+        12
+      ],
+      "fL": [
+        -20,
+        -36,
+        12
+      ],
+      "uR": [
+        -8,
+        -42,
+        7
+      ],
+      "fR": [
+        -20,
+        -36,
+        6
+      ]
+    },
+    "8": {
+      "stanceWidth": 1.5
+    },
+    "9": {
+      "stanceWidth": 1.5
+    },
+    "10": {
+      "stanceWidth": 1.5
+    },
+    "11": {
+      "stanceWidth": 1.5
+    }
+  },
+  "front": {},
+  "back": {
+    "4": {
+      "rearTip": "Gối khuỵu hạ thấp trọng tâm, đầu cúi nhìn tay; hai tay duỗi gần thẳng, bắt chéo trước đùi (bị lưng che nên vẽ nét đứt)."
+    }
+  }
+}

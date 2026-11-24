@@ -765,3 +765,42 @@ details { margin: 10px 0; }
 .report-name span { font-weight: 400; color: var(--muted); font-size: .85rem; }
 .report-name input { min-height: 44px; padding: 8px 12px; border: 2px solid var(--line); border-radius: var(--radius-sm); font: inherit; font-weight: 500; }
 .report-name input:focus { outline: none; border-color: var(--brand); }
+
+/* ---------- Bạn mẫu vector 2.5D: phía sau (trái) + phía trước (phải), chạy cùng nhịp ---------- */
+.vfig { background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; display: grid; gap: 10px; }
+.vfig h3 { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vfig__stages { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.vfig__pane { margin: 0; background: linear-gradient(#f8fafc, #eef4f1); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line);
+  display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.vfig__pane figcaption { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 6px 6px 0; text-align: center; line-height: 1.25; }
+.vfig__pane figcaption b { font-size: 1rem; color: var(--brand-dark); }
+.vfig__pane figcaption span { font-size: .78rem; color: var(--muted); }
+.vfig__pane--back figcaption b { color: var(--achieve); }
+.vfig__pane svg { display: block; width: 100%; height: auto; max-height: min(52vh, 440px); margin: 0 auto; user-select: none; -webkit-user-select: none; }
+.vfig__now { margin: 0; font-size: 1.02rem; min-height: 2.6em; }
+.vfig__now b { color: var(--brand-dark); font-size: 1.1rem; margin-right: 4px; }
+.vfig__tip { display: block; margin-top: 4px; font-size: .86rem; color: var(--ink-2); }
+.vfig__ctrl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.vfig__ctrl .btn--icon { min-width: 44px; padding: 0 10px; font-size: 1.1rem; }
+.vfig__play { min-width: 96px; }
+.vfig__toggle[aria-pressed="true"] { background: var(--brand-50); border-color: var(--brand); color: var(--brand-dark); }
+.vfig__toggle[aria-pressed="false"] { opacity: .75; }
+.vfig__dot { width: 10px; height: 10px; border-radius: 50%; background: #f97316; box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #10b981; margin-right: 6px; display: inline-block; }
+.vfig__steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.vfig__steps .chip--sm { min-width: 44px; min-height: 40px; padding: 4px 10px; justify-content: center; }
+.vfig__note { margin: 0; }
+.notice--motion a { font-weight: 700; }
+.sgk-arrow-flow, .rear-arrow-flow { animation: vfigDash 1.05s linear infinite; }
+@keyframes vfigDash { to { stroke-dashoffset: -20; } }
+@media (max-width: 759px) {
+  .vfig { padding: 10px; }
+  .vfig__stages { gap: 6px; }
+  .vfig__pane svg { max-height: 46vh; }
+  .vfig__pane figcaption span { font-size: .7rem; }
+  .vfig__steps { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -4px; padding: 0 4px 2px; scroll-behavior: smooth; }
+  .vfig__steps::-webkit-scrollbar { display: none; }
+  .vfig__steps .chip--sm { flex: none; }
+  .vfig__ctrl .btn--small { padding-inline: 10px; }
+}
+.vfig__steps .chip--sm.is-gstart { margin-left: 10px; }
+.vfig__group { display: inline-block; font-size: .8rem; font-weight: 700; color: var(--achieve); background: var(--achieve-bg); border-radius: 999px; padding: 1px 8px; margin-right: 6px; vertical-align: 2px; }

@@ -1033,6 +1033,7 @@
     },
     {
       "id": "g6-dang-tay",
+      "vectorFigure": true,
       "grade": 6,
       "chapter": "g6-c4",
       "order": 1,

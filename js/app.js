@@ -6,6 +6,7 @@ import { videoFacade, watchUrl, searchUrl } from './youtube.js';
 import { isTeacherUnlocked, renderTeacherGate } from './teacher-gate.js';
 import { esc, $, $$, debounce } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
+import { hasVectorFigure } from './figure-anim.js';
 
 const state = { grade: null, chapter: null, q: '' };
 const closed = new Set(); // các nhóm Lớp/Phần đang thu gọn (nhớ trong lúc dùng trang)
@@ -282,14 +283,23 @@ function panelGuide(e) {
       : '<p class="notice">Bài này không chấm bằng camera. Em xem video rồi tập cùng thầy cô nhé.</p>'}`;
 }
 
+/** Mục 2. Video: bạn mẫu vector hai góc nhìn + hình động ghép từ sách (nếu có), rồi tới video. */
 function panelVideo(e, root) {
+  const motion = `${hasVectorFigure(e) ? '<div data-vfig><p class="muted small">Đang tải bạn mẫu…</p></div>' : ''}
+    ${hasBookAnim(e) ? `<section class="anim-card" aria-labelledby="anim-title">
+      <h3 id="anim-title">Động tác trong sách <span class="anim-card__tag">hình động</span></h3>
+      <div data-bookanim><p class="muted small">Đang tải hình trong sách…</p></div>
+      <p class="muted small anim-card__note">Ghép từ các hình “Nhịp” trong SGK, chạy lần lượt như một đoạn phim. Bấm ‹ › để xem từng nhịp.</p>
+    </section>` : ''}`;
+  const cleanup = mountMotion(e, root);
   if (!e.youtube.length) {
-    root.innerHTML = waitingPanel('video', e, e.youtubeSearch
+    root.innerHTML = motion + waitingPanel('video', e, e.youtubeSearch
       ? `<p><a class="btn btn--ghost" href="${searchUrl(e.youtubeSearch)}" target="_blank" rel="noopener">Tìm trên YouTube ↗</a></p>` : '');
-    return;
+    cleanup.start();
+    return cleanup.stop;
   }
   const list = e.youtube;
-  root.innerHTML = `<div class="player"></div>
+  root.innerHTML = `${motion}<div class="player"></div>
     <div class="player__meta"><p class="player__title"></p>
       <a class="btn btn--ghost btn--small player__open" target="_blank" rel="noopener">Mở trên YouTube ↗</a></div>
     ${list.length > 1 ? `<h3 class="visually-hidden">Danh sách video</h3><ol class="playlist">${list.map((v, i) =>
@@ -303,6 +313,35 @@ function panelVideo(e, root) {
   };
   root.addEventListener('click', (ev) => { const b = ev.target.closest('.playlist__item'); if (b) show(Number(b.dataset.i)); });
   show(0);
+  cleanup.start();
+  return cleanup.stop;
+}
+
+/** Gắn bạn mẫu vector và hình động trong sách vào các ô [data-vfig] / [data-bookanim] của root. */
+function mountMotion(e, root) {
+  const players = [];
+  let gone = false;
+  return {
+    start() {
+      const vslot = root.querySelector('[data-vfig]');
+      if (vslot) {
+        import('./figure-anim.js').then(({ createFigurePlayer }) => createFigurePlayer(e)).then((p) => {
+          if (gone || !vslot.isConnected) { p.stop(); return; }
+          players.push(p); vslot.replaceWith(p.el);
+        }).catch((err) => { console.warn(err); vslot.remove(); });
+      }
+      // Hình động trong sách: chỉ hiện khi tải được ảnh trang sách; không tải được thì bỏ hẳn khung này.
+      const slot = root.querySelector('[data-bookanim]');
+      if (slot) {
+        preloadBookAnim(e).then(() => {
+          if (gone || !slot.isConnected) return;
+          const p = createBookAnim(e, { mode: 'full' });
+          players.push(p); slot.replaceChildren(p.el);
+        }).catch(() => { root.querySelector('.anim-card')?.remove(); });
+      }
+    },
+    stop() { gone = true; players.forEach((p) => p.stop()); },
+  };
 }
 
 function panelBook(e, root) {
@@ -325,13 +364,8 @@ function panelBook(e, root) {
     : b.url && b.range
       ? bookLinkPanel(b)
       : waitingPanel('book', e, b.url ? `<p><a class="btn btn--ghost" href="${esc(b.url)}" target="_blank" rel="noopener">Mở sách điện tử ↗</a></p>` : '');
-  const anim = hasBookAnim(e) ? `<section class="anim-card" aria-labelledby="anim-title">
-      <h3 id="anim-title">Động tác trong sách <span class="anim-card__tag">hình động</span></h3>
-      <div data-bookanim><p class="muted small">Đang tải hình trong sách…</p></div>
-      <p class="muted small anim-card__note">Ghép từ các hình “Nhịp” trong SGK, chạy lần lượt như một đoạn phim. Bấm ‹ › để xem từng nhịp.</p>
-    </section>` : '';
   root.innerHTML = `
-    ${anim}
+    ${hasBookAnim(e) || hasVectorFigure(e) ? `<p class="notice notice--motion">Hình chuyển động của bài này ở mục <a href="#bai/${encodeURIComponent(e.id)}/video">2. Video</a>.</p>` : ''}
     ${series ? `<p class="muted small book-series">Bộ sách: ${esc(series)}</p>` : ''}
     <div class="book-split">
       <section class="book-split__text" aria-labelledby="sum-title"><h3 id="sum-title">Ý chính</h3>${summary}
@@ -356,17 +390,6 @@ function panelBook(e, root) {
     root.querySelector('.book-viewer__full').href = p.image;
     $$('[data-page]', root).forEach((x) => x.setAttribute('aria-pressed', String(x === pg)));
   });
-  // Hình động: chỉ hiện khi tải được ảnh trang sách; không tải được thì bỏ hẳn khung này.
-  let player = null, gone = false;
-  const slot = root.querySelector('[data-bookanim]');
-  if (slot) {
-    preloadBookAnim(e).then(() => {
-      if (gone || !slot.isConnected) return;
-      player = createBookAnim(e, { mode: 'full' });
-      slot.replaceChildren(player.el);
-    }).catch(() => { root.querySelector('.anim-card')?.replaceWith(); });
-  }
-  return () => { gone = true; player?.stop(); };
 }
 function bookLinkPanel(b, note = 'Xem hình minh hoạ trong sách điện tử của NXB Giáo dục.') {
   return `<div class="waiting book-link" role="note">
@@ -419,8 +442,8 @@ async function showTab(tabId, { focus = false, updateHash = true } = {}) {
       const tip = panel.querySelector('[data-camera-tip]');
       if (tip) tip.innerHTML = cameraTip(ex.scoring);
     }
-  } else if (tab.id === 'video') panelVideo(ex, panel);
-  else if (tab.id === 'sach') current.cleanup = panelBook(ex, panel);
+  } else if (tab.id === 'video') current.cleanup = panelVideo(ex, panel);
+  else if (tab.id === 'sach') panelBook(ex, panel);
   else if (tab.id === 'tu-tap') {
     const { mountPractice } = await import('./practice.js');
     if (current?.tab === 'tu-tap') current.cleanup = mountPractice(panel, ex);
@@ -442,7 +465,7 @@ function openLesson(id, tabId) {
     const st = contentStatus(ex);
     $('#lesson-tabs').innerHTML = tabs.map((t) => {
       const n = TABS.indexOf(t) + 1; // số thứ tự cố định: 1. Sách 2. Video 3. Hướng dẫn 4. Tự tập
-      const waiting = (t.id === 'video' && !st.video) || (t.id === 'sach' && !st.book);
+      const waiting = (t.id === 'video' && !st.video && !hasVectorFigure(ex) && !hasBookAnim(ex)) || (t.id === 'sach' && !st.book);
       return `<button type="button" role="tab" id="tab-${t.id}" data-tab="${t.id}" aria-controls="panel-${t.id}" aria-selected="false" tabindex="-1">${svg(t.icon, 18)}<span><span class="tab-num">${n}.</span> ${t.label}</span>${waiting ? '<span class="tab-dot" title="Sắp có"><span class="visually-hidden"> (sắp có)</span></span>' : ''}</button>`;
     }).join('');
     $('#lesson-body').replaceChildren();

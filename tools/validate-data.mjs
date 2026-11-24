@@ -1,5 +1,6 @@
 // Kiểm tra data/exercises.json trước khi deploy. Sai → workflow dừng, trang cũ vẫn chạy bình thường.
 import { readFileSync, existsSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
 const root = new URL('..', import.meta.url).pathname;
 const errors = [];
@@ -78,6 +79,23 @@ for (const [i, e] of (data.exercises || []).entries()) {
       }
     }
   }
+}
+// Bạn mẫu vector (mục 2. Video): hai tệp hình phải có, cùng số tư thế, vẽ được mà không ra NaN.
+for (const e of (data.exercises || []).filter((x) => x.vectorFigure)) {
+  const at = `Bài ${e.id} (vectorFigure)`;
+  const files = ['front', 'back'].map((v) => `${root}js/figures/${e.id}.${v}.js`);
+  const missing = files.filter((f) => !existsSync(f));
+  if (missing.length) { errors.push(`${at}: thiếu ${missing.map((f) => f.slice(root.length)).join(', ')} — chạy tools/import-gemini-figure.mjs.`); continue; }
+  try {
+    const [F, B] = await Promise.all(files.map((f) => import(pathToFileURL(f).href)));
+    if (F.poses.length !== B.poses.length) errors.push(`${at}: mặt trước ${F.poses.length} tư thế, mặt sau ${B.poses.length}.`);
+    for (const M of [F, B]) {
+      for (let t = 0; t < M.poses.length; t += 0.25) {
+        const svg = M.render(M.sample(t), { ai: true, arrows: true });
+        if (/NaN|undefined/.test(svg)) { errors.push(`${at}: hình ${M.view} có NaN/undefined tại t=${t}.`); break; }
+      }
+    }
+  } catch (err) { errors.push(`${at}: lỗi khi vẽ thử — ${err.message}`); }
 }
 for (const id of Object.keys(media)) if (!ids.has(id)) warns.push(`Thư mục media/sach/${id}/ không khớp mã bài nào.`);
 for (const id of (data.exercises || []).flatMap((e) => e.related || [])) if (!ids.has(id)) warns.push(`related: không có bài "${id}".`);
