@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.2] - 2026-11-24: Luôn tải bản mới nhất sau mỗi lần cập nhật
+
+### Sửa
+- Sau khi cập nhật, trình duyệt (nhất là điện thoại) có thể vẫn chạy mã cũ đã lưu, nên tính năng mới như tự cuộn tới danh sách bài chưa có tác dụng.
+  Từ bản này, khi deploy, GitHub Actions gắn mã phiên bản vào mọi tệp JS/CSS (`tools/cache-bust.mjs`), nên trình duyệt luôn tải bản mới.
+- Cuối trang hiện **"Phiên bản x.y.z · mã"** để kiểm tra đang xem bản nào.
+
 ## [0.24.1] - 2026-11-24: Chọn lớp / chủ đề tự cuộn tới danh sách bài
 
 ### Thay đổi

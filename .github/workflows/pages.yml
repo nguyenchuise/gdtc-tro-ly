@@ -29,6 +29,8 @@ jobs:
         run: node tools/validate-data.mjs
       - name: Kiểm tra logic chấm điểm và tìm kiếm
         run: node tools/test-scoring.mjs
+      - name: Đóng dấu phiên bản (trình duyệt luôn tải bản mới nhất)
+        run: node tools/cache-bust.mjs "${GITHUB_SHA:0:7}"
       - name: Bỏ thư mục công cụ (.claude) khỏi trang web
         run: rm -rf .claude
       - uses: actions/configure-pages@v5
