@@ -192,12 +192,23 @@ function initHome() {
     input.value = b.dataset.q; state.q = b.dataset.q;
     renderResults({ openSingle: true });
   });
+  // Chọn lớp / chủ đề → tự cuộn xuống danh sách bài tập (em không phải tự kéo tìm), nháy viền nhẹ để thấy danh sách vừa đổi.
+  const scrollToList = () => {
+    const head = $('.results-head');
+    if (!head) return;
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    requestAnimationFrame(() => {
+      head.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      const box = $('#results');
+      box.classList.remove('is-flash'); void box.offsetWidth; box.classList.add('is-flash');
+    });
+  };
   const pickGrade = (ev) => {
     const b = ev.target.closest('button[data-grade]');
     if (!b) return;
     const g = b.dataset.grade ? Number(b.dataset.grade) : null;
     setGrade(state.grade === g ? null : g);
-    if (g && state.grade === g) $('#chapter-nav').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (g && state.grade === g) scrollToList();
   };
   $('#grade-tiles').addEventListener('click', pickGrade);
   $('#list-title').addEventListener('click', pickGrade);
@@ -211,6 +222,7 @@ function initHome() {
     if (!b) return;
     state.chapter = b.dataset.chapter || null;
     renderChapterNav(); renderResults();
+    scrollToList();
   });
   // Ghi nhớ khối nào đang thu gọn (sự kiện toggle không nổi bọt → bắt ở pha capture).
   const remember = (ev) => {

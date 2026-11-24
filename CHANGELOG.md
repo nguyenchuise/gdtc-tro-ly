@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.24.1] - 2026-11-24: Chọn lớp / chủ đề tự cuộn tới danh sách bài
+
+### Thay đổi
+- Chọn **lớp** hoặc **chủ đề** thì trang tự cuộn xuống danh sách bài tập vừa lọc, không phải tự kéo tìm.
+  Danh sách nháy viền xanh nhẹ để em thấy đã đổi. Máy bật "giảm chuyển động" thì nhảy thẳng tới, không cuộn mượt.
+
 ## [0.24.0] - 2026-11-24: Ảnh sân trường trên trang chủ
 
 ### Thêm
