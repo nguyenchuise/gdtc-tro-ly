@@ -28,11 +28,25 @@ export default {
       'Access-Control-Max-Age': '86400',
     };
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+    // Kiểm tra nhanh cấu hình: mở .../?health=1 trên trình duyệt. Chỉ cho biết biến nào ĐÃ đặt, KHÔNG lộ giá trị.
+    if (request.method === 'GET' && new URL(request.url).searchParams.get('health') === '1') {
+      return json({
+        ok: true,
+        has: {
+          GOOGLE_CLIENT_ID: Boolean(env.GOOGLE_CLIENT_ID),
+          GOOGLE_CLIENT_SECRET: Boolean(env.GOOGLE_CLIENT_SECRET),
+          GOOGLE_REFRESH_TOKEN: Boolean(env.GOOGLE_REFRESH_TOKEN),
+          SHEET_ID: Boolean(env.SHEET_ID),
+          DRIVE_FOLDER_ID: Boolean(env.DRIVE_FOLDER_ID),
+        },
+      }, 200, cors);
+    }
     try {
       if (request.method === 'POST') return await handleSave(request, env, cors);
       if (request.method === 'GET') return await handleRead(request, env, cors);
       return json({ error: 'Chỉ nhận GET hoặc POST.' }, 405, cors);
     } catch (err) {
+      console.error('Worker lỗi:', (err && err.stack) || err);
       return json({ error: String((err && err.message) || err) }, 500, cors);
     }
   },
