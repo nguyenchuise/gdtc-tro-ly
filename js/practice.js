@@ -749,7 +749,7 @@ export function mountPractice(root, ex) {
       </article>`;
     const showLast = rec.last && rec.last !== rec.best;
     box.innerHTML = `
-      <p class="results__saved">${icon('doc')} Hình ảnh được lưu. Em có thể lưu PDF rồi gửi thầy cô chấm điểm.</p>
+      <p class="results__saved">${icon('doc')} Ảnh đã được lưu, em có thể lưu PDF để giữ lại.</p>
       <label class="report-name">Họ tên em để in vào phiếu PDF <span>(không bắt buộc, không lưu)</span>
         <input type="text" maxlength="60" autocomplete="off" data-k="name" value="${esc(reportName)}" placeholder="Có thể để trống rồi ghi tay"></label>
       ${showLast ? cardHtml(rec.last, 'last') : ''}
