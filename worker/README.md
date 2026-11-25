@@ -19,8 +19,11 @@ Google Sheet và tạo một thư mục ảnh trong Google Drive. **Khoá không
 ### 2. Tạo OAuth client
 1. **APIs & Services → OAuth consent screen**: chọn **External**, điền tên app, thêm chính email của cô
    vào mục **Test users**. (Để ở chế độ "Testing" là đủ.)
-2. **APIs & Services → Credentials → Create credentials → OAuth client ID** → kiểu **Desktop app**.
-3. Chép lại **Client ID** và **Client secret**.
+2. **APIs & Services → Credentials → Create credentials → OAuth client ID** → kiểu **Web application**
+   (KHÔNG chọn Desktop — loại Desktop không dùng được với OAuth Playground).
+3. Ở mục **Authorized redirect URIs**, bấm **+ Add URI** và dán chính xác:
+   `https://developers.google.com/oauthplayground`
+4. Bấm **Create** → chép lại **Client ID** và **Client secret**.
 
 ### 3. Lấy refresh token (một lần)
 1. Mở <https://developers.google.com/oauthplayground>.
@@ -32,8 +35,9 @@ Google Sheet và tạo một thư mục ảnh trong Google Drive. **Khoá không
    ```
 4. Đăng nhập bằng **tài khoản sở hữu Sheet/Drive** (xem lưu ý ở đầu) → **Allow**.
 5. Bấm **Exchange authorization code for tokens** → chép **Refresh token**.
-   > Nếu báo lỗi redirect: trong màn hình OAuth client (bước 2), thêm
-   > `https://developers.google.com/oauthplayground` vào **Authorized redirect URIs**, lưu, rồi làm lại.
+   > Báo lỗi `redirect_uri_mismatch`: OAuth client chưa đúng loại/địa chỉ. Kiểm tra lại bước 2–3:
+   > client phải là **Web application** và có `https://developers.google.com/oauthplayground` trong
+   > **Authorized redirect URIs**.
 
 ### 4. Đặt bí mật và biến cho Worker
 Trong thư mục `worker/`:
