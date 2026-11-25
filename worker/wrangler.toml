@@ -5,9 +5,9 @@ compatibility_date = "2024-11-01"
 
 [vars]
 # Mã Google Sheet tổng — lấy từ URL sheet: .../spreadsheets/d/<MÃ Ở ĐÂY>/edit
-SHEET_ID = "DAN_MA_SHEET_O_DAY"
+SHEET_ID = "1LAAjFZbhnjNHcLCVVaThXYEDfFBTB5JyI39I4iN-X4I"
 # Mã thư mục Drive gốc — lấy từ URL thư mục: .../drive/folders/<MÃ Ở ĐÂY>
-DRIVE_FOLDER_ID = "DAN_MA_THU_MUC_DRIVE_O_DAY"
+DRIVE_FOLDER_ID = "1-Ci9d3KPkmW6WjWV3GRtJqaqk7y-fUBT"
 # Giới hạn trang được phép gọi (để "*" nếu chưa chắc tên miền). VD: "https://gdtc-tro-ly.nguyenthuyquyanh.workers.dev"
 ALLOWED_ORIGIN = "*"
 
