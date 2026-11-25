@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.27.0] - 2026-11-25: Mọi bài tự tập đều có giọng đọc và lời nhắc "Chưa đạt"
+
+### Thêm
+- **Giọng đọc hướng dẫn và lời nhắc lý do chưa đạt cho TẤT CẢ bài ở mục 4. Tự tập**, giống các bài thể dục đếm nhịp
+  (trước đây chỉ bài đếm nhịp mới có):
+  - **Vào bài**: đọc yêu cầu và hiện chữ to giữa màn hình ("Giữ 1 giây…" / "Làm 3 lần…" kèm mô tả tư thế), tự ẩn sau 5 giây cho thoáng.
+  - **Chưa đạt quá 5 giây**: đọc và hiện chữ to lý do cụ thể, ví dụ *"Chưa đạt. Khuỷu tay co khoảng 90°: gập lại thêm khoảng 90 độ."*
+    Bài đếm lần chưa đếm được lần nào thì nhắc chính động tác của bài.
+  - **Vẫn chưa đạt**: nhắc lại mỗi 10 giây. Làm đúng được thì lời nhắc tắt và tính lại giờ.
+  - Lý do được suy ra từ bộ phận có điểm thấp nhất (bài ngoài chủ đề thể dục không soạn sẵn câu gợi ý).
+  - Nút bật/tắt giọng đọc 🔊 nay có ở mọi bài. Máy không có giọng tiếng Việt thì vẫn hiện chữ như cũ.
+- Bài đếm nhịp giữ nguyên cơ chế cũ: quá 10 giây chưa đạt thì tự chuyển sang nhịp sau.
+
+### Thay đổi
+- Tìm kiếm: bấm **Tìm** hoặc một từ khoá gợi ý thì tự cuộn xuống danh sách kết quả (khớp đúng 1 bài thì mở thẳng bài đó).
+  Từ khoá mẫu đổi thành **Chạy ngắn · Nhảy xa · Cầu lông · Dẫn bóng** (bỏ "Plank" vì không khớp bài nào).
+- Sau mỗi lần có kết quả, mục Tự tập hiện: *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."*
+  Bỏ câu "hình camera … không lưu, không gửi đi" ở cuối trang và trong mục Tự tập.
+
 ## [0.26.0] - 2026-11-24: Bạn mẫu đi đủ các hình trong sách
 
 ### Thêm

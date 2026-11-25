@@ -763,6 +763,8 @@ details { margin: 10px 0; }
 .stage-cue span.is-why b { color: #fff3c4; }
 /* Chấm trọn bộ: bỏ bảng nhỏ trên camera cho thoáng (bảng đầy đủ ở dưới) */
 .practice--seq .stage-parts { display: none; }
+/* Bài không đếm nhịp: lúc hiện lời nhắc "Chưa đạt" thì giấu bảng nhỏ góc trên cho khỏi chồng chữ. */
+.stage:has(.stage-cue span.is-why) .stage-parts { visibility: hidden; }
 /* Phiếu kết quả PDF */
 .result-card__actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
 .report-name { display: grid; gap: 6px; margin: 0 0 12px; font-weight: 600; font-size: .95rem; }

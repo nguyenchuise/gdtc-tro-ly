@@ -118,7 +118,11 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Chấm đã được **nới cho dễ đạt** (`EASE` trong `js/pose-scoring.js`): mỗi góc được lệch thêm 10° mà vẫn 100%, điểm giảm chậm hơn; làm gần đúng tư thế là được khoảng 80–100%. Bảng "Cần" vẫn ghi góc chuẩn trong sách.
 - Thẻ kết quả có nút **Xuất PDF cho thầy cô**: phiếu một trang A4 (điểm, ảnh, từng phần/từng nhịp, ô nhận xét và chữ ký giáo viên), tạo ngay trên máy.
 - Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
-- Kết quả chỉ nằm trong trình duyệt khi đang mở trang, **không lưu, không gửi đi**; tải lại trang là mất. Học sinh có thể bấm **Lưu ảnh về máy** để cho thầy cô xem.
+- Kết quả chỉ nằm trong trình duyệt khi đang mở trang; tải lại trang là mất. Sau khi có kết quả, trang nhắc *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."* Học sinh bấm **Lưu ảnh về máy** hoặc **Xuất PDF** để cho thầy cô xem.
+- **Giọng đọc và lời nhắc "Chưa đạt" có ở mọi bài** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ):
+  vào bài đọc yêu cầu và hiện chữ to giữa khung camera (tự ẩn sau 5 giây); **chưa đạt quá 5 giây** thì đọc và hiện lý do cụ thể
+  (suy ra từ bộ phận điểm thấp nhất, vd *"Khuỷu tay co khoảng 90°: gập lại thêm khoảng 90 độ"*), rồi **nhắc lại mỗi 10 giây**
+  cho tới khi làm đúng. Xem `TELL_FIRST` / `TELL_AGAIN` và `tellWhy()` trong `js/practice.js`.
 
 **Chấm trọn bộ (10 bài thể dục, `scoring.mode = "sequence"`).** Máy chấm lần lượt **từng nhịp** theo đúng các hình trong sách:
 - Mỗi nhịp đạt khi máy thấy ít nhất một nửa số bộ phận và **quá nửa số bộ phận thấy được đạt ≥ 80%** (bộ phận bị khuất, vd chân, không chặn nhịp) và **giữ liên tục 1 giây** (`holdSeconds`). Tiêu chí được nới vừa phải (góc +8°, vị trí +¼ bề rộng vai, xem `easeSeq` trong `js/practice.js`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.

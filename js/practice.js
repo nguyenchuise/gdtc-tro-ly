@@ -107,14 +107,14 @@ export function mountPractice(root, ex) {
         <div class="hud-progress" aria-hidden="true"><span></span></div>
         <div class="pass-banner" hidden aria-hidden="true">Đạt!</div>
         <p class="stage-advice" aria-hidden="true"></p>
-        ${isSeq ? '<p class="stage-cue" aria-live="polite"><span></span></p>' : ''}
+        <p class="stage-cue" aria-live="polite"><span></span></p>
         <button type="button" class="stage-figure" data-act="fig-toggle" ${isSeq ? 'data-size="l"' : ''} aria-label="Đổi cỡ hình mẫu" aria-pressed="false">
           <span class="stage-figure__img" data-fig="inset"></span><span class="stage-figure__label">Hình mẫu</span>
         </button>
         ${rules.length ? '<ul class="stage-parts" aria-hidden="true"></ul>' : ''}
         <div class="stage-controls">
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
-          ${isSeq && speechSupported() ? `<button type="button" class="btn btn--small btn--glass btn--icon" data-act="voice" aria-pressed="${voicePref()}" aria-label="Đọc hướng dẫn">${voicePref() ? '🔊' : '🔇'}</button>` : ''}
+          ${speechSupported() ? `<button type="button" class="btn btn--small btn--glass btn--icon" data-act="voice" aria-pressed="${voicePref()}" aria-label="Đọc hướng dẫn">${voicePref() ? '🔊' : '🔇'}</button>` : ''}
           <button type="button" class="btn btn--small btn--glass" data-act="wide" hidden aria-pressed="false" aria-label="Camera góc rộng">Góc rộng</button>
           ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>' : ''}
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
@@ -233,11 +233,62 @@ export function mountPractice(root, ex) {
 
   function newAttempt() {
     timer.reset(); counter?.reset();
-    attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null };
+    attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null,
+      vis: 0, lastT: null, told: false, toldAt: null };
     if (isSeq) { attempt.steps = seqSteps(); attempt.si = 0; attempt.res = []; setStep(0); }
+    else announceGoal();
     $('.pass-banner').hidden = true;
     setVal('cur', '—'); setVal('peak', '—'); setVal('hold', '0.0s'); setVal('reps', `0/${sc.reps?.target}`); setVal('total', '0'); setVal('hud', isSeq ? `1/${attempt.steps.length}` : '—');
     setProgress(0);
+  }
+
+  // ---- Đọc hướng dẫn & nhắc lý do chưa đạt (bài không đếm nhịp) ------------------------------
+  // Giống bài thể dục đếm nhịp: vào bài thì đọc yêu cầu, chưa đạt quá 5 giây thì nói ngắn gọn vì sao,
+  // rồi nhắc lại mỗi 10 giây nếu vẫn chưa đạt (bài đếm nhịp thay vào đó tự chuyển sang nhịp sau).
+  const TELL_FIRST = 5, TELL_AGAIN = 10;
+  const cueEl = () => root.querySelector('.stage-cue span');
+  const goalCue = () => `<b>${isReps ? `Làm ${sc.reps.target} lần` : `Giữ ${secText} giây`}</b> ${esc(sc.pose || '')}`;
+  const goalSpeech = () => (isReps
+    ? `Làm đúng ${sc.reps.target} lần. ${sc.reps.label || ''}. ${sc.pose || ''}`
+    : `Giữ đúng tư thế ${secText} giây. ${sc.pose || ''}`);
+  let cueT = 0;
+  function announceGoal() {
+    const cue = cueEl();
+    if (cue) {
+      cue.classList.remove('is-why'); cue.innerHTML = goalCue();
+      // Hiện yêu cầu vài giây rồi ẩn đi cho thoáng màn hình (lúc chưa đạt sẽ hiện lại lời nhắc).
+      clearTimeout(cueT);
+      cueT = setTimeout(() => { if (!cue.classList.contains('is-why')) cue.replaceChildren(); }, 5000);
+    }
+    if (voicePref()) say(goalSpeech());
+  }
+  /** Câu ngắn (để đọc và hiện chữ to) vì sao chưa đạt. Bài không đếm nhịp không soạn sẵn "hint". */
+  function shortReason(ev) {
+    if (ev.unseen.length) {
+      const names = [...new Set(ev.unseen.flatMap((u) => u.missing || []))].map((i) => PART[i]).filter(Boolean).slice(0, 2);
+      return `Chưa thấy rõ ${names.join(', ') || 'cả người'}. Lùi ra xa cho máy thấy cả người.`;
+    }
+    const worst = [...ev.results].filter((r) => r.score != null).sort((a, b) => a.score - b.score)[0];
+    if (!worst || worst.score >= PASS_SCORE) return '';
+    if (worst.rule.hint) return worst.rule.hint;
+    if (worst.rule.kind) return `${worst.rule.label}: chưa đúng, em xem lại hình mẫu.`;
+    const diff = Math.round(worst.angle - worst.rule.target);
+    return `${worst.rule.label}: ${diff > 0 ? 'gập lại' : 'duỗi ra'} thêm khoảng ${Math.abs(diff)} độ.`;
+  }
+  /** Đang đạt → xoá nhắc và tính lại giờ; chưa đạt đủ lâu → đọc lý do một lần. */
+  function tellWhy(ev, lm, h, okNow, repShort = '') {
+    const cue = cueEl();
+    if (okNow) {
+      attempt.vis = 0; attempt.toldAt = null;
+      if (cue?.classList.contains('is-why')) { cue.classList.remove('is-why'); cue.replaceChildren(); }
+      return;
+    }
+    if (attempt.vis < (attempt.toldAt == null ? TELL_FIRST : attempt.toldAt + TELL_AGAIN)) return;
+    const short = tooFar(lm, h) || repShort || shortReason(ev);
+    if (!short) return;
+    attempt.toldAt = attempt.vis;
+    if (voicePref()) say(`Chưa đạt. ${short}`);
+    if (cue) { cue.classList.add('is-why'); cue.innerHTML = `<b>Chưa đạt</b> ${esc(short)}`; }
   }
 
   // Nhạc nền tạm dừng khi đang tập bằng camera / video (chỉ còn giọng nói hướng dẫn) — xem js/music.js.
@@ -375,6 +426,9 @@ export function mountPractice(root, ex) {
       ? seen.length >= Math.ceil(parts.length / 2) && okSeen.length > seen.length / 2
       : allSeen && parts.every((p) => p.score >= PASS_SCORE);
     let repInfo = null;
+    // Thời gian thực sự đang tập: chỉ tính lúc máy thấy người (đi vào chỗ đứng không bị tính).
+    if (attempt.lastT != null && tSec >= attempt.lastT) attempt.vis += Math.min(0.5, tSec - attempt.lastT);
+    attempt.lastT = tSec;
 
     if (isReps) {
       const m = measure(lm, repSpec, w, h);
@@ -386,9 +440,11 @@ export function mountPractice(root, ex) {
       if (counter.state === 'down' && m.angle != null && (!wasDown || !attempt.low || m.angle <= attempt.low.angle)) {
         attempt.low = { angle: m.angle, frame: grabFrame(w, h, attempt.low?.frame), lm, parts, repInfo: m };
       }
+      let gotRep = false;
       if (counter.count > before && !attempt.done) {
         // Lần này đạt khi độ sâu đạt chuẩn và (nếu có) các bộ phận khác cũng đạt.
         const ok = counter.lastQuality >= PASS_SCORE && (!parts.length || allOk);
+        gotRep = ok;
         if (ok) {
           attempt.goodReps += 1; attempt.goodQ.push(counter.lastQuality);
           if (attempt.low && (!attempt.bestShot || counter.lastQuality >= attempt.bestShot.q)) {
@@ -407,6 +463,11 @@ export function mountPractice(root, ex) {
       else if (counter.state === 'down') showAdvice('Tốt! Giờ trở về như lúc đầu.');
       else showAdvice(counter.lastQuality != null && counter.lastQuality < PASS_SCORE
         ? 'Lần vừa rồi chưa đủ sâu. Cố thêm chút nữa!' : 'Bắt đầu nào! Làm thật đúng nhé.');
+      // Làm được một lần đạt là tính lại giờ; lâu chưa có lần nào đạt thì đọc lý do.
+      tellWhy(ev, lm, h, gotRep, m.angle == null
+        ? `Chưa thấy rõ ${(m.missing || []).map((i) => PART[i]).filter(Boolean).slice(0, 2).join(', ') || 'cả người'}. Lùi ra xa cho máy thấy cả người.`
+        : counter.lastQuality != null && counter.lastQuality < PASS_SCORE ? `${sc.reps.label}: chưa đủ sâu, cố thêm chút nữa.`
+        : counter.count === 0 ? `Chưa đếm được lần nào. ${sc.pose || `Làm đúng động tác: ${sc.reps.label}.`}` : '');
       if (!attempt.done && attempt.goodReps >= sc.reps.target) {
         const b = attempt.bestShot;
         if (b) finish(b.lm, w, h, b.parts, b.repInfo, b.frame); else finish(lm, w, h, parts, m);
@@ -418,9 +479,6 @@ export function mountPractice(root, ex) {
         attempt.streak.n += 1;
         attempt.streak.sum += okSeen.length === seen.length ? avg : (okSeen.reduce((a, p) => a + p.score, 0) / okSeen.length);
       } else attempt.streak = null;
-      // Thời gian thử nhịp này: chỉ tính lúc máy thấy người (đi vào chỗ đứng không bị tính).
-      if (attempt.lastT != null && tSec >= attempt.lastT) attempt.vis += Math.min(0.5, tSec - attempt.lastT);
-      attempt.lastT = tSec;
       const N = attempt.steps.length;
       const limit = autoSkip + (attempt.si === 0 ? 5 : 0);
       const left = limit - attempt.vis;
@@ -466,6 +524,7 @@ export function mountPractice(root, ex) {
       setVal('hud', avg == null ? '—' : `${Math.round(avg)}%`);
       setProgress(timer.current / holdSec);
       showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s` : adviceFor(ev));
+      tellWhy(ev, lm, h, allOk);
       if (!attempt.done && timer.done) finish(lm, w, h, parts, null);
     }
     stage.classList.toggle('is-ok', isReps ? counter.state === 'down' : allOk);
@@ -872,6 +931,8 @@ export function mountPractice(root, ex) {
   function stop(releaseMusic = true) {
     running = false;
     stopVoice();
+    clearTimeout(cueT);
+    cueEl()?.replaceChildren();
     if (releaseMusic) holdMusic(false);
     cancelAnimationFrame(raf);
     stream?.getTracks().forEach((t) => t.stop());
@@ -909,6 +970,7 @@ export function mountPractice(root, ex) {
       b.textContent = on ? '🔊' : '🔇'; b.setAttribute('aria-pressed', String(on));
       if (on && !hasVietnameseVoice()) showAdvice('Máy này chưa có giọng đọc tiếng Việt, em xem chữ trên màn hình nhé.');
       else if (on && attempt?.steps) say(attempt.steps[attempt.si]?.say || '');
+      else if (on && attempt) say(goalSpeech());
     }
     else if (act === 'skip') skipStep();
     else if (act === 'stop') stop();
