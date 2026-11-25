@@ -5,3 +5,10 @@ __pycache__/
 *.pyc
 tools/sgk-poses/work/
 tools/sgk-poses/pages/
+
+# Bí mật của Worker (không bao giờ commit)
+worker/.dev.vars
+worker/.wrangler/
+**/service-account*.json
+**/*credentials*.json
+.env

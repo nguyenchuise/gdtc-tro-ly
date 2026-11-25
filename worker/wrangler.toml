@@ -1,0 +1,19 @@
+# Cấu hình Cloudflare Worker lưu kết quả tự tập. KHÔNG để bí mật ở đây (chúng đặt bằng wrangler secret).
+name = "gdtc-ket-qua"
+main = "gdtc-ket-qua.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+# Mã Google Sheet tổng — lấy từ URL sheet: .../spreadsheets/d/<MÃ Ở ĐÂY>/edit
+SHEET_ID = "DAN_MA_SHEET_O_DAY"
+# Mã thư mục Drive gốc — lấy từ URL thư mục: .../drive/folders/<MÃ Ở ĐÂY>
+DRIVE_FOLDER_ID = "DAN_MA_THU_MUC_DRIVE_O_DAY"
+# Giới hạn trang được phép gọi (để "*" nếu chưa chắc tên miền). VD: "https://gdtc-tro-ly.nguyenthuyquyanh.workers.dev"
+ALLOWED_ORIGIN = "*"
+
+# Bí mật đặt bằng (chạy trong thư mục worker/):
+#   npx wrangler secret put GOOGLE_CLIENT_ID
+#   npx wrangler secret put GOOGLE_CLIENT_SECRET
+#   npx wrangler secret put GOOGLE_REFRESH_TOKEN
+#   npx wrangler secret put ADMIN_TOKEN     # (tuỳ chọn) để đọc dữ liệu qua GET
+#   npx wrangler secret put APP_TOKEN       # (tuỳ chọn) chặn người lạ gửi bừa
