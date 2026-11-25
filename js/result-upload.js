@@ -2,9 +2,10 @@
 // Chạy NỀN, không chặn giao diện, không hiện popup. Lỗi mạng chỉ ghi console.error.
 // Để RESULT_ENDPOINT = '' thì KHÔNG gửi gì (ảnh chỉ nằm trong máy như trước).
 
-// ⚠️ ĐỊA CHỈ WORKER LƯU KẾT QUẢ (không phải địa chỉ trang web). Worker tên "gdtc-ket-qua" (xem worker/).
-// Nếu Worker của cô ở địa chỉ khác, sửa đúng một dòng này.
-export const RESULT_ENDPOINT = 'https://gdtc-ket-qua.nguyenthuyquyanh.workers.dev';
+// ⚠️ ĐỊA CHỈ NHẬN KẾT QUẢ (không phải địa chỉ trang web).
+// Đang dùng Google Apps Script Web app — xem worker/apps-script/README.md.
+// Đổi chỗ nhận thì sửa đúng một dòng này; để '' thì KHÔNG gửi gì.
+export const RESULT_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxOtYeSmb8OCChqSjTWjLZOwCZJrBC-wz7SXpBJKzByOT9ZdMudmPvsW09ZfIVJZBTd4A/exec';
 
 export const uploadEnabled = () => Boolean(RESULT_ENDPOINT);
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.28.1] - 2026-11-25: Bật gửi kết quả — dùng Google Apps Script
+
+### Thay đổi
+- **Chỗ nhận kết quả đổi sang Google Apps Script Web app** (`worker/apps-script/`) thay cho Cloudflare Worker:
+  cách này không cần Client ID / Client secret / Refresh token nên dựng nhanh và ít sai sót hơn.
+  `RESULT_ENDPOINT` trong `js/result-upload.js` nay trỏ tới địa chỉ `…/exec`.
+- Khi chỗ nhận là Apps Script, trang gửi kiểu `no-cors` (Apps Script không trả nhãn CORS) nên không
+  báo lỗi giả trong console; dữ liệu vẫn được ghi bình thường.
+- Mã Cloudflare Worker (`worker/gdtc-ket-qua.js`) vẫn giữ lại làm phương án thay thế.
+
 ## [0.28.0] - 2026-11-25: Tự gửi kết quả tự tập về Google Sheet + Drive của thầy cô
 
 ### Thêm

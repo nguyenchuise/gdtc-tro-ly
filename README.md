@@ -119,7 +119,8 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Thẻ kết quả có nút **Xuất PDF cho thầy cô**: phiếu một trang A4 (điểm, ảnh, từng phần/từng nhịp, ô nhận xét và chữ ký giáo viên), tạo ngay trên máy.
 - Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
 - Kết quả nằm trong trình duyệt khi đang mở trang; tải lại trang là mất. Học sinh bấm **Lưu ảnh về máy** hoặc **Xuất PDF** để cho thầy cô xem.
-- **Tự gửi kết quả cho thầy cô (tuỳ chọn).** Nếu đặt `RESULT_ENDPOINT` trong `js/result-upload.js` trỏ tới Worker (xem `worker/`),
+- **Tự gửi kết quả cho thầy cô.** `RESULT_ENDPOINT` trong `js/result-upload.js` trỏ tới chỗ nhận — hiện là **Google Apps Script Web app**
+  (`worker/apps-script/`, không cần khoá); phương án thay thế là Cloudflare Worker (`worker/gdtc-ket-qua.js`). Khi đã đặt,
   thì mỗi lần tập xong app tự gửi nền về Worker: `sessionId`, tên bài, điểm cao nhất, danh sách lỗi, 1 ảnh điểm cao nhất + tối đa
   2 khung lỗi (JPEG 0.7, ≤ 640px). Worker ghi một dòng vào Google Sheet và lưu ảnh vào một thư mục Drive theo `sessionId`.
   Mỗi lần hoàn thành chỉ gửi một lần; lỗi mạng chỉ ghi `console.error`. Khi bật gửi, trang nhắc *"Ảnh đã được lưu và gửi, em có thể
