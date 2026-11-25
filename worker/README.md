@@ -4,8 +4,11 @@ Worker này nhận kết quả một lần tập từ trang GDTC rồi **gọi t
 Google Sheet và tạo một thư mục ảnh trong Google Drive. **Khoá không nằm trong repo** — đặt bằng
 `wrangler secret`. Mã nguồn: [`gdtc-ket-qua.js`](gdtc-ket-qua.js).
 
-> Vì tài khoản là Gmail thường, Worker dùng **refresh token OAuth của chính cô** (không dùng tài khoản
-> dịch vụ — loại đó không tải được ảnh vào Drive của Gmail vì không có hạn mức lưu trữ).
+> Vì tài khoản là Gmail thường, Worker dùng **refresh token OAuth của một tài khoản Google thật** (không
+> dùng tài khoản dịch vụ — loại đó không tải được ảnh vào Drive của Gmail vì không có hạn mức lưu trữ).
+>
+> **Dùng đúng tài khoản sở hữu Sheet tổng và thư mục Drive.** Nếu đăng nhập bằng tài khoản khác, hãy mở
+> Sheet và thư mục đó → **Chia sẻ** → thêm tài khoản đăng nhập làm **Người chỉnh sửa**.
 
 ## Cài một lần
 
@@ -27,7 +30,7 @@ Google Sheet và tạo một thư mục ảnh trong Google Drive. **Khoá không
    https://www.googleapis.com/auth/spreadsheets
    https://www.googleapis.com/auth/drive
    ```
-4. Đăng nhập bằng **nguyenthuyquyanh@gmail.com** → **Allow**.
+4. Đăng nhập bằng **tài khoản sở hữu Sheet/Drive** (xem lưu ý ở đầu) → **Allow**.
 5. Bấm **Exchange authorization code for tokens** → chép **Refresh token**.
    > Nếu báo lỗi redirect: trong màn hình OAuth client (bước 2), thêm
    > `https://developers.google.com/oauthplayground` vào **Authorized redirect URIs**, lưu, rồi làm lại.
