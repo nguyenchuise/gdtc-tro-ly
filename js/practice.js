@@ -154,7 +154,7 @@ export function mountPractice(root, ex) {
       </div>
 
       <section class="results" aria-live="polite" aria-label="Kết quả"></section>
-      <p class="fine-print">Điểm chỉ để em tự luyện, không thay thầy cô chấm. Hình ảnh không lưu, không gửi đi.</p>
+      <p class="fine-print">Điểm chỉ để em tự luyện, không thay thầy cô chấm.</p>
     </div>`;
 
   const $ = (s) => root.querySelector(s);
@@ -749,6 +749,7 @@ export function mountPractice(root, ex) {
       </article>`;
     const showLast = rec.last && rec.last !== rec.best;
     box.innerHTML = `
+      <p class="results__saved">${icon('doc')} Hình ảnh được lưu. Em có thể lưu PDF rồi gửi thầy cô chấm điểm.</p>
       <label class="report-name">Họ tên em để in vào phiếu PDF <span>(không bắt buộc, không lưu)</span>
         <input type="text" maxlength="60" autocomplete="off" data-k="name" value="${esc(reportName)}" placeholder="Có thể để trống rồi ghi tay"></label>
       ${showLast ? cardHtml(rec.last, 'last') : ''}
