@@ -14,6 +14,13 @@
  *   SHEET_ID, DRIVE_FOLDER_ID, ALLOWED_ORIGIN
  */
 
+// Mã Sheet và thư mục Drive (KHÔNG phải bí mật). Để sẵn trong code cho khỏi phải khai biến trên dashboard.
+// Nếu đổi Sheet/thư mục: sửa hai dòng này, hoặc đặt biến SHEET_ID / DRIVE_FOLDER_ID trên worker để ghi đè.
+const DEFAULT_SHEET_ID = '1LAAjFZbhnjNHcLCVVaThXYEDfFBTB5JyI39I4iN-X4I';
+const DEFAULT_FOLDER_ID = '1-Ci9d3KPkmW6WjWV3GRtJqaqk7y-fUBT';
+const sheetId = (env) => env.SHEET_ID || DEFAULT_SHEET_ID;
+const folderId = (env) => env.DRIVE_FOLDER_ID || DEFAULT_FOLDER_ID;
+
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const DRIVE = 'https://www.googleapis.com/drive/v3/files';
 const DRIVE_UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
@@ -32,13 +39,13 @@ export default {
     if (request.method === 'GET' && new URL(request.url).searchParams.get('health') === '1') {
       return json({
         ok: true,
+        // Chỉ còn 3 secret cần đặt; Sheet/thư mục đã có sẵn trong code.
         has: {
           GOOGLE_CLIENT_ID: Boolean(env.GOOGLE_CLIENT_ID),
           GOOGLE_CLIENT_SECRET: Boolean(env.GOOGLE_CLIENT_SECRET),
           GOOGLE_REFRESH_TOKEN: Boolean(env.GOOGLE_REFRESH_TOKEN),
-          SHEET_ID: Boolean(env.SHEET_ID),
-          DRIVE_FOLDER_ID: Boolean(env.DRIVE_FOLDER_ID),
         },
+        sheet_folder: 'đã nhúng trong code',
       }, 200, cors);
     }
     try {
@@ -88,7 +95,7 @@ async function handleSave(request, env, cors) {
   const token = await accessToken(env);
 
   // 1) thư mục con theo sessionId
-  const folder = await driveCreateFolder(token, env.DRIVE_FOLDER_ID, sessionId);
+  const folder = await driveCreateFolder(token, folderId(env), sessionId);
   // 2) tải từng ảnh (tối đa 5)
   const links = [];
   for (const img of (Array.isArray(data.images) ? data.images : []).slice(0, 5)) {
@@ -97,7 +104,7 @@ async function handleSave(request, env, cors) {
     if (f.id) links.push(`${img.label || 'anh'}: ${f.webViewLink || `https://drive.google.com/file/d/${f.id}/view`}`);
   }
   // 3) một dòng vào Sheet
-  await sheetAppend(token, env.SHEET_ID, [
+  await sheetAppend(token, sheetId(env), [
     new Date().toISOString(), sessionId, data.exerciseName || '', data.bestScore ?? '',
     (Array.isArray(data.errors) ? data.errors : []).join('; '),
     folder.webViewLink || '', links.join('\n'),
@@ -155,7 +162,7 @@ async function handleRead(request, env, cors) {
     return json({ error: 'Cần ?token=<ADMIN_TOKEN> đúng để đọc dữ liệu.' }, 403, cors);
   }
   const token = await accessToken(env);
-  const res = await fetch(`${SHEETS}/${env.SHEET_ID}/values/A1:G100000`, { headers: { Authorization: `Bearer ${token}` } });
+  const res = await fetch(`${SHEETS}/${sheetId(env)}/values/A1:G100000`, { headers: { Authorization: `Bearer ${token}` } });
   const j = await res.json();
   return json({ ok: true, rows: j.values || [] }, 200, cors);
 }
