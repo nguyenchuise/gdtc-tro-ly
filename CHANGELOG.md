@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.28.0] - 2026-11-25: Tự gửi kết quả tự tập về Google Sheet + Drive của thầy cô
+
+### Thêm
+- **Sau mỗi lần tập xong, app tự gửi kết quả về Worker của thầy cô** (Worker ghi vào Google Sheet và lưu
+  ảnh vào Google Drive). Chạy nền, không hiện popup, không chặn thao tác.
+  - Gửi: `sessionId` (dạng `YYYYMMDD_HHmmss_TenBai_3số`), tên bài, điểm cao nhất, danh sách lỗi tư thế,
+    và tối đa 3 ảnh — 1 ảnh lúc điểm cao nhất + tối đa 2 khung lỗi rõ nhất (JPEG 0.7, rộng ≤ 640px, base64).
+  - Mỗi lần hoàn thành chỉ gửi đúng **một lần** (cờ chống trùng khi vẽ lại). Lỗi mạng chỉ ghi `console.error`.
+  - Khi có gửi, dòng nhắc cuối buổi thành **"Ảnh đã được lưu và gửi, em có thể lưu PDF để giữ lại."**
+    (chưa cấu hình địa chỉ gửi thì giữ "Ảnh đã được lưu, em có thể lưu PDF để giữ lại.").
+  - Địa chỉ Worker đặt ở một hằng duy nhất `RESULT_ENDPOINT` trong `js/result-upload.js`; để trống thì KHÔNG gửi.
+- **Worker** (`worker/`): nhận POST → gọi thẳng Google Sheets API + Drive API bằng refresh token OAuth của
+  thầy cô (khoá đặt trong Cloudflare Worker secret, không nằm trong repo). Có `GET ?token=` để đọc lại dữ liệu.
+
 ## [0.27.0] - 2026-11-25: Mọi bài tự tập đều có giọng đọc và lời nhắc "Chưa đạt"
 
 ### Thêm

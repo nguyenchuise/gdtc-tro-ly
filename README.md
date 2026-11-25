@@ -118,7 +118,12 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
 - Chấm đã được **nới cho dễ đạt** (`EASE` trong `js/pose-scoring.js`): mỗi góc được lệch thêm 10° mà vẫn 100%, điểm giảm chậm hơn; làm gần đúng tư thế là được khoảng 80–100%. Bảng "Cần" vẫn ghi góc chuẩn trong sách.
 - Thẻ kết quả có nút **Xuất PDF cho thầy cô**: phiếu một trang A4 (điểm, ảnh, từng phần/từng nhịp, ô nhận xét và chữ ký giáo viên), tạo ngay trên máy.
 - Khi đạt, trang **tự chụp ảnh ngay** (bài đếm lần: chụp đúng khoảnh khắc sâu nhất của lần tốt nhất) (kèm khung xương, % từng bộ phận, điểm, thời gian) và hiện thẻ **Kết quả lần này**. **Kết quả tốt nhất** được giữ lại; bấm **Tập lại để phá kỷ lục**, nếu lần sau cao hơn thì tự thay.
-- Kết quả chỉ nằm trong trình duyệt khi đang mở trang; tải lại trang là mất. Sau khi có kết quả, trang nhắc *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."* Học sinh bấm **Lưu ảnh về máy** hoặc **Xuất PDF** để cho thầy cô xem.
+- Kết quả nằm trong trình duyệt khi đang mở trang; tải lại trang là mất. Học sinh bấm **Lưu ảnh về máy** hoặc **Xuất PDF** để cho thầy cô xem.
+- **Tự gửi kết quả cho thầy cô (tuỳ chọn).** Nếu đặt `RESULT_ENDPOINT` trong `js/result-upload.js` trỏ tới Worker (xem `worker/`),
+  thì mỗi lần tập xong app tự gửi nền về Worker: `sessionId`, tên bài, điểm cao nhất, danh sách lỗi, 1 ảnh điểm cao nhất + tối đa
+  2 khung lỗi (JPEG 0.7, ≤ 640px). Worker ghi một dòng vào Google Sheet và lưu ảnh vào một thư mục Drive theo `sessionId`.
+  Mỗi lần hoàn thành chỉ gửi một lần; lỗi mạng chỉ ghi `console.error`. Khi bật gửi, trang nhắc *"Ảnh đã được lưu và gửi, em có thể
+  lưu PDF để giữ lại."*; để trống `RESULT_ENDPOINT` thì không gửi và nhắc *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."*
 - **Giọng đọc và lời nhắc "Chưa đạt" có ở mọi bài** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ):
   vào bài đọc yêu cầu và hiện chữ to giữa khung camera (tự ẩn sau 5 giây); **chưa đạt quá 5 giây** thì đọc và hiện lý do cụ thể
   (suy ra từ bộ phận điểm thấp nhất, vd *"Khuỷu tay co khoảng 90°: gập lại thêm khoảng 90 độ"*), rồi **nhắc lại mỗi 10 giây**

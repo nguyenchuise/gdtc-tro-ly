@@ -11,6 +11,7 @@ import { store } from './data.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding } from './speak.js';
+import { uploadEnabled, makeSessionId, shrinkDataUrl, sendResult } from './result-upload.js';
 
 const PART = {
   0: 'Thân', 11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -234,7 +235,7 @@ export function mountPractice(root, ex) {
   function newAttempt() {
     timer.reset(); counter?.reset();
     attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null,
-      vis: 0, lastT: null, told: false, toldAt: null };
+      vis: 0, lastT: null, told: false, toldAt: null, errorShots: [], errorReasons: new Set() };
     if (isSeq) { attempt.steps = seqSteps(); attempt.si = 0; attempt.res = []; setStep(0); }
     else announceGoal();
     $('.pass-banner').hidden = true;
@@ -275,8 +276,8 @@ export function mountPractice(root, ex) {
     const diff = Math.round(worst.angle - worst.rule.target);
     return `${worst.rule.label}: ${diff > 0 ? 'gập lại' : 'duỗi ra'} thêm khoảng ${Math.abs(diff)} độ.`;
   }
-  /** Đang đạt → xoá nhắc và tính lại giờ; chưa đạt đủ lâu → đọc lý do một lần. */
-  function tellWhy(ev, lm, h, okNow, repShort = '') {
+  /** Đang đạt → xoá nhắc và tính lại giờ; chưa đạt đủ lâu → đọc lý do một lần (và lưu lại khung lỗi để gửi). */
+  function tellWhy(ev, lm, w, h, parts, okNow, repShort = '') {
     const cue = cueEl();
     if (okNow) {
       attempt.vis = 0; attempt.toldAt = null;
@@ -287,8 +288,52 @@ export function mountPractice(root, ex) {
     const short = tooFar(lm, h) || repShort || shortReason(ev);
     if (!short) return;
     attempt.toldAt = attempt.vis;
+    attempt.errorReasons.add(short);
+    // Giữ lại tối đa 2 khung lỗi rõ nhất (mỗi lý do một khung) để gửi cho thầy cô.
+    if (uploadEnabled() && attempt.errorShots.length < 2 && !attempt.errorShots.some((e) => e.reason === short)) {
+      attempt.errorShots.push({ reason: short, image: compactShot(lm, w, h, parts, short) });
+    }
     if (voicePref()) say(`Chưa đạt. ${short}`);
     if (cue) { cue.classList.add('is-why'); cue.innerHTML = `<b>Chưa đạt</b> ${esc(short)}`; }
+  }
+
+  /** Ảnh nhỏ (≤640px, JPEG 0.7) của khung hình hiện tại + khung xương + dòng lý do, để gửi kèm kết quả. */
+  function compactShot(lm, w, h, parts, caption) {
+    const s = Math.min(1, 640 / w);
+    const cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(h * s));
+    const c = document.createElement('canvas'); c.width = cw; c.height = ch;
+    const g = c.getContext('2d');
+    const mirror = stage.classList.contains('mirror');
+    g.save();
+    if (mirror) { g.translate(cw, 0); g.scale(-1, 1); }
+    g.scale(cw / w, ch / h);
+    g.drawImage(video, 0, 0, w, h);
+    drawSkeleton(g, lm, w, h, parts, null);
+    g.restore();
+    if (caption) {
+      const bh = Math.max(22, Math.round(ch * 0.12));
+      g.fillStyle = 'rgba(180,60,8,.92)'; g.fillRect(0, ch - bh, cw, bh);
+      g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.textAlign = 'left';
+      g.font = `600 ${Math.round(bh * 0.42)}px "Be Vietnam Pro", system-ui, sans-serif`;
+      g.fillText(caption, 8, ch - bh / 2, cw - 16);
+    }
+    return c.toDataURL('image/jpeg', 0.7);
+  }
+
+  /** Gửi nền kết quả một lượt tập về Worker (nếu đã cấu hình). Mỗi kết quả chỉ gửi đúng một lần. */
+  async function uploadResult(result, errorImages, errorReasons) {
+    if (!uploadEnabled() || result.__sent) return;
+    result.__sent = true;
+    const images = [];
+    if (result.image) images.push({ label: 'best_score', base64: await shrinkDataUrl(result.image) });
+    errorImages.slice(0, 2).forEach((im, i) => { if (im) images.push({ label: `error_${i + 1}`, base64: im }); });
+    sendResult({
+      sessionId: makeSessionId(ex.title, result.time),
+      exerciseName: ex.title,
+      bestScore: result.score,
+      errors: errorReasons,
+      images,
+    });
   }
 
   // Nhạc nền tạm dừng khi đang tập bằng camera / video (chỉ còn giọng nói hướng dẫn) — xem js/music.js.
@@ -464,7 +509,7 @@ export function mountPractice(root, ex) {
       else showAdvice(counter.lastQuality != null && counter.lastQuality < PASS_SCORE
         ? 'Lần vừa rồi chưa đủ sâu. Cố thêm chút nữa!' : 'Bắt đầu nào! Làm thật đúng nhé.');
       // Làm được một lần đạt là tính lại giờ; lâu chưa có lần nào đạt thì đọc lý do.
-      tellWhy(ev, lm, h, gotRep, m.angle == null
+      tellWhy(ev, lm, w, h, parts, gotRep, m.angle == null
         ? `Chưa thấy rõ ${(m.missing || []).map((i) => PART[i]).filter(Boolean).slice(0, 2).join(', ') || 'cả người'}. Lùi ra xa cho máy thấy cả người.`
         : counter.lastQuality != null && counter.lastQuality < PASS_SCORE ? `${sc.reps.label}: chưa đủ sâu, cố thêm chút nữa.`
         : counter.count === 0 ? `Chưa đếm được lần nào. ${sc.pose || `Làm đúng động tác: ${sc.reps.label}.`}` : '');
@@ -524,7 +569,7 @@ export function mountPractice(root, ex) {
       setVal('hud', avg == null ? '—' : `${Math.round(avg)}%`);
       setProgress(timer.current / holdSec);
       showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s` : adviceFor(ev));
-      tellWhy(ev, lm, h, allOk);
+      tellWhy(ev, lm, w, h, parts, allOk);
       if (!attempt.done && timer.done) finish(lm, w, h, parts, null);
     }
     stage.classList.toggle('is-ok', isReps ? counter.state === 'down' : allOk);
@@ -633,6 +678,10 @@ export function mountPractice(root, ex) {
     rec.last = result;
     if (!rec.best || newRecord) rec.best = result;
     session.set(ex.id, rec);
+    const failed = steps.map((st, k) => ({ st, r: res[k], k })).filter((x) => !x.r.ok);
+    uploadResult(result,
+      failed.filter((x) => x.r.thumb).slice(0, 2).map((x) => x.r.thumb.toDataURL('image/jpeg', 0.7)),
+      failed.map((x) => `${frames[x.st.frame]?.label || `Nhịp ${x.k + 1}`} chưa đạt`));
     const b = $('.pass-banner');
     clearTimeout(nextStep.t);
     b.hidden = false;
@@ -706,6 +755,7 @@ export function mountPractice(root, ex) {
     rec.last = result;
     if (!rec.best || newRecord) rec.best = result;
     session.set(ex.id, rec);
+    uploadResult(result, (attempt.errorShots || []).map((e) => e.image), [...(attempt.errorReasons || [])]);
     $('.pass-banner').hidden = false;
     $('.pass-banner').textContent = newRecord ? 'Kỷ lục mới!' : 'Đạt!';
     navigator.vibrate?.([80, 60, 120]);
@@ -808,7 +858,7 @@ export function mountPractice(root, ex) {
       </article>`;
     const showLast = rec.last && rec.last !== rec.best;
     box.innerHTML = `
-      <p class="results__saved">${icon('doc')} Ảnh đã được lưu, em có thể lưu PDF để giữ lại.</p>
+      <p class="results__saved">${icon('doc')} ${uploadEnabled() ? 'Ảnh đã được lưu và gửi, em có thể lưu PDF để giữ lại.' : 'Ảnh đã được lưu, em có thể lưu PDF để giữ lại.'}</p>
       <label class="report-name">Họ tên em để in vào phiếu PDF <span>(không bắt buộc, không lưu)</span>
         <input type="text" maxlength="60" autocomplete="off" data-k="name" value="${esc(reportName)}" placeholder="Có thể để trống rồi ghi tay"></label>
       ${showLast ? cardHtml(rec.last, 'last') : ''}
