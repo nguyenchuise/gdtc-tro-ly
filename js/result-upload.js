@@ -40,17 +40,22 @@ export function shrinkDataUrl(dataUrl, maxW = 640, q = 0.7) {
 }
 
 /** Gửi một bản ghi lên Worker. Fire-and-forget; không chặn, không ném lỗi ra ngoài. */
+// Google Apps Script không trả kèm nhãn CORS nên trình duyệt không đọc được phản hồi:
+// gửi kiểu "no-cors" (vẫn ghi dữ liệu bình thường, chỉ là ta không đọc được kết quả trả về).
+const isAppsScript = /(^|\.)script\.google\.com\//.test(RESULT_ENDPOINT);
+
 export function sendResult(payload) {
   if (!RESULT_ENDPOINT) return;
   try {
     fetch(RESULT_ENDPOINT, {
       method: 'POST',
-      // text/plain để tránh CORS preflight; Worker đọc body dạng text rồi JSON.parse.
+      // text/plain để tránh CORS preflight; phía nhận đọc body dạng text rồi JSON.parse.
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
       keepalive: true, // vẫn gửi xong kể cả khi em rời trang ngay sau đó
+      ...(isAppsScript ? { mode: 'no-cors' } : {}),
     })
-      .then((r) => { if (!r.ok) console.error('Gửi kết quả: HTTP', r.status); })
+      .then((r) => { if (!isAppsScript && !r.ok) console.error('Gửi kết quả: HTTP', r.status); })
       .catch((e) => console.error('Gửi kết quả: lỗi mạng', e));
   } catch (e) {
     console.error('Gửi kết quả: lỗi', e);
