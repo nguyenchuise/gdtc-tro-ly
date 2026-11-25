@@ -178,21 +178,7 @@ function setGrade(g) {
 function initHome() {
   renderGradeChips(); renderChapterNav(); renderResults();
   const input = $('#q');
-  const live = debounce(() => { state.q = input.value; renderResults(); }, 180);
-  input.addEventListener('input', live);
-  $('#search-form').addEventListener('submit', (ev) => {
-    ev.preventDefault();
-    state.q = input.value;
-    renderResults({ openSingle: true });
-    input.blur();
-  });
-  $('#suggest').addEventListener('click', (ev) => {
-    const b = ev.target.closest('[data-q]');
-    if (!b) return;
-    input.value = b.dataset.q; state.q = b.dataset.q;
-    renderResults({ openSingle: true });
-  });
-  // Chọn lớp / chủ đề → tự cuộn xuống danh sách bài tập (em không phải tự kéo tìm), nháy viền nhẹ để thấy danh sách vừa đổi.
+  // Chọn lớp / chủ đề / bấm Tìm → tự cuộn xuống danh sách bài tập (em không phải tự kéo tìm), nháy viền nhẹ để thấy danh sách vừa đổi.
   const scrollToList = () => {
     const head = $('.results-head');
     if (!head) return;
@@ -203,6 +189,25 @@ function initHome() {
       box.classList.remove('is-flash'); void box.offsetWidth; box.classList.add('is-flash');
     });
   };
+  // Bấm Tìm (hoặc gợi ý): nếu khớp đúng 1 bài thì mở thẳng bài đó, còn lại thì cuộn xuống danh sách kết quả.
+  const runSearch = () => {
+    state.q = input.value;
+    renderResults({ openSingle: true });
+    if (!location.hash.startsWith('#bai/')) scrollToList();
+  };
+  const live = debounce(() => { state.q = input.value; renderResults(); }, 180);
+  input.addEventListener('input', live);
+  $('#search-form').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    runSearch();
+    input.blur();
+  });
+  $('#suggest').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-q]');
+    if (!b) return;
+    input.value = b.dataset.q;
+    runSearch();
+  });
   const pickGrade = (ev) => {
     const b = ev.target.closest('button[data-grade]');
     if (!b) return;
