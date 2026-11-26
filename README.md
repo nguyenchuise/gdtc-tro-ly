@@ -260,7 +260,10 @@ Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp v
 ## 7. Quyền riêng tư
 
 - Không đăng nhập, không cookie theo dõi, không analytics.
-- Hình camera / video tải lên chỉ xử lý trong trình duyệt, không lưu, không gửi đi. Camera tự tắt khi đóng bài, đổi tab hoặc ẩn trang.
+- Hình camera / video tải lên được **xử lý ngay trong trình duyệt** (nhận dạng tư thế không gửi hình đi đâu). Camera tự tắt khi đóng bài, đổi tab hoặc ẩn trang.
+- **Kết quả tự tập có gửi cho thầy cô**: khi đặt `RESULT_ENDPOINT` (`js/result-upload.js`), mỗi lần tập xong trang gửi điểm, danh sách lỗi và
+  tối đa 3 ảnh (1 ảnh điểm cao nhất + 2 khung lỗi) về Google Sheet / Drive của thầy cô, và **báo cho em biết** bằng dòng
+  *"Ảnh đã được lưu và gửi…"*. Để trống `RESULT_ENDPOINT` thì không gửi gì.
 - Video YouTube dùng `youtube-nocookie.com` và chỉ tải khi học sinh bấm Play.
 - Giọng nói: do trình duyệt nhận dạng (Chrome gửi âm thanh tới dịch vụ nhận dạng của Google). Trang web không lưu lại. Học sinh luôn có thể gõ thay vì nói.
 
@@ -280,3 +283,21 @@ Số tư thế phải bằng số nhịp của bài, để chạy cùng nhịp v
 | Firefox | ✓ | ✗ (hiện thông báo, gõ thay) | ✓ | ✓ |
 
 Lần đầu mở tab “Tự tập”, máy tải khoảng 15 MB (thư viện + mô hình), các lần sau dùng bộ nhớ đệm. Nên tải trước bằng Wi-Fi của trường.
+
+**Giọng đọc (Web Speech API, giọng có sẵn trong máy):**
+- Mọi trình duyệt chỉ cho đọc **sau cú chạm đầu tiên** trên trang. iPhone (Safari, và mọi ứng dụng trên iPhone vì đều dùng WebKit)
+  còn chặt hơn: câu đầu phải nằm ngay trong cú chạm. Trang tự mở khoá ở cú chạm đầu tiên (`installVoiceUnlock` trong `js/speak.js`);
+  mở thẳng link mà chưa chạm gì thì nút hiện **"🔊 Chạm để nghe đọc"**.
+- **Zalo trên Android** mở trang bằng WebView, thường **không có bộ đọc giọng nói** — trang web không tự bù được.
+  Trang nhận ra điều này, hiện băng nhắc và lời nhắc trong mục Video (`js/inapp.js`).
+- iPhone để chế độ **im lặng** (nút gạt bên hông) có thể làm giọng đọc không ra tiếng.
+
+| | Giọng đọc | Ghi chú |
+|---|---|---|
+| Chrome / Brave Android | ✓ | Cần giọng Tiếng Việt trong Cài đặt → Chuyển văn bản thành giọng nói |
+| Safari iPhone | ✓ sau một cú chạm | |
+| Zalo trên iPhone | ✓ sau một cú chạm | Camera có thể bị chặn |
+| Zalo trên Android | ✗ | Bấm "Mở bằng Chrome" trên băng nhắc, hoặc ⋮ → mở bằng trình duyệt |
+
+**Hướng dẫn học sinh (gọn nhất):** quét mã QR bằng **Camera của điện thoại**, không quét qua Zalo — Camera iPhone mở bằng Safari,
+Camera / Google Lens trên Android mở bằng Chrome. Nếu lỡ mở trong Zalo: bấm nút ba chấm ở góc trên → mở bằng trình duyệt.

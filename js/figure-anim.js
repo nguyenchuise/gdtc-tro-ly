@@ -8,7 +8,7 @@
 //   Phải ② Động tác trong sách: ẢNH GỐC SGK chạy động (js/book-anim.js), giữ nguyên hình trong sách.
 import { esc } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
-import { voiceButton, createBeatVoice } from './video-voice.js';
+import { voiceButton, voiceNoticeHTML, createBeatVoice } from './video-voice.js';
 
 const SPEEDS = [{ label: 'Chậm', k: 0.6 }, { label: 'Vừa', k: 1 }, { label: 'Nhanh', k: 1.5 }];
 const BEAT = 1.05; // giây chuyển giữa hai nhịp ở tốc độ Vừa
@@ -380,6 +380,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       ${src.arrows ? '<button type="button" class="btn btn--ghost btn--small vfig__toggle" data-a="arrows" aria-pressed="true">Mũi tên</button>' : ''}
       ${voiceButton()}
     </div>
+    ${voiceNoticeHTML()}
     <p class="muted small vfig__note">${src.note}</p>`;
   const panes = src.views.map((v) => ({ v, svg: el.querySelector(`svg[data-view="${v.id}"]`) }));
   // Ảnh gốc SGK. Bài đếm nhịp: trình chiếu do bạn mẫu điều khiển, luôn hiện đúng nhịp đang tập.
@@ -401,6 +402,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     });
   }
   const now = el.querySelector('.vfig__now');
+  voice.bind(el.querySelector('[data-a="voice"]'), el.querySelector('.vfig__voicewarn'));
 
   let phone = Boolean(phoneMQ?.matches);
   function fit() {
@@ -494,7 +496,13 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     else if (a === 'next') goTo(cur + 1);
     else if (a === 'play') { playing = !playing; hold = playing ? 0.15 : hold; }
     else if (a === 'speed') speed = (speed + 1) % SPEEDS.length;
-    else if (a === 'voice') { voice.toggle(ev.target.closest('[data-a="voice"]')); schedule(); return; }
+    else if (a === 'voice') {
+      // Đọc ngay nhịp đang hiện (trong cú chạm — iPhone bắt buộc). Chạm lúc hình đang di chuyển thì
+      // vẫn đọc nhưng không bắt đứng chờ, để động tác không khựng giữa đường.
+      const atPose = !tween && Math.abs(t - Math.round(t)) < 0.02;
+      voice.toggle(src.poses[((Math.round(t) % N) + N) % N], { hold: atPose });
+      schedule(); return;
+    }
     else if (a === 'ai') { ai = !ai; dirty = true; }
     else if (a === 'arrows') { arrows = !arrows; dirty = true; }
     ui(); schedule();

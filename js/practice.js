@@ -12,6 +12,7 @@ import { figureModel, createFigure, animateFigures, figureLegend } from './pose-
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
 import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding } from './speak.js';
 import { uploadEnabled, makeSessionId, shrinkDataUrl, sendResult } from './result-upload.js';
+import { inAppName } from './inapp.js';
 
 const PART = {
   0: 'Thân', 11: 'Vai trái', 12: 'Vai phải', 13: 'Khuỷu trái', 14: 'Khuỷu phải', 15: 'Cổ tay trái', 16: 'Cổ tay phải',
@@ -347,8 +348,11 @@ export function mountPractice(root, ex) {
   async function startCamera() {
     holdMusic(true);
     stop(false);
+    // Đang mở trong Zalo / Facebook…: camera hay bị ứng dụng chặn → chỉ cách mở bằng trình duyệt.
+    const app = inAppName();
+    const inAppTip = app ? ` Em đang mở trong ${app}: bấm nút ba chấm ở góc trên → mở bằng trình duyệt (Chrome / Safari).` : '';
     if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
-      setStatus('Camera chỉ chạy trên trang https. Em dùng nút “Chọn video” nhé.');
+      setStatus(app ? `Camera không mở được trong ${app}.${inAppTip}` : 'Camera chỉ chạy trên trang https. Em dùng nút “Chọn video” nhé.');
       holdMusic(false);
       return;
     }
@@ -365,7 +369,7 @@ export function mountPractice(root, ex) {
         NotFoundError: 'Không thấy camera. Em dùng nút “Chọn video” nhé.',
         NotReadableError: 'Camera đang bận. Em tắt ứng dụng khác rồi thử lại.',
       }[err.name];
-      setStatus(msg || 'Không mở được camera. Em thử lại nhé.');
+      setStatus((msg || 'Không mở được camera. Em thử lại nhé.') + inAppTip);
       holdMusic(false);
       return;
     }

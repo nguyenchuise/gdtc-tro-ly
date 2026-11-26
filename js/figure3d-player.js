@@ -4,7 +4,7 @@
 // Nhịp được ghép với ảnh sách theo TÊN (động tác + "Nhịp n"); nhịp nào SGK không in hình thì ghi rõ.
 import { esc } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
-import { voiceButton, createBeatVoice } from './video-voice.js';
+import { voiceButton, voiceNoticeHTML, createBeatVoice } from './video-voice.js';
 
 const SPEEDS = [{ label: 'Chậm', v: 0.5 }, { label: 'Vừa', v: 1 }, { label: 'Nhanh', v: 1.5 }];
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -71,16 +71,19 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
       <button type="button" class="btn btn--ghost btn--small vfig__toggle" data-a="ai" aria-pressed="true"><span class="vfig__dot" aria-hidden="true"></span>Điểm khớp AI</button>
       ${voiceButton()}
     </div>
+    ${voiceNoticeHTML()}
     <p class="muted small vfig__note">Bên trái là <b>mô hình 3D</b> nhìn từ phía sau (tay trái ở bên trái màn hình, em làm y hệt); kéo ngang trên hình để xoay xem các phía.
       Bên phải là <b>ảnh gốc trong SGK</b>, chạy cùng nhịp để đối chiếu.</p>`;
   const frame = el.querySelector('iframe');
   const now = el.querySelector('.vfig__now');
   const stepsEl = el.querySelector('.vfig__steps');
   const nobook = el.querySelector('.vfig__nobook');
+  // (nút 🔊 và dòng nhắc được gắn ngay dưới, sau khi khai báo `voice`)
   let poses = [], map = [], k = -1, playing = !reduceMotion(), speed = 1, ai = true, alive = true, visible = true, ready = false, book = null;
   const post = (m) => frame.contentWindow?.postMessage({ type: 'fig3d', ...m }, '*');
   // Giọng đọc tên nhịp: đang đọc thì mô hình đứng yên, đọc xong chạy tiếp.
   const voice = createBeatVoice(() => apply());
+  voice.bind(el.querySelector('[data-a="voice"]'), el.querySelector('.vfig__voicewarn'));
 
   function ui() {
     const play = el.querySelector('[data-a="play"]');
@@ -143,7 +146,8 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
     else if (a === 'play') playing = !playing;
     else if (a === 'speed') speed = (speed + 1) % SPEEDS.length;
     else if (a === 'ai') ai = !ai;
-    else if (a === 'voice') voice.toggle(ev.target.closest('[data-a="voice"]'));
+    // Đọc ngay nhịp đang hiện, trong cú chạm (iPhone bắt buộc); mô hình tự dừng khi đi hết nhịp.
+    else if (a === 'voice') voice.toggle(poses[Math.max(0, k)] || null);
     ui(); apply();
   });
 

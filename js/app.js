@@ -8,6 +8,8 @@ import { esc, $, $$, debounce } from './util.js';
 import { hasBookAnim } from './book-anim.js';
 import { hasFigure } from './figure-anim.js';
 import { initMusic } from './music.js';
+import { installVoiceUnlock } from './speak.js';
+import { initInApp } from './inapp.js';
 
 // mode: lọc chính xác theo kiểu chấm ('sequence' = bài thể dục đếm nhịp). Dùng cho nút gợi ý,
 // vì tìm theo chữ không tách được "nhịp điệu" với "điều chỉnh" (bỏ dấu đều ra "dieu").
@@ -583,6 +585,9 @@ function initSlides() {
 }
 
 async function main() {
+  // Giọng đọc: bắt cú chạm đầu tiên ở bất kỳ đâu để mở khoá (iPhone bắt buộc) — cài trước mọi thứ khác.
+  installVoiceUnlock();
+  initInApp(); // đang mở trong Zalo / Facebook… → nhắc mở bằng trình duyệt
   initMusic();
   initSlides();
   try {

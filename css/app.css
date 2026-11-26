@@ -968,3 +968,23 @@ details { margin: 10px 0; }
 .vfig__chipstar { color: #EA580C; font-size: .8em; margin-right: 2px; }
 .vfig__steps .chip.is-star[aria-pressed="true"] .vfig__chipstar { color: #FED7AA; }
 .vfig__star { color: #F97316; }
+
+/* ---------- Trang đang mở trong Zalo / Facebook…: băng nhắc mở bằng trình duyệt (js/inapp.js) ---------- */
+.inapp { background: #fff7e6; border-bottom: 1px solid #f3c98b; color: #6b3d00; }
+.inapp__inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding-top: 10px; padding-bottom: 10px; position: relative; }
+.inapp__text { margin: 0; flex: 1 1 260px; font-size: .92rem; line-height: 1.45; padding-right: 28px; }
+.inapp__actions { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.inapp__close { position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border: 0; background: none;
+  font-size: 1.5rem; line-height: 1; color: inherit; cursor: pointer; border-radius: 999px; }
+.inapp__close:hover { background: rgba(0, 0, 0, .06); }
+
+/* Nút 🔊 khi máy chưa cho đọc (chưa chạm lần nào): nhấp nháy nhẹ để em biết cần chạm */
+.vfig__voice.is-locked { border-color: var(--brand); color: var(--brand-dark); font-weight: 700;
+  animation: voice-nudge 1.6s ease-in-out infinite; }
+@keyframes voice-nudge { 0%, 100% { box-shadow: 0 0 0 0 rgba(15, 138, 95, .45); } 50% { box-shadow: 0 0 0 6px rgba(15, 138, 95, 0); } }
+@media (prefers-reduced-motion: reduce) { .vfig__voice.is-locked { animation: none; } }
+
+/* Dòng nhắc trong mục Video khi máy / ứng dụng không có giọng đọc */
+.vfig__voicewarn { margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; background: #fff7e6;
+  border: 1px solid #f3c98b; color: #6b3d00; line-height: 1.45; }
+.vfig__voicewarn .inapp__actions { margin-top: 8px; display: flex; }

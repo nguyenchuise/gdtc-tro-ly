@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.31.0] - 2026-11-26: Giọng đọc chạy được trên iPhone; nhắc mở bằng trình duyệt khi ở trong Zalo
+
+### Sửa
+- **iPhone (Safari, và cả Zalo trên iPhone) không đọc nhịp ở mục Video; bấm nút 🔊 còn bị tắt luôn.**
+  iOS chỉ cho phát giọng đọc khi câu đầu tiên được gọi **ngay trong cú chạm**; mục Video lại đọc từ vòng
+  hoạt hình, sau khi tải xong, nên bị chặn. (Đổi tab Sách → Video có lúc đọc được chỉ là may: mã đã nằm
+  sẵn trong bộ nhớ nên chạy kịp trong khoảng ~1 giây iOS còn cho phép sau cú chạm.)
+  - Cú chạm **đầu tiên ở bất kỳ đâu** trên trang nay mở khoá giọng đọc (`installVoiceUnlock`).
+  - Mở thẳng link mà chưa chạm gì: nút hiện **"🔊 Chạm để nghe đọc"** (nhấp nháy nhẹ); chạm là đọc ngay
+    nhịp đang hiện — **không còn bị tắt nhầm**.
+  - Khi máy chưa cho đọc, hoạt hình **không còn đứng im chờ** một câu đọc sẽ không bao giờ phát
+    (trước đây đứng ở "TTCB" tới 9 giây).
+  - Safari hay "nuốt" câu đọc ngay sau lệnh huỷ và đôi khi không báo "đọc xong": nay chỉ huỷ khi đang đọc
+    dở, giữ tham chiếu câu đọc, và mốc dự phòng tính theo độ dài câu thay vì chờ cứng 9 giây.
+  - Kiểm bằng giả lập đúng luật iOS: trước khi sửa 0 câu được đọc; sau khi sửa đọc đủ ở cả mô hình 3D,
+    hình vector và hình nộm theo ảnh SGK.
+
+### Thêm
+- **Băng nhắc khi trang đang mở trong Zalo / Facebook / Messenger…** (thường do quét QR bằng Zalo):
+  nút **"Mở bằng Chrome"** (Android) / **"Mở bằng Safari"** (iPhone), nút **Sao chép link**, kèm hướng dẫn
+  bấm nút ba chấm → mở bằng trình duyệt. Đóng băng nhắc thì nhớ trong phiên.
+- Mục Video: máy / ứng dụng **không có giọng đọc** (Zalo trên Android dùng WebView không có bộ đọc) thì
+  giấu nút 🔊 và hiện lời nhắc cách khắc phục, thay vì để nút bấm không ăn thua.
+- Mục Tự tập: camera không mở được trong Zalo thì chỉ cách mở bằng trình duyệt.
+- **Poster QR**: thêm dòng *"Quét bằng Camera của điện thoại, không quét qua Zalo — để nghe được giọng đọc"*;
+  bỏ câu "Hình camera không gửi đi đâu" vì không còn đúng (kết quả và ảnh nay được gửi cho thầy cô).
+
 ## [0.30.0] - 2026-11-26: Kết quả tìm kiếm chia theo lớp; nút gợi ý lọc đúng bài
 
 ### Thay đổi
