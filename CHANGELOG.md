@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.30.0] - 2026-11-26: Kết quả tìm kiếm chia theo lớp; nút gợi ý lọc đúng bài
+
+### Thay đổi
+- **Kết quả tìm kiếm nay cũng chia theo Lớp 6 → 7 → 8 → 9**, giữ nguyên các khối Lớp / Phần / Chủ đề
+  và **thu gọn – mở được** như khi xem cả danh sách (trước đây tìm xong đổ ra một danh sách phẳng).
+  Nút **Thu gọn tất cả** vì vậy cũng hiện khi đang tìm.
+- Nút gợi ý còn **3**, chọn lại cho đúng và phủ đủ 4 lớp:
+  **Thể dục nhịp điệu** (10 bài đếm nhịp, lớp 6–9) · **Chạy cự li ngắn** (17 bài) · **Cầu lông** (12 bài).
+  Bỏ nút "Thể dục liên hoàn" vì đã gộp vào nút đầu.
+
+### Sửa
+- **Bấm "Thể dục nhịp điệu" trước đây ra lẫn cả nhảy cao, chạy…** Lý do: bỏ dấu thì "nhịp **điệu**" và
+  "**điều** chỉnh" đều thành `dieu`, mà "thể dục" lại là từ bị lược nên không phân biệt được.
+  Nay nút này **lọc thẳng theo kiểu chấm** (`scoring.mode = "sequence"`) nên ra **đúng 10 bài** thể dục
+  đếm nhịp, không lẫn bài nào. Gõ tay hoặc bấm "Xoá tìm kiếm" thì bỏ bộ lọc, không bị kẹt.
+- Tìm theo nhiều từ: chữ chỉ khớp **lỏng** (nằm giữa một từ khác) không còn được tính là "trúng từ",
+  nên câu nhiều từ bớt lọt bài không liên quan.
+
 ## [0.29.1] - 2026-11-26: Sửa mô hình khựng nửa chừng khi đọc nhịp
 
 ### Sửa

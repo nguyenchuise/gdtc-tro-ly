@@ -65,7 +65,11 @@ export function search(exercises, raw, { grade = null, chapter = null } = {}) {
     for (const t of q.terms) {
       // Từ ngắn (≤ 2 chữ, ví dụ "rổ") phải khớp nguyên từ; từ dài hơn được khớp phần đầu ("bon" → "bong").
       const re = new RegExp(t.length <= 2 ? `(^|\\s)${t}(\\s|$)` : `(^|\\s)${t}`);
-      if (re.test(e._title)) { s += 5; hits++; } else if (re.test(e._hay)) { s += 2; hits++; } else if (t.length >= 3 && e._hay.includes(t)) { s += 1; hits++; }
+      if (re.test(e._title)) { s += 5; hits++; }
+      else if (re.test(e._hay)) { s += 2; hits++; }
+      // Khớp lỏng (nằm giữa một từ khác, vd "dieu" trong "dieu chinh"): cộng điểm nhẹ nhưng KHÔNG
+      // tính là "trúng từ", để câu nhiều từ không lọt những bài chỉ tình cờ chứa mẩu chữ đó.
+      else if (t.length >= 3 && e._hay.includes(t)) s += 1;
     }
     // Cụm nhiều từ khớp liền nhau trong tiêu đề → cộng thêm.
     if (q.terms.length > 1 && e._title.includes(q.terms.join(' '))) s += 6;

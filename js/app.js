@@ -9,7 +9,9 @@ import { hasBookAnim } from './book-anim.js';
 import { hasFigure } from './figure-anim.js';
 import { initMusic } from './music.js';
 
-const state = { grade: null, chapter: null, q: '' };
+// mode: lọc chính xác theo kiểu chấm ('sequence' = bài thể dục đếm nhịp). Dùng cho nút gợi ý,
+// vì tìm theo chữ không tách được "nhịp điệu" với "điều chỉnh" (bỏ dấu đều ra "dieu").
+const state = { grade: null, chapter: null, q: '', mode: null };
 const closed = new Set(); // các nhóm Lớp/Phần đang thu gọn (nhớ trong lúc dùng trang)
 const GRADES = [6, 7, 8, 9];
 // Thứ tự tab: Sách → Video → Hướng dẫn → Tự tập. Mở bài mặc định vào tab đầu (Sách).
@@ -107,11 +109,14 @@ function card(e, { crumbs = false } = {}) {
 }
 
 function renderResults({ openSingle = false } = {}) {
-  const { results, query } = search(store.exercises, state.q, { grade: state.grade, chapter: state.chapter });
+  // Nút gợi ý lọc theo kiểu chấm thì bỏ qua phần tìm theo chữ, để ra ĐỦ các bài thuộc nhóm đó.
+  const found = search(store.exercises, state.mode ? '' : state.q, { grade: state.grade, chapter: state.chapter });
+  const query = found.query;
+  const results = state.mode ? found.results.filter((e) => e.scoring?.mode === state.mode) : found.results;
   const box = $('#results');
   const summary = $('#result-summary');
-  const hasTerms = query.terms.length > 0;
-  $('#toggle-all').hidden = hasTerms || !results.length;
+  const hasTerms = query.terms.length > 0 || Boolean(state.mode);
+  $('#toggle-all').hidden = !results.length;
   if (!results.length) {
     summary.textContent = 'Không tìm thấy bài nào.';
     box.innerHTML = `<div class="empty"><p><strong>Chưa thấy bài “${esc(state.q)}”.</strong></p>
@@ -125,7 +130,8 @@ function renderResults({ openSingle = false } = {}) {
     : `${results.length} bài tập`;
   box.classList.toggle('reveal', !renderResults.done);
   renderResults.done = true;
-  box.innerHTML = hasTerms ? `<ul class="grid">${results.map((e) => card(e, { crumbs: true })).join('')}</ul>` : renderTree(results);
+  // Kể cả khi tìm kiếm cũng giữ nguyên các khối Lớp 6→9 (thu gọn / mở được), cho dễ nhìn theo lớp.
+  box.innerHTML = renderTree(results);
   updateToggleAll();
   if (openSingle && results.length === 1) location.hash = `bai/${results[0].id}`;
 }
@@ -190,12 +196,14 @@ function initHome() {
     });
   };
   // Bấm Tìm (hoặc gợi ý): nếu khớp đúng 1 bài thì mở thẳng bài đó, còn lại thì cuộn xuống danh sách kết quả.
-  const runSearch = () => {
+  const runSearch = ({ mode = null } = {}) => {
+    state.mode = mode;
     state.q = input.value;
     renderResults({ openSingle: true });
     if (!location.hash.startsWith('#bai/')) scrollToList();
   };
-  const live = debounce(() => { state.q = input.value; renderResults(); }, 180);
+  // Gõ tay thì bỏ bộ lọc của nút gợi ý, để kết quả bám theo đúng chữ em gõ.
+  const live = debounce(() => { state.mode = null; state.q = input.value; renderResults(); }, 180);
   input.addEventListener('input', live);
   $('#search-form').addEventListener('submit', (ev) => {
     ev.preventDefault();
@@ -206,7 +214,7 @@ function initHome() {
     const b = ev.target.closest('[data-q]');
     if (!b) return;
     input.value = b.dataset.q;
-    runSearch();
+    runSearch({ mode: b.dataset.mode || null });
   });
   const pickGrade = (ev) => {
     const b = ev.target.closest('button[data-grade]');
@@ -243,7 +251,7 @@ function initHome() {
     $$('#results details').forEach((d) => { d.open = open; });
   });
   $('#results').addEventListener('click', (ev) => {
-    if (ev.target.closest('[data-clear]')) { input.value = ''; state.q = ''; setGrade(null); }
+    if (ev.target.closest('[data-clear]')) { input.value = ''; state.q = ''; state.mode = null; setGrade(null); }
   });
 
   // Giọng nói
@@ -256,7 +264,7 @@ function initHome() {
     stopListening = listen({
       onText: (text, final) => {
         input.value = text;
-        if (final) { state.q = text; renderResults({ openSingle: true }); }
+        if (final) { state.mode = null; state.q = text; renderResults({ openSingle: true }); }
       },
       onState: (s) => {
         const on = s === 'listening';
