@@ -426,9 +426,13 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       const chip = el.querySelector(`[data-k="${k}"]`);
       const row = chip?.parentElement;
       if (row && row.scrollWidth > row.clientWidth) row.scrollLeft = chip.offsetLeft - row.clientWidth / 2 + chip.offsetWidth / 2;
-      voice.speak(p); // đang đọc thì vòng chạy đứng yên ở nhịp này (xem frame())
     }
     dirty = false;
+  }
+
+  /** Đọc nhịp khi hình đã tới ĐÚNG tư thế (không đọc giữa đường, để động tác chạy liền mạch). */
+  function sayAt(x) {
+    voice.speak(src.poses[((Math.round(x) % N) + N) % N] || {});
   }
 
   function ui() {
@@ -447,16 +451,17 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     last = ms;
     if (tween) {
       tween.p += dt / 0.55;
-      if (tween.p >= 1) { t = tween.to; tween = null; } else t = tween.from + (tween.to - tween.from) * ease(tween.p);
+      if (tween.p >= 1) { t = tween.to; tween = null; sayAt(t); } else t = tween.from + (tween.to - tween.from) * ease(tween.p);
       dirty = true;
-    } else if (playing && !voice.holding) {
+    } else if (playing) {
       const k = SPEEDS[speed].k;
       if (hold > 0) hold -= dt;
-      else {
+      // Đang đọc thì đứng yên — nhưng chỉ sau khi đã đi TRỌN nhịp, tức lúc này hình đang đúng tư thế.
+      else if (!voice.holding) {
         const before = Math.floor(t + 1e-6);
         t += (dt * k) / beatSec;
         const after = Math.floor(t + 1e-6);
-        if (after > before) { t = after % N; hold = holdOf(t) / Math.sqrt(k); }
+        if (after > before) { t = after % N; hold = holdOf(t) / Math.sqrt(k); sayAt(t); }
         dirty = true;
       }
     }
@@ -503,7 +508,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   const onVis = () => schedule();
   document.addEventListener('visibilitychange', onVis);
 
-  fit(); ui(); draw(); schedule();
+  fit(); ui(); draw(); sayAt(t); schedule();
   return {
     el,
     stop() {

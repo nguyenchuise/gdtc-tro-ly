@@ -111,7 +111,10 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
     if (!ready) return;
     post({ cmd: 'ai', on: ai });
     post({ cmd: 'speed', v: SPEEDS[speed].v });
-    post({ cmd: playing && visible && !document.hidden && !voice.holding ? 'play' : 'pause' });
+    // Đang đọc nhịp: KHÔNG gửi lệnh dừng ngay (sẽ khựng giữa đường) — báo cầu nối tự dừng
+    // khi mô hình đi hết nhịp, tới đúng tư thế.
+    post({ cmd: 'speaking', on: voice.holding });
+    if (!voice.holding) post({ cmd: playing && visible && !document.hidden ? 'play' : 'pause' });
   }
 
   function onMsg(e) {

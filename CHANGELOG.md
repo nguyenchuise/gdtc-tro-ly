@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.29.1] - 2026-11-26: Sửa mô hình khựng nửa chừng khi đọc nhịp
+
+### Sửa
+- **Hình (nhất là mô hình 3D nhìn từ phía sau) bị khựng giữa hai tư thế trong lúc đọc nhịp.**
+  Nguyên nhân: số nhịp được tính bằng `Math.round`, nên nó đổi ở **giữa đường** đi từ tư thế này sang
+  tư thế kia; lệnh dừng để nghe đọc rơi đúng lúc đó, làm động tác đứng khựng nửa chừng.
+  Nay động tác **chạy liền mạch hết nhịp, tới đúng tư thế rồi mới dừng chờ đọc xong**:
+  - Hình nộm / vector: chỉ đọc và dừng khi `t` chạm đúng số nguyên (đúng tư thế).
+  - Mô hình 3D: trang chính báo `speaking` cho cầu nối, cầu nối tự dừng khi mô hình đi hết nhịp
+    (`frac ≥ 0,92` hoặc `≤ 0,12`, xem `samplePose`) — không dừng từ xa để khỏi trễ lệnh.
+  - Đo thực tế bài lớp 8 nhịp điệu: trước khi sửa 271/325 lần dừng rơi vào giữa đường (frac ~0,55–0,62);
+    sau khi sửa 0/180.
+
 ## [0.29.0] - 2026-11-26: Đọc nhịp ở mục Video; nút "Chấm luôn"; sửa hình mẫu bị co trên camera
 
 ### Thêm

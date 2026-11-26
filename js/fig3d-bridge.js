@@ -60,9 +60,20 @@
   setAI(true);
 
   // ---------- Theo dõi nhịp; tự sang động tác kế tiếp khi chạy hết một động tác (bài nhiều động tác)
-  let last = -1, lastLocal = -1;
+  let last = -1, lastLocal = -1, speaking = false;
+  // Mô hình chạy từ tư thế này sang tư thế kia trong khoảng frac 0,12 → 0,92 (xem samplePose).
+  // Ngoài khoảng đó là đang ĐỨNG ĐÚNG một tư thế — chỉ lúc ấy mới được dừng để nghe đọc,
+  // nếu dừng giữa đường thì động tác bị khựng nửa chừng.
+  function atPose() {
+    const n = lists[curEx()].length || 1;
+    const w = ((state.t % n) + n) % n;
+    const frac = w - Math.floor(w);
+    return frac >= 0.92 || frac <= 0.12;
+  }
   function loop() {
     try {
+      // Trang chính đang đọc nhịp: chạy nốt cho hết nhịp rồi mới dừng.
+      if (speaking && state.playing && atPose()) setPlaying(false);
       if (multi && state.playing) {
         const n = nearest(), len = lists[state.exIdx].length;
         if (lastLocal === len - 1 && n === 0) { selectEx((state.exIdx + 1) % lists.length); setPlaying(true); }
@@ -77,6 +88,7 @@
   window.addEventListener('message', (e) => {
     const m = e.data;
     if (!m || m.type !== 'fig3d' || !m.cmd) return;
+    if (m.cmd === 'speaking') { speaking = Boolean(m.on); return; }
     if (m.cmd === 'goto') { goto(m.k); last = -1; }
     else if (m.cmd === 'play') setPlaying(true);
     else if (m.cmd === 'pause') setPlaying(false);

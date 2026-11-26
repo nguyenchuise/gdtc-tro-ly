@@ -210,7 +210,8 @@ Hàng trên chia **hai cột chạy cùng nhịp**, để đối chiếu ngay v�
 | Phải: ② Động tác trong sách | **Ảnh gốc SGK** chạy động. Góc phía trước giữ đúng sách, không dựng lại. | "Chưa có hình động", kèm link sang mục 1. Sách |
 
 - Hàng điều khiển có nút **🔊 Đọc nhịp**: đọc tên nhịp và câu hướng dẫn mỗi khi đổi nhịp (giọng 1,2×), **đọc xong mới sang nhịp sau**
-  (hình nộm đứng yên, mô hình 3D tạm dừng). Tên động tác / câu mô tả trùng nhịp trước thì bỏ cho đỡ lặp. Xem `js/video-voice.js`.
+  Động tác **chạy liền mạch hết nhịp rồi mới dừng** ở đúng tư thế (không khựng nửa chừng): hình nộm chờ `t` chạm số nguyên, mô hình 3D
+  do `js/fig3d-bridge.js` tự dừng khi `frac ≥ 0,92`. Tên động tác / câu mô tả trùng nhịp trước thì bỏ cho đỡ lặp. Xem `js/video-voice.js`.
 
 Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của thầy cô; chưa có thì "Video sắp có".
 
