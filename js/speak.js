@@ -24,14 +24,22 @@ export function setVoicePref(on) {
   if (!on) synth?.cancel();
 }
 
-/** Đọc một câu (huỷ câu đang đọc dở). Trả về false nếu không đọc được. */
-export function say(text, { rate = 1.2 } = {}) {
+/**
+ * Đọc một câu (huỷ câu đang đọc dở). Trả về false nếu không đọc được.
+ * onend: gọi khi đọc xong (hoặc lỗi) — dùng để chờ đọc hết nhịp rồi mới sang nhịp sau.
+ */
+export function say(text, { rate = 1.2, onend = null } = {}) {
   if (!synth || !text) return false;
   const v = viVoice || pickVoice();
   if (!v) return false;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.voice = v; u.lang = v.lang; u.rate = rate;
+  if (onend) {
+    let done = false;
+    const fire = () => { if (!done) { done = true; onend(); } };
+    u.onend = fire; u.onerror = fire;
+  }
   synth.speak(u);
   return true;
 }

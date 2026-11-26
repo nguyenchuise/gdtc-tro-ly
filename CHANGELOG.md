@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.29.0] - 2026-11-26: Đọc nhịp ở mục Video; nút "Chấm luôn"; sửa hình mẫu bị co trên camera
+
+### Thêm
+- **Mục 2. Video đọc tên nhịp cho TẤT CẢ bài** (trước chỉ mục Tự tập mới có giọng).
+  Nút **🔊 Đọc nhịp** ở hàng điều khiển; giọng chạy **1,2×**; **đọc xong mới sang nhịp sau** để em nghe kịp
+  (hình nộm/vector đứng yên, mô hình 3D tạm dừng rồi chạy tiếp). Tên động tác và câu mô tả giống nhịp trước
+  thì bỏ, chỉ đọc tên nhịp cho đỡ lặp. Dùng chung công tắc 🔊 với mục Tự tập.
+- **Nút "Chấm luôn"** ở mục 4. Tự tập cho **75 bài không đếm nhịp** (57 bài giữ tư thế + 18 bài đếm lần) —
+  trước đây chỉ 10 bài thể dục đếm nhịp có nút "Bỏ qua nhịp". Bấm vào là chốt kết quả với đúng những gì em
+  đã làm được (điểm cao nhất đã đạt / số lần đã đạt), vẫn có ảnh, phiếu PDF và gửi cho thầy cô như bình thường.
+
+### Sửa
+- **Hình mẫu nhỏ ở góc dưới phải khung camera bị co còn ~34×20px ở 31 bài** có hình sách nằm ngang:
+  do `min(100%, …)` tính theo khung cha rộng tự do. Nay dùng đơn vị theo bề ngang màn hình, khung ra
+  **~124×73px**, nhìn rõ mà vẫn không che người tập.
+
+### Thay đổi
+- Từ khoá gợi ý ở ô tìm kiếm rút còn **3**, ưu tiên bài trọng tâm cả 4 lớp:
+  **Thể dục liên hoàn** (6 bài đếm nhịp lớp 6–7) · **Thể dục nhịp điệu** (lớp 8–9) · **Chạy cự li ngắn** (lớp 6–9).
+
+### Đã rà soát
+- Chạy thử camera cho **cả 85 bài có chấm điểm**: 85/85 có hình mẫu trong khung camera (đều là ảnh sách thật,
+  nằm góc dưới phải) và 85/85 có giọng đọc hướng dẫn. Không bài nào thiếu.
+
 ## [0.28.1] - 2026-11-25: Bật gửi kết quả — dùng Google Apps Script
 
 ### Thay đổi

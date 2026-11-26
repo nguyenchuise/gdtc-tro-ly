@@ -712,7 +712,10 @@ details { margin: 10px 0; }
 .bookanim--inset .bookanim__label strong { font-size: .72rem; }
 .bookanim--inset .bookanim__label span { display: none; }
 .bookanim--inset .bookanim__badge { font-size: .55rem; padding: 1px 5px; }
-.stage-figure--book { width: auto; max-width: 30%; }
+.stage-figure--book { width: auto; max-width: 34%; }
+/* Hình mẫu nhỏ trên camera: hình NGANG (ar > 1) trước đây bị co còn ~20px, vì "min(100%, …)" tính
+   theo khung cha rộng tự do. Dùng đơn vị theo bề ngang màn hình để luôn ra kích thước thật. */
+.bookanim--inset .bookanim__stage { width: min(calc(var(--h) * var(--ar)), 30vw); }
 .stage-figure--book:not(.is-min) .stage-figure__label { display: none; }
 /* Điện thoại ở sân trường: nút "Bật camera" nổi sát mép dưới trong lúc em xem hình mẫu — bấm được bằng một ngón cái */
 @media (max-width: 759px) {

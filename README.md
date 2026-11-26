@@ -125,6 +125,8 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
   2 khung lỗi (JPEG 0.7, ≤ 640px). Worker ghi một dòng vào Google Sheet và lưu ảnh vào một thư mục Drive theo `sessionId`.
   Mỗi lần hoàn thành chỉ gửi một lần; lỗi mạng chỉ ghi `console.error`. Khi bật gửi, trang nhắc *"Ảnh đã được lưu và gửi, em có thể
   lưu PDF để giữ lại."*; để trống `RESULT_ENDPOINT` thì không gửi và nhắc *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."*
+- **Nút "Chấm luôn"** (bài không đếm nhịp): chốt kết quả với đúng những gì em đã làm được — điểm cao nhất đã đạt, hoặc số lần đã đạt.
+  Tương đương nút **Bỏ qua nhịp** của bài đếm nhịp. Vẫn có ảnh, phiếu PDF và gửi kết quả như bình thường.
 - **Giọng đọc và lời nhắc "Chưa đạt" có ở mọi bài** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ):
   vào bài đọc yêu cầu và hiện chữ to giữa khung camera (tự ẩn sau 5 giây); **chưa đạt quá 5 giây** thì đọc và hiện lý do cụ thể
   (suy ra từ bộ phận điểm thấp nhất, vd *"Khuỷu tay co khoảng 90°: gập lại thêm khoảng 90 độ"*), rồi **nhắc lại mỗi 10 giây**
@@ -206,6 +208,9 @@ Hàng trên chia **hai cột chạy cùng nhịp**, để đối chiếu ngay v�
 |---|---|---|
 | Trái: ① Bạn mẫu tập cùng em | Góc nhìn **phía sau** dựng nhân tạo (tệp Gemini), có điểm khớp AI | Bài có chấm điểm: **hình nộm đi lần lượt theo từng hình SGK** (`data/sgk-poses.json`, sinh bằng `tools/sgk-poses/`), cùng nhịp với ảnh sách, hình đúng tư thế máy chấm có ★. Sách chỉ có sơ đồ/cảnh đông người: hình nộm vẽ từ góc máy chấm. Bài không chấm: "sắp có". |
 | Phải: ② Động tác trong sách | **Ảnh gốc SGK** chạy động. Góc phía trước giữ đúng sách, không dựng lại. | "Chưa có hình động", kèm link sang mục 1. Sách |
+
+- Hàng điều khiển có nút **🔊 Đọc nhịp**: đọc tên nhịp và câu hướng dẫn mỗi khi đổi nhịp (giọng 1,2×), **đọc xong mới sang nhịp sau**
+  (hình nộm đứng yên, mô hình 3D tạm dừng). Tên động tác / câu mô tả trùng nhịp trước thì bỏ cho đỡ lặp. Xem `js/video-voice.js`.
 
 Bên dưới là ③ **Video hướng dẫn**: video YouTube hoặc video của thầy cô; chưa có thì "Video sắp có".
 

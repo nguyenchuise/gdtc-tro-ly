@@ -117,7 +117,8 @@ export function mountPractice(root, ex) {
           <button type="button" class="btn btn--small btn--glass" data-act="flip" hidden aria-label="Đổi sang camera sau">${icon('flip')}<span class="flip-text">Camera sau</span></button>
           ${speechSupported() ? `<button type="button" class="btn btn--small btn--glass btn--icon" data-act="voice" aria-pressed="${voicePref()}" aria-label="Đọc hướng dẫn">${voicePref() ? '🔊' : '🔇'}</button>` : ''}
           <button type="button" class="btn btn--small btn--glass" data-act="wide" hidden aria-pressed="false" aria-label="Camera góc rộng">Góc rộng</button>
-          ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>' : ''}
+          ${isSeq ? '<button type="button" class="btn btn--small btn--glass" data-act="skip">Bỏ qua nhịp</button>'
+            : '<button type="button" class="btn btn--small btn--glass" data-act="giveup">Chấm luôn</button>'}
           <button type="button" class="btn btn--small btn--danger" data-act="stop">Dừng</button>
         </div>
       </div>
@@ -459,6 +460,8 @@ export function mountPractice(root, ex) {
       attempt.smooth[i] = s;
       return { label: r.rule.label, joint: r.joints?.[1], angle: r.angle, target: r.rule.target, kind: r.rule.kind, need: r.rule.need, score: s, missing: r.missing };
     });
+    // Giữ lại khung vừa xử lí để nút "Chấm luôn" còn ảnh và điểm từng bộ phận.
+    attempt.lastLm = lm; attempt.lastParts = parts; attempt.lastW = w; attempt.lastH = h;
     const allSeen = parts.every((p) => p.score != null);
     // Chấm trọn bộ: bộ phận máy không thấy (vd chân bị khuất) không chặn nhịp. Đạt khi máy thấy ít nhất một nửa
     // số bộ phận và quá nửa số bộ phận thấy được đạt ≥ 80%.
@@ -763,6 +766,46 @@ export function mountPractice(root, ex) {
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
   }
 
+  /**
+   * Bài không đếm nhịp: nút "Chấm luôn" — kết thúc lượt với đúng những gì em đã làm được
+   * (tương tự nút "Bỏ qua nhịp" của bài thể dục đếm nhịp, vì bài này không chia nhịp để bỏ).
+   */
+  function giveUp() {
+    if (isSeq || !attempt || attempt.done || !running) return;
+    const parts = attempt.lastParts || [];
+    const lm = attempt.lastLm, w = attempt.lastW || video.videoWidth, h = attempt.lastH || video.videoHeight;
+    const per = parts.map((p) => ({ label: p.label, score: Math.round(p.score ?? 0) }));
+    let result;
+    if (isReps) {
+      const q = attempt.goodQ.length ? attempt.goodQ.reduce((a, b) => a + b, 0) / attempt.goodQ.length : 0;
+      result = {
+        score: Math.round(q),
+        detail: `${attempt.goodReps}/${sc.reps.target} lần đạt · dừng giữa chừng`,
+        parts: [{ label: sc.reps.label, score: Math.round(q) }, ...per],
+      };
+    } else {
+      result = {
+        score: Math.round(attempt.peak || 0),
+        detail: `Cao nhất ${Math.round(attempt.peak || 0)}% · chưa giữ đủ ${secText} giây`,
+        parts: per.length ? per : rules.map((r) => ({ label: r.label, score: 0 })),
+      };
+    }
+    attempt.done = true;
+    result.time = new Date();
+    if (lm && w && h) result.image = snapshot(lm, w, h, parts, null, result);
+    const rec = session.get(ex.id) || { best: null, last: null };
+    const newRecord = Boolean(rec.best) && result.score > rec.best.score;
+    rec.last = result;
+    if (!rec.best || newRecord) rec.best = result;
+    session.set(ex.id, rec);
+    uploadResult(result, (attempt.errorShots || []).map((e) => e.image), [...(attempt.errorReasons || [])]);
+    const b = $('.pass-banner');
+    b.hidden = false; b.textContent = `Đã chấm ${result.score}%`;
+    showAdvice('Đã chấm với kết quả hiện có. Bấm “Tập lại” để thử lần nữa.');
+    renderResults(newRecord);
+    setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
+  }
+
   /** Chép khung hình camera hiện tại (dùng lại canvas cũ nếu có) để chụp đúng khoảnh khắc làm đúng. */
   function grabFrame(w, h, reuse) {
     const c = reuse && reuse.width === w && reuse.height === h ? reuse : document.createElement('canvas');
@@ -847,7 +890,7 @@ export function mountPractice(root, ex) {
       <article class="result-card result-card--${kind}">
         <header><h3>${kind === 'best' ? `${icon('trophy')} Kết quả tốt nhất` : 'Kết quả lần này'}</h3>
           ${kind === 'best' && newRecord ? '<span class="badge badge--record">Kỷ lục mới</span>' : ''}</header>
-        <img src="${r.image}" alt="Ảnh lúc em đạt ${r.score}%" width="640" height="560">
+        ${r.image ? `<img src="${r.image}" alt="Ảnh lúc em đạt ${r.score}%" width="640" height="560">` : ''}
         <div class="result-card__score"><strong>${r.score}%</strong><span>${esc(r.detail)} · ${fmtTime(r.time)}</span></div>
         <ul class="part-bars">${r.parts.map((p) => `<li><span>${esc(p.label)}</span>
           <span class="bar"><span style="width:${Math.min(100, p.score)}%" class="bar--${tone(p.score)}"></span></span><b>${p.score}%</b></li>`).join('')}</ul>
@@ -1023,6 +1066,7 @@ export function mountPractice(root, ex) {
       else if (on && attempt) say(goalSpeech());
     }
     else if (act === 'skip') skipStep();
+    else if (act === 'giveup') giveUp();
     else if (act === 'stop') stop();
     else if (act === 'again') {
       if (running) newAttempt(); else startCamera();

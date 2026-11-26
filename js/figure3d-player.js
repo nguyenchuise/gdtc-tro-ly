@@ -4,6 +4,7 @@
 // Nhịp được ghép với ảnh sách theo TÊN (động tác + "Nhịp n"); nhịp nào SGK không in hình thì ghi rõ.
 import { esc } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
+import { voiceButton, createBeatVoice } from './video-voice.js';
 
 const SPEEDS = [{ label: 'Chậm', v: 0.5 }, { label: 'Vừa', v: 1 }, { label: 'Nhanh', v: 1.5 }];
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -68,6 +69,7 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
       <button type="button" class="btn btn--ghost btn--small btn--icon" data-a="next" aria-label="Nhịp sau">›</button>
       <button type="button" class="btn btn--ghost btn--small" data-a="speed" aria-label="Đổi tốc độ"></button>
       <button type="button" class="btn btn--ghost btn--small vfig__toggle" data-a="ai" aria-pressed="true"><span class="vfig__dot" aria-hidden="true"></span>Điểm khớp AI</button>
+      ${voiceButton()}
     </div>
     <p class="muted small vfig__note">Bên trái là <b>mô hình 3D</b> nhìn từ phía sau (tay trái ở bên trái màn hình, em làm y hệt); kéo ngang trên hình để xoay xem các phía.
       Bên phải là <b>ảnh gốc trong SGK</b>, chạy cùng nhịp để đối chiếu.</p>`;
@@ -77,6 +79,8 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
   const nobook = el.querySelector('.vfig__nobook');
   let poses = [], map = [], k = -1, playing = !reduceMotion(), speed = 1, ai = true, alive = true, visible = true, ready = false, book = null;
   const post = (m) => frame.contentWindow?.postMessage({ type: 'fig3d', ...m }, '*');
+  // Giọng đọc tên nhịp: đang đọc thì mô hình đứng yên, đọc xong chạy tiếp.
+  const voice = createBeatVoice(() => apply());
 
   function ui() {
     const play = el.querySelector('[data-a="play"]');
@@ -101,12 +105,13 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
     const chip = stepsEl.querySelector(`[data-k="${k}"]`);
     if (chip && stepsEl.scrollWidth > stepsEl.clientWidth) stepsEl.scrollLeft = chip.offsetLeft - stepsEl.clientWidth / 2 + chip.offsetWidth / 2;
     showBook();
+    if (voice.speak(p)) apply(); // đọc nhịp này: tạm dừng mô hình cho em nghe kịp
   }
   function apply() {
     if (!ready) return;
     post({ cmd: 'ai', on: ai });
     post({ cmd: 'speed', v: SPEEDS[speed].v });
-    post({ cmd: playing && visible && !document.hidden ? 'play' : 'pause' });
+    post({ cmd: playing && visible && !document.hidden && !voice.holding ? 'play' : 'pause' });
   }
 
   function onMsg(e) {
@@ -135,6 +140,7 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
     else if (a === 'play') playing = !playing;
     else if (a === 'speed') speed = (speed + 1) % SPEEDS.length;
     else if (a === 'ai') ai = !ai;
+    else if (a === 'voice') voice.toggle(ev.target.closest('[data-a="voice"]'));
     ui(); apply();
   });
 
@@ -161,7 +167,7 @@ export async function create3DPlayer(ex, { num = 0 } = {}) {
   return {
     el,
     stop() {
-      alive = false; post({ cmd: 'pause' }); book?.stop(); io?.disconnect();
+      alive = false; voice.stop(); post({ cmd: 'pause' }); book?.stop(); io?.disconnect();
       window.removeEventListener('message', onMsg); document.removeEventListener('visibilitychange', onVis);
       window.removeEventListener('resize', onResize);
     },

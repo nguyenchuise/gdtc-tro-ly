@@ -8,6 +8,7 @@
 //   Phải ② Động tác trong sách: ẢNH GỐC SGK chạy động (js/book-anim.js), giữ nguyên hình trong sách.
 import { esc } from './util.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
+import { voiceButton, createBeatVoice } from './video-voice.js';
 
 const SPEEDS = [{ label: 'Chậm', k: 0.6 }, { label: 'Vừa', k: 1 }, { label: 'Nhanh', k: 1.5 }];
 const BEAT = 1.05; // giây chuyển giữa hai nhịp ở tốc độ Vừa
@@ -344,6 +345,8 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   const uid = Math.random().toString(36).slice(2, 7);
   let t = 0, playing = !reduceMotion(), speed = 1, hold = holdOf(0), alive = true, visible = true;
   let ai = true, arrows = src.arrows, tween = null, raf = 0, last = 0, lastIdx = -1, dirty = true;
+  // Giọng đọc tên nhịp: đang đọc thì giữ nguyên nhịp, đọc xong mới chạy tiếp.
+  const voice = createBeatVoice(() => schedule());
 
   const el = document.createElement('section');
   el.className = `vsec vfig vfig--${src.kind}`;
@@ -375,6 +378,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       <button type="button" class="btn btn--ghost btn--small" data-a="speed" aria-label="Đổi tốc độ"></button>
       <button type="button" class="btn btn--ghost btn--small vfig__toggle" data-a="ai" aria-pressed="true"><span class="vfig__dot" aria-hidden="true"></span>Điểm khớp AI</button>
       ${src.arrows ? '<button type="button" class="btn btn--ghost btn--small vfig__toggle" data-a="arrows" aria-pressed="true">Mũi tên</button>' : ''}
+      ${voiceButton()}
     </div>
     <p class="muted small vfig__note">${src.note}</p>`;
   const panes = src.views.map((v) => ({ v, svg: el.querySelector(`svg[data-view="${v.id}"]`) }));
@@ -422,6 +426,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       const chip = el.querySelector(`[data-k="${k}"]`);
       const row = chip?.parentElement;
       if (row && row.scrollWidth > row.clientWidth) row.scrollLeft = chip.offsetLeft - row.clientWidth / 2 + chip.offsetWidth / 2;
+      voice.speak(p); // đang đọc thì vòng chạy đứng yên ở nhịp này (xem frame())
     }
     dirty = false;
   }
@@ -444,7 +449,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
       tween.p += dt / 0.55;
       if (tween.p >= 1) { t = tween.to; tween = null; } else t = tween.from + (tween.to - tween.from) * ease(tween.p);
       dirty = true;
-    } else if (playing) {
+    } else if (playing && !voice.holding) {
       const k = SPEEDS[speed].k;
       if (hold > 0) hold -= dt;
       else {
@@ -484,6 +489,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
     else if (a === 'next') goTo(cur + 1);
     else if (a === 'play') { playing = !playing; hold = playing ? 0.15 : hold; }
     else if (a === 'speed') speed = (speed + 1) % SPEEDS.length;
+    else if (a === 'voice') { voice.toggle(ev.target.closest('[data-a="voice"]')); schedule(); return; }
     else if (a === 'ai') { ai = !ai; dirty = true; }
     else if (a === 'arrows') { arrows = !arrows; dirty = true; }
     ui(); schedule();
@@ -501,7 +507,7 @@ export async function createFigurePlayer(ex, { num = 0 } = {}) {
   return {
     el,
     stop() {
-      alive = false; if (raf) cancelAnimationFrame(raf); book?.stop();
+      alive = false; voice.stop(); if (raf) cancelAnimationFrame(raf); book?.stop();
       io?.disconnect(); document.removeEventListener('visibilitychange', onVis);
       phoneMQ?.removeEventListener?.('change', onMQ);
     },
