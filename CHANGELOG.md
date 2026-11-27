@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.1] - 2026-11-27: Băng "bản nháp chưa đăng" chỉ hiện ở trang Giáo viên
+
+### Thay đổi
+- Dòng *"Máy này đang hiện bản nháp chưa đăng. Học sinh chưa thấy. Quản lý bản nháp"* trước hiện ở mọi màn
+  hình (cả trang chủ). Nay **chỉ hiện ở trang Giáo viên, sau khi đã nhập mã**; trang chủ và trang bài học
+  không còn dòng này. Lưu hoặc xoá bản nháp thì băng tự cập nhật ngay, không cần tải lại trang.
+
 ## [0.31.0] - 2026-11-26: Giọng đọc chạy được trên iPhone; nhắc mở bằng trình duyệt khi ở trong Zalo
 
 ### Sửa

@@ -15,8 +15,10 @@ export function readDrafts() {
   try { return JSON.parse(safeStorage.get(DRAFT_KEY) || '{}') || {}; } catch { return {}; }
 }
 export function writeDrafts(d) {
-  if (!Object.keys(d).length) { safeStorage.del(DRAFT_KEY); return true; }
-  return safeStorage.set(DRAFT_KEY, JSON.stringify(d));
+  const ok = Object.keys(d).length ? safeStorage.set(DRAFT_KEY, JSON.stringify(d)) : (safeStorage.del(DRAFT_KEY), true);
+  // Báo cho băng "bản nháp chưa đăng" (chỉ hiện ở trang Giáo viên) cập nhật ngay khi lưu / xoá nháp.
+  try { window.dispatchEvent(new CustomEvent('gdtc:drafts')); } catch { /* bỏ qua */ }
+  return ok;
 }
 
 /** Chuẩn hoá trường book: hỗ trợ cả dạng cũ {page, image} và dạng mới {pages: [...]}. */

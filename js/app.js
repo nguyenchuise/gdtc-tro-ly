@@ -1,5 +1,5 @@
 // Ứng dụng chính: trang chủ, tìm kiếm, cây Lớp → Phần → Chủ đề → Bài (thu gọn được), hộp chi tiết bài tập.
-import { loadData, store, contentStatus, relatedOf } from './data.js';
+import { loadData, store, contentStatus, relatedOf, readDrafts } from './data.js';
 import { search } from './search.js';
 import { listen, voiceSupported } from './voice.js';
 import { videoFacade, watchUrl, searchUrl } from './youtube.js';
@@ -533,9 +533,16 @@ function initDialog() {
 }
 
 // ---------------------------------------------------------------- Định tuyến
+/** Băng "Máy này đang hiện bản nháp chưa đăng" chỉ hiện ở trang Giáo viên (trang chủ để học sinh xem cho gọn). */
+function showDraftBanner() {
+  const teacher = decodeURIComponent(location.hash.slice(1)).startsWith('giao-vien');
+  $('#draft-banner').hidden = !(teacher && isTeacherUnlocked() && Object.keys(readDrafts()).length > 0);
+}
+
 async function route() {
   const h = decodeURIComponent(location.hash.slice(1));
   const teacher = h.startsWith('giao-vien');
+  showDraftBanner();
   $('#home-view').hidden = teacher;
   $('#teacher-view').hidden = !teacher;
   $$('[data-nav]').forEach((a) => {
@@ -549,6 +556,7 @@ async function route() {
     if (!isTeacherUnlocked()) { renderTeacherGate(view, route); return; }
     const { renderTeacher } = await import('./teacher.js');
     renderTeacher(view, h.split('/')[1] || null);
+    showDraftBanner();
     return;
   }
   document.title = 'GDTC Trợ lý tập luyện';
@@ -597,7 +605,7 @@ async function main() {
     $('#results').innerHTML = '<div class="empty"><p>Không tải được bài tập. Em kiểm tra mạng rồi tải lại trang nhé.</p></div>';
     return;
   }
-  $('#draft-banner').hidden = !store.hasDrafts;
+  window.addEventListener('gdtc:drafts', showDraftBanner);
   initHome();
   initDialog();
   window.addEventListener('hashchange', route);
