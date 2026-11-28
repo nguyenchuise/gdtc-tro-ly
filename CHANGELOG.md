@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.32.0] - 2026-11-28: Tự tập năng động hơn; giọng đọc có chào, khen, nhắc dễ thương
+
+### Thay đổi
+- **Nhịp đọc ở mục 4. Tự tập (mọi bài):** đọc hướng dẫn → em làm chưa đúng thêm **2 giây** → đọc nhận xét
+  → thêm **2 giây** vẫn chưa đúng thì **sang nhịp sau** (bài đếm nhịp). Trước đây chờ 5 giây mới nhắc và
+  10 giây mới sang nhịp. Các mốc tính từ lúc **đọc xong**, nên em luôn nghe trọn câu; làm đúng lúc nào thì
+  qua ngay. Bài giữ tư thế / đếm lần nhắc lại sau mỗi lần đọc xong + 3 giây (trước: 10 giây).
+- **Giọng đọc có lên xuống hơn:** máy tự chọn giọng tự nhiên nhất đang có (giọng *Natural / Nâng cao / Online*
+  được ưu tiên); lời chào, lời khen đọc cao giọng hơn câu hướng dẫn.
+
+### Thêm
+- **Lời đọc dễ thương** (`js/voice-lines.js`), đổi câu luân phiên để không lặp:
+  - **Câu chào** khi bắt đầu Tự tập và khi bắt đầu đọc nhịp ở mục **2. Video**.
+  - **Lời khen** khi qua nhịp (*"Tốt lắm!"*, *"Chuẩn luôn!"*…); bỏ nhịp thì *"Không sao, mình sang nhịp sau nhé!"*.
+  - **Nhắc khi máy chưa thấy em** (*"Ơ, máy chưa thấy em đâu! Em lùi ra xa một chút…"*), khi em đứng xa,
+    khi tư thế chưa đúng (*"Gần được rồi! Đưa thẳng cả hai tay lên cao, sát tai nhé!"*) — nói "thêm chút nữa"
+    thay cho đọc số độ.
+  - **Đếm to** số lần đạt ở bài đếm lần; **lời kết theo điểm** (*"Xuất sắc! Em được 95 phần trăm."*).
+  - Phần **hướng dẫn động tác vẫn đọc nguyên văn theo SGK**.
+- Đã kiểm cả **85 bài có chấm**: bài nào cũng có chào → hướng dẫn → nhận xét, không lỗi.
+
 ## [0.31.1] - 2026-11-27: Băng "bản nháp chưa đăng" chỉ hiện ở trang Giáo viên
 
 ### Thay đổi

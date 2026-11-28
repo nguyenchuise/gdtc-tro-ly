@@ -10,7 +10,11 @@ import { esc } from './util.js';
 import { store } from './data.js';
 import { figureModel, createFigure, animateFigures, figureLegend } from './pose-figure.js';
 import { hasBookAnim, createBookAnim, preloadBookAnim } from './book-anim.js';
-import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding } from './speak.js';
+import { say, primeVoice, stopVoice, voicePref, setVoicePref, speechSupported, hasVietnameseVoice, primeSound, ding, speechMs } from './speak.js';
+import {
+  speakable, greetPractice, praise, skipLine, notSeenLine, tooFarLine, unclearLine, fixLine, angleFix,
+  repStartLine, repDeeperLine, countLine, finishLine,
+} from './voice-lines.js';
 import { uploadEnabled, makeSessionId, shrinkDataUrl, sendResult } from './result-upload.js';
 import { inAppName } from './inapp.js';
 
@@ -237,25 +241,60 @@ export function mountPractice(root, ex) {
   function newAttempt() {
     timer.reset(); counter?.reset();
     attempt = { done: false, smooth: rules.map(() => null), peak: 0, streak: null, goodReps: 0, goodQ: [], low: null, bestShot: null,
-      vis: 0, lastT: null, told: false, toldAt: null, errorShots: [], errorReasons: new Set() };
-    if (isSeq) { attempt.steps = seqSteps(); attempt.si = 0; attempt.res = []; setStep(0); }
-    else announceGoal();
+      vis: 0, lastT: null, errorShots: [], errorReasons: new Set(),
+      // nhịp đọc: 'instr' (đang đọc hướng dẫn) → 'wait-fb' (chờ xem em làm) → 'fb' (đang nhận xét) → 'wait-skip'
+      phase: 'instr', wrong: 0, fbCount: 0, speaking: false, unseenAt: null, unseenToldAt: -99 };
+    if (isSeq) { attempt.steps = seqSteps(); attempt.si = 0; attempt.res = []; setStep(0, greetPractice()); }
+    else announceGoal(greetPractice());
     $('.pass-banner').hidden = true;
     setVal('cur', '—'); setVal('peak', '—'); setVal('hold', '0.0s'); setVal('reps', `0/${sc.reps?.target}`); setVal('total', '0'); setVal('hud', isSeq ? `1/${attempt.steps.length}` : '—');
     setProgress(0);
   }
 
-  // ---- Đọc hướng dẫn & nhắc lý do chưa đạt (bài không đếm nhịp) ------------------------------
-  // Giống bài thể dục đếm nhịp: vào bài thì đọc yêu cầu, chưa đạt quá 5 giây thì nói ngắn gọn vì sao,
-  // rồi nhắc lại mỗi 10 giây nếu vẫn chưa đạt (bài đếm nhịp thay vào đó tự chuyển sang nhịp sau).
-  const TELL_FIRST = 5, TELL_AGAIN = 10;
+  // ---- Nhịp đọc (mọi bài) ---------------------------------------------------------------------
+  // Đọc hướng dẫn → em làm chưa đúng thêm 2 giây (chỉ tính lúc máy THẤY em) → đọc nhận xét →
+  // thêm SKIP_AFTER giây vẫn chưa đúng → bài đếm nhịp tự sang nhịp sau. Bài giữ tư thế / đếm lần không
+  // có nhịp để sang, nên nhắc lại sau AGAIN_AFTER giây. Các mốc tính từ lúc ĐỌC XONG (không phải lúc bắt đầu
+  // đọc), nên em luôn nghe trọn câu. Làm đúng ở bất cứ lúc nào thì qua ngay.
+  const FB_AFTER = 2, FB_FIRST = 2, SKIP_AFTER = 2, AGAIN_AFTER = 3;
+  // Mốc an toàn tối đa cho một nhịp (giây máy thấy em), phòng khi máy không báo "đọc xong".
+  const SKIP_CEILING = autoSkip * 2;
+
+  let speechTok = 0;
+  /**
+   * Đọc (một câu hoặc nhiều đoạn [{ text, pitch, rate }]) rồi gọi done() khi đọc xong.
+   * Máy không đọc được (tắt giọng, không có giọng Việt, chưa chạm mở khoá) thì vẫn chờ bằng thời gian
+   * ước lượng để em kịp đọc chữ trên màn hình — nhịp tập như nhau trên mọi máy.
+   */
+  function speakThen(parts, done) {
+    const tok = ++speechTok;
+    const list = (Array.isArray(parts) ? parts : [{ text: parts }]).filter((p) => p && p.text);
+    const all = list.map((p) => p.text).join(' ');
+    let fired = false;
+    const finish = () => {
+      if (fired || tok !== speechTok) return;
+      fired = true;
+      if (attempt) attempt.speaking = false;
+      done?.();
+    };
+    if (attempt) attempt.speaking = true;
+    const spoke = voicePref() && say(list.map((p) => ({ ...p, text: speakable(p.text) })), { rate: 1.15, onend: finish });
+    setTimeout(finish, spoke ? speechMs(all, 1.15) * 1.8 + 1500 : speechMs(all, 1.15));
+  }
+  /** Đọc một câu ngắn không ảnh hưởng nhịp tập (đếm số, chào kết…). Không chen ngang lúc đang hướng dẫn. */
+  function speakFree(text, { force = false } = {}) {
+    if (!voicePref() || (!force && attempt?.speaking)) return;
+    say(speakable(text), { rate: 1.15, pitch: 1.12 });
+  }
+  /** Đọc xong hướng dẫn / nhận xét → bắt đầu đếm giờ chờ xem em làm. */
+  const toWait = (phase) => () => { if (attempt) { attempt.phase = phase; attempt.wrong = 0; } };
   const cueEl = () => root.querySelector('.stage-cue span');
   const goalCue = () => `<b>${isReps ? `Làm ${sc.reps.target} lần` : `Giữ ${secText} giây`}</b> ${esc(sc.pose || '')}`;
   const goalSpeech = () => (isReps
     ? `Làm đúng ${sc.reps.target} lần. ${sc.reps.label || ''}. ${sc.pose || ''}`
     : `Giữ đúng tư thế ${secText} giây. ${sc.pose || ''}`);
   let cueT = 0;
-  function announceGoal() {
+  function announceGoal(lead = '') {
     const cue = cueEl();
     if (cue) {
       cue.classList.remove('is-why'); cue.innerHTML = goalCue();
@@ -263,7 +302,9 @@ export function mountPractice(root, ex) {
       clearTimeout(cueT);
       cueT = setTimeout(() => { if (!cue.classList.contains('is-why')) cue.replaceChildren(); }, 5000);
     }
-    if (voicePref()) say(goalSpeech());
+    // Lời chào (giọng cao, vui hơn) rồi tới yêu cầu của bài (đọc chuẩn, giọng thường).
+    attempt.phase = 'instr';
+    speakThen([{ text: lead, pitch: 1.15 }, { text: goalSpeech() }], toWait('wait-fb'));
   }
   /** Câu ngắn (để đọc và hiện chữ to) vì sao chưa đạt. Bài không đếm nhịp không soạn sẵn "hint". */
   function shortReason(ev) {
@@ -278,24 +319,41 @@ export function mountPractice(root, ex) {
     const diff = Math.round(worst.angle - worst.rule.target);
     return `${worst.rule.label}: ${diff > 0 ? 'gập lại' : 'duỗi ra'} thêm khoảng ${Math.abs(diff)} độ.`;
   }
-  /** Đang đạt → xoá nhắc và tính lại giờ; chưa đạt đủ lâu → đọc lý do một lần (và lưu lại khung lỗi để gửi). */
-  function tellWhy(ev, lm, w, h, parts, okNow, repShort = '') {
+  /** Câu nhận xét để ĐỌC: mở đầu động viên + câu sửa (gợi ý SGK giữ nguyên); nói "thêm chút nữa" thay số độ. */
+  function voiceReason(ev) {
+    if (ev.unseen.length) {
+      const names = [...new Set(ev.unseen.flatMap((u) => u.missing || []))].map((i) => PART[i]).filter(Boolean).slice(0, 2);
+      return unclearLine(names.join(', ').toLowerCase());
+    }
+    const worst = [...ev.results].filter((r) => r.score != null).sort((a, b) => a.score - b.score)[0];
+    if (!worst || worst.score >= PASS_SCORE) return '';
+    if (worst.rule.hint) return fixLine(worst.rule.hint);
+    if (worst.rule.kind) return fixLine(`${worst.rule.label} chưa đúng, em nhìn lại hình mẫu`);
+    return fixLine(angleFix(worst.rule.label, Math.round(worst.angle - worst.rule.target)));
+  }
+  /**
+   * Bài giữ tư thế / đếm lần. Đang đúng → tính lại giờ. Đọc xong hướng dẫn mà chưa đúng thêm 2–3 giây →
+   * đọc nhận xét (rồi nhắc lại sau mỗi lần đọc xong + 3 giây). rep = { screen, voice } riêng cho bài đếm lần.
+   */
+  function tellWhy(ev, lm, w, h, parts, okNow, rep = null) {
     const cue = cueEl();
     if (okNow) {
-      attempt.vis = 0; attempt.toldAt = null;
+      attempt.wrong = 0;
       if (cue?.classList.contains('is-why')) { cue.classList.remove('is-why'); cue.replaceChildren(); }
       return;
     }
-    if (attempt.vis < (attempt.toldAt == null ? TELL_FIRST : attempt.toldAt + TELL_AGAIN)) return;
-    const short = tooFar(lm, h) || repShort || shortReason(ev);
+    if (attempt.done || attempt.phase !== 'wait-fb' || attempt.wrong < (attempt.fbCount ? AGAIN_AFTER : FB_FIRST)) return;
+    const far = tooFar(lm, h);
+    const short = far || rep?.screen || shortReason(ev);
     if (!short) return;
-    attempt.toldAt = attempt.vis;
+    const spoken = far ? tooFarLine() : rep?.voice || voiceReason(ev);
+    attempt.phase = 'fb'; attempt.fbCount += 1;
     attempt.errorReasons.add(short);
     // Giữ lại tối đa 2 khung lỗi rõ nhất (mỗi lý do một khung) để gửi cho thầy cô.
     if (uploadEnabled() && attempt.errorShots.length < 2 && !attempt.errorShots.some((e) => e.reason === short)) {
       attempt.errorShots.push({ reason: short, image: compactShot(lm, w, h, parts, short) });
     }
-    if (voicePref()) say(`Chưa đạt. ${short}`);
+    speakThen([{ text: spoken, pitch: 1.12 }], toWait('wait-fb'));
     if (cue) { cue.classList.add('is-why'); cue.innerHTML = `<b>Chưa đạt</b> ${esc(short)}`; }
   }
 
@@ -449,13 +507,20 @@ export function mountPractice(root, ex) {
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; stage.style.aspectRatio = `${w} / ${h}`; stage.style.setProperty('--ar', (w / h).toFixed(4)); }
     ctx.clearRect(0, 0, w, h);
     const tSec = source === 'file' ? video.currentTime : performance.now() / 1000;
+    const wall = performance.now() / 1000;
     if (!lm) {
       showAdvice('Chưa thấy em. Lùi ra xa cho máy thấy cả người nhé.');
+      if (attempt.unseenAt == null) attempt.unseenAt = wall;
+      if (!attempt.done && wall - attempt.unseenAt >= 2 && wall - attempt.unseenToldAt >= 7) {
+        attempt.unseenToldAt = wall;
+        speakFree(notSeenLine());
+      }
       if (!isReps) { timer.update(null, tSec); attempt.streak = null; }
       labelsBox.replaceChildren();
       setVal('hud', '—');
       return;
     }
+    attempt.unseenAt = null;
     const ev = evaluateRules(lm, rules, w, h);
     // Làm mượt điểm từng bộ phận để số không nhảy liên tục.
     const parts = ev.results.map((r, i) => {
@@ -479,8 +544,11 @@ export function mountPractice(root, ex) {
       : allSeen && parts.every((p) => p.score >= PASS_SCORE);
     let repInfo = null;
     // Thời gian thực sự đang tập: chỉ tính lúc máy thấy người (đi vào chỗ đứng không bị tính).
-    if (attempt.lastT != null && tSec >= attempt.lastT) attempt.vis += Math.min(0.5, tSec - attempt.lastT);
+    const dt = attempt.lastT != null && tSec >= attempt.lastT ? Math.min(0.5, tSec - attempt.lastT) : 0;
+    attempt.vis += dt;
     attempt.lastT = tSec;
+    // Giờ "đang tập mà chưa đúng" kể từ khi đọc xong hướng dẫn / nhận xét (bài đếm lần: chưa có lần đạt).
+    if ((attempt.phase === 'wait-fb' || attempt.phase === 'wait-skip') && (isReps || !allOk)) attempt.wrong += dt;
 
     if (isReps) {
       const m = measure(lm, repSpec, w, h);
@@ -504,6 +572,7 @@ export function mountPractice(root, ex) {
             attempt.low = null; // khung đã giữ lại làm ảnh, lần sau dùng khung mới
           }
           flashOk();
+          if (attempt.goodReps < sc.reps.target) speakFree(countLine(attempt.goodReps), { force: true });
         }
         setVal('cur', `${Math.round(counter.lastQuality)}% ${ok ? 'đạt' : 'chưa'}`);
       }
@@ -516,10 +585,14 @@ export function mountPractice(root, ex) {
       else showAdvice(counter.lastQuality != null && counter.lastQuality < PASS_SCORE
         ? 'Lần vừa rồi chưa đủ sâu. Cố thêm chút nữa!' : 'Bắt đầu nào! Làm thật đúng nhé.');
       // Làm được một lần đạt là tính lại giờ; lâu chưa có lần nào đạt thì đọc lý do.
+      const unseenNames = (m.missing || []).map((i) => PART[i]).filter(Boolean).slice(0, 2).join(', ');
       tellWhy(ev, lm, w, h, parts, gotRep, m.angle == null
-        ? `Chưa thấy rõ ${(m.missing || []).map((i) => PART[i]).filter(Boolean).slice(0, 2).join(', ') || 'cả người'}. Lùi ra xa cho máy thấy cả người.`
-        : counter.lastQuality != null && counter.lastQuality < PASS_SCORE ? `${sc.reps.label}: chưa đủ sâu, cố thêm chút nữa.`
-        : counter.count === 0 ? `Chưa đếm được lần nào. ${sc.pose || `Làm đúng động tác: ${sc.reps.label}.`}` : '');
+        ? { screen: `Chưa thấy rõ ${unseenNames || 'cả người'}. Lùi ra xa cho máy thấy cả người.`, voice: unclearLine(unseenNames.toLowerCase()) }
+        : counter.lastQuality != null && counter.lastQuality < PASS_SCORE
+          ? { screen: `${sc.reps.label}: chưa đủ sâu, cố thêm chút nữa.`, voice: repDeeperLine() }
+          : counter.count === 0
+            ? { screen: `Chưa đếm được lần nào. ${sc.pose || `Làm đúng động tác: ${sc.reps.label}.`}`, voice: repStartLine(sc.pose || sc.reps.label) }
+            : null);
       if (!attempt.done && attempt.goodReps >= sc.reps.target) {
         const b = attempt.bestShot;
         if (b) finish(b.lm, w, h, b.parts, b.repInfo, b.frame); else finish(lm, w, h, parts, m);
@@ -532,8 +605,7 @@ export function mountPractice(root, ex) {
         attempt.streak.sum += okSeen.length === seen.length ? avg : (okSeen.reduce((a, p) => a + p.score, 0) / okSeen.length);
       } else attempt.streak = null;
       const N = attempt.steps.length;
-      const limit = autoSkip + (attempt.si === 0 ? 5 : 0);
-      const left = limit - attempt.vis;
+      const skipLeft = attempt.phase === 'wait-skip' ? SKIP_AFTER - attempt.wrong : null;
       setVal('cur', avg == null ? '—' : `${Math.round(avg)}%`);
       setVal('hold', `${Math.min(timer.current, 99).toFixed(1)}s`);
       setVal('step', `${attempt.si + 1}/${N}`);
@@ -547,20 +619,22 @@ export function mountPractice(root, ex) {
       // Gợi ý theo bộ phận máy thấy được; chỉ nhắc "chưa thấy rõ" khi thấy chưa đủ một nửa.
       const evSeen = { unseen: seen.length < Math.ceil(parts.length / 2) ? ev.unseen : [], results: ev.results.filter((x) => x.score != null) };
       const why = far || adviceFor(evSeen);
-      // Sau 5 giây chưa đạt: nói ngắn gọn vì sao (một lần mỗi nhịp) và hiện lý do bằng chữ to.
-      if (!allOk && attempt.vis >= 5 && !attempt.told && why) {
-        attempt.told = true;
+      // Đọc xong hướng dẫn mà vẫn chưa đúng thêm 2 giây → đọc nhận xét, một lần mỗi nhịp.
+      if (!allOk && why && attempt.phase === 'wait-fb' && attempt.wrong >= (attempt.si === 0 ? FB_FIRST : FB_AFTER)) {
         const worst = [...ev.results].filter((r) => r.score != null).sort((a, b) => a.score - b.score)[0];
         const short = far || worst?.rule.hint || why;
-        if (voicePref()) say(`Chưa đạt. ${short}`);
+        const spoken = far ? tooFarLine() : evSeen.unseen.length ? voiceReason(evSeen) : fixLine(worst?.rule.hint || why);
+        attempt.phase = 'fb';
+        speakThen([{ text: spoken, pitch: 1.12 }], toWait('wait-skip'));
         const cue = root.querySelector('.stage-cue span');
         if (cue) { cue.classList.add('is-why'); cue.innerHTML = `<b>Chưa đạt</b> ${esc(short)}`; }
       }
       showAdvice(allOk ? `Đúng rồi! Giữ yên… ${Math.max(0, holdSec - timer.current).toFixed(1)}s`
-        : left <= 5 ? `${why} · Tự sang nhịp sau ${Math.max(0, Math.ceil(left))}s` : why);
+        : skipLeft != null ? `${why} · Sang nhịp sau ${Math.max(0, Math.ceil(skipLeft))}s` : why);
       if (!attempt.done && (timer.done || fast)) stepDone(lm, w, h, parts);
-      // Quá thời gian mà chưa làm được (và không đang giữ đúng) → tự bỏ qua nhịp này.
-      else if (!attempt.done && left <= 0 && !allOk) skipStep(true);
+      // Đọc xong nhận xét mà thêm 2 giây vẫn chưa đúng → tự sang nhịp sau (có mốc an toàn tối đa).
+      else if (!attempt.done && !allOk
+        && ((attempt.phase === 'wait-skip' && attempt.wrong >= SKIP_AFTER) || attempt.vis >= SKIP_CEILING)) skipStep(true);
     } else {
       timer.update(allOk ? avg : null, tSec);
       // Cộng dồn điểm từng bộ phận trong lúc đang giữ đúng, để ghi kết quả.
@@ -593,11 +667,11 @@ export function mountPractice(root, ex) {
     if (ys.length < 3) return '';
     return Math.max(...ys) - Math.min(...ys) < 0.45 ? 'Em đứng hơi xa, tiến lại gần một bước.' : '';
   }
-  function setStep(i) {
+  function setStep(i, lead = '') {
     const st = attempt.steps[i];
     rules = st.rules.map(easeSeq);
     attempt.si = i; attempt.smooth = rules.map(() => null); attempt.streak = null; attempt.vis = 0; attempt.lastT = null;
-    attempt.greatT = null; attempt.told = false;
+    attempt.greatT = null; attempt.phase = 'instr'; attempt.wrong = 0;
     timer.reset();
     lastTableAt = 0;
     targetPlayers.forEach((p) => p.go(st.frame));
@@ -610,7 +684,11 @@ export function mountPractice(root, ex) {
     const prev = attempt.steps[i - 1];
     const newGroup = f.group && (!prev || stepGroup(prev) !== f.group);
     const label = /^TTCB/.test(f.label || '') ? 'Tư thế chuẩn bị' : (f.label || '');
-    if (voicePref()) say(`${newGroup ? `Động tác ${f.group}. ` : ''}${label}. ${st.say || ''}`);
+    // Lời dẫn vui (giọng cao hơn) rồi tới hướng dẫn nhịp — đọc NGUYÊN VĂN theo SGK.
+    speakThen([
+      { text: lead, pitch: 1.15 },
+      { text: `${newGroup ? `Động tác ${f.group}. ` : ''}${label}. ${st.say || ''}` },
+    ], toWait('wait-fb'));
     renderTrack();
   }
   function renderTrack() {
@@ -654,7 +732,7 @@ export function mountPractice(root, ex) {
   function nextStep(ok, auto = false) {
     ding(ok);
     if (attempt.si + 1 >= attempt.steps.length) { finishSeq(); return; }
-    setStep(attempt.si + 1);
+    setStep(attempt.si + 1, ok ? praise() : auto ? skipLine() : '');
     const b = $('.pass-banner');
     b.textContent = ok ? 'Đúng rồi! Nhịp tiếp' : auto ? 'Hết giờ – nhịp tiếp' : 'Nhịp tiếp theo'; b.hidden = false;
     clearTimeout(nextStep.t);
@@ -697,7 +775,7 @@ export function mountPractice(root, ex) {
     showAdvice(`Hoàn thành ${passed}/${steps.length} nhịp. Xem kết quả bên dưới.`);
     const cue = root.querySelector('.stage-cue span');
     if (cue) cue.innerHTML = `<b>Xong!</b> ${total}% · ${passed}/${steps.length} nhịp đạt`;
-    if (voicePref()) say(`Hoàn thành. Em được ${total} phần trăm, đạt ${passed} trên ${steps.length} nhịp.`);
+    speakFree(`${finishLine(total)} Em đạt ${passed} trên ${steps.length} nhịp.`, { force: true });
     navigator.vibrate?.([80, 60, 120]);
     renderResults(newRecord);
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
@@ -765,6 +843,7 @@ export function mountPractice(root, ex) {
     uploadResult(result, (attempt.errorShots || []).map((e) => e.image), [...(attempt.errorReasons || [])]);
     $('.pass-banner').hidden = false;
     $('.pass-banner').textContent = newRecord ? 'Kỷ lục mới!' : 'Đạt!';
+    speakFree(`${newRecord ? 'Kỷ lục mới! ' : ''}${finishLine(result.score)}`, { force: true });
     navigator.vibrate?.([80, 60, 120]);
     renderResults(newRecord);
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
@@ -806,6 +885,7 @@ export function mountPractice(root, ex) {
     const b = $('.pass-banner');
     b.hidden = false; b.textContent = `Đã chấm ${result.score}%`;
     showAdvice('Đã chấm với kết quả hiện có. Bấm “Tập lại” để thử lần nữa.');
+    speakFree(finishLine(result.score), { force: true });
     renderResults(newRecord);
     setTimeout(() => root.querySelector('.results')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
   }
@@ -1066,8 +1146,8 @@ export function mountPractice(root, ex) {
       const b = e.target.closest('[data-act="voice"]');
       b.textContent = on ? '🔊' : '🔇'; b.setAttribute('aria-pressed', String(on));
       if (on && !hasVietnameseVoice()) showAdvice('Máy này chưa có giọng đọc tiếng Việt, em xem chữ trên màn hình nhé.');
-      else if (on && attempt?.steps) say(attempt.steps[attempt.si]?.say || '');
-      else if (on && attempt) say(goalSpeech());
+      else if (on && attempt?.steps) speakFree(attempt.steps[attempt.si]?.say || '', { force: true });
+      else if (on && attempt) speakFree(goalSpeech(), { force: true });
     }
     else if (act === 'skip') skipStep();
     else if (act === 'giveup') giveUp();

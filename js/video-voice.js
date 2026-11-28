@@ -8,6 +8,7 @@ import {
   say, stopVoice, voicePref, setVoicePref, speechSupported, unlockVoice, voiceUnlocked, justUnlocked, voiceStatus, speechMs,
 } from './speak.js';
 import { inAppName, voiceHelpHTML } from './inapp.js';
+import { greetVideo, speakable } from './voice-lines.js';
 
 const RATE = 1.2;
 const strip = (s) => String(s || '').replace(/^[a-z]\d?\)\s*/i, '').trim();
@@ -59,6 +60,7 @@ export const voiceNoticeHTML = () => '<p class="vfig__voicewarn small" role="not
  */
 export function createBeatVoice(onDone) {
   let holding = false, timer = 0, prev = {}, seq = 0, btn = null, note = null, checkT = 0;
+  let greeted = false; // lần đầu đọc thì chào một câu ngắn cho vui
   const release = () => {
     if (!holding) return;
     holding = false;
@@ -98,13 +100,17 @@ export function createBeatVoice(onDone) {
       const text = beatSpeech(pose, full ? {} : prev);
       if (!text) return false;
       const my = ++seq; // chỉ nhận "đọc xong" của đúng câu này, bỏ qua câu cũ vừa bị thay
-      if (!say(text, { rate: RATE, onend: () => { if (my === seq) release(); } })) return false;
+      // Lần đọc đầu: lời chào (giọng cao, vui) rồi tới câu hướng dẫn nhịp (giữ nguyên văn SGK).
+      const hello = greeted ? '' : greetVideo();
+      const parts = [{ text: hello, pitch: 1.15 }, { text: speakable(text) }];
+      if (!say(parts, { rate: RATE, onend: () => { if (my === seq) release(); } })) return false;
+      greeted = true;
       prev = pieces(pose);
       if (!hold) return false; // đọc nhưng không bắt trình phát chờ (vd em chạm lúc hình đang di chuyển)
       holding = true;
       clearTimeout(timer);
       // Dự phòng khi trình duyệt không báo "đọc xong": chờ theo độ dài câu, không chờ cứng 9 giây.
-      timer = setTimeout(() => { if (my === seq) release(); }, Math.min(12000, speechMs(text, RATE) * 1.6 + 800));
+      timer = setTimeout(() => { if (my === seq) release(); }, Math.min(15000, speechMs(`${hello} ${text}`, RATE) * 1.6 + 800));
       return true;
     },
     /**

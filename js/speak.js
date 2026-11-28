@@ -14,13 +14,28 @@ let unlocked = false;     // đã có một câu đọc nằm TRONG cú chạm
 let current = null;       // câu đang đọc — giữ tham chiếu để Safari không "quên" câu (mất onend)
 let unlockedAt = -Infinity; // lúc mở khoá — để biết cú chạm vừa rồi có phải chính cú mở khoá không
 
+/**
+ * Điểm "tự nhiên" của một giọng: giọng thần kinh / nâng cao đọc có lên xuống hơn hẳn giọng cục bộ cũ.
+ *   Edge (Windows): "Microsoft HoaiMy / NamMinh Online (Natural)"  · Chrome: "Google Tiếng Việt"
+ *   iPhone: "Linh (Nâng cao / Enhanced / Premium)" nếu đã tải trong Cài đặt → Trợ năng → Nội dung được đọc.
+ */
+function voiceScore(v) {
+  let sc = 0;
+  if (/natural|neural|premium|enhanced|nâng cao|cao cấp|wavenet|studio/i.test(v.name)) sc += 4;
+  if (/online|google/i.test(v.name) || v.localService === false) sc += 2;
+  if (v.default) sc += 0.5;
+  return sc;
+}
 function pickVoice() {
   if (!synth) return null;
   const vs = synth.getVoices();
   if (vs.length) voicesLoaded = true;
-  viVoice = vs.find((v) => /^vi(-|_|$)/i.test(v.lang) && v.localService) || vs.find((v) => /^vi(-|_|$)/i.test(v.lang)) || null;
+  const vi = vs.filter((v) => /^vi(-|_|$)/i.test(v.lang));
+  viVoice = vi.sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
   return viVoice;
 }
+/** Tên giọng đang dùng (để hiện cho thầy cô biết máy đang đọc bằng giọng nào). */
+export const voiceName = () => (viVoice || pickVoice())?.name || '';
 if (synth) {
   pickVoice();
   synth.addEventListener?.('voiceschanged', pickVoice);
@@ -98,12 +113,21 @@ export function setVoicePref(on) {
  * (chưa có cú chạm mở khoá): khi đó người gọi không được đứng chờ "đọc xong".
  * onend: gọi khi đọc xong (hoặc lỗi) — dùng để chờ đọc hết nhịp rồi mới sang nhịp sau.
  */
-export function say(text, { rate = 1.2, onend = null } = {}) {
-  if (!synth || !text || !unlocked) return false;
+export function say(text, { rate = 1.2, pitch = 1, onend = null } = {}) {
+  // text: một câu, hoặc nhiều đoạn [{ text, rate, pitch }] đọc liền nhau với giọng điệu khác nhau
+  // (vd lời khen cao giọng hơn, rồi tới câu hướng dẫn giọng chuẩn) — đọc xong đoạn cuối mới báo onend.
+  const parts = (Array.isArray(text) ? text : [{ text }])
+    .map((p) => ({ text: String(p.text || '').trim(), rate: p.rate ?? rate, pitch: p.pitch ?? pitch }))
+    .filter((p) => p.text);
+  if (!synth || !parts.length || !unlocked) return false;
   const v = viVoice || pickVoice();
   if (!v) return false;
-  const u = new SpeechSynthesisUtterance(text);
-  u.voice = v; u.lang = v.lang; u.rate = rate;
+  const us = parts.map((p) => {
+    const x = new SpeechSynthesisUtterance(p.text);
+    x.voice = v; x.lang = v.lang; x.rate = p.rate; x.pitch = p.pitch;
+    return x;
+  });
+  const u = us[us.length - 1];
   let done = false;
   const fire = () => {
     if (done) return;
@@ -111,8 +135,9 @@ export function say(text, { rate = 1.2, onend = null } = {}) {
     if (current === u) current = null;
     onend?.();
   };
-  u.onend = fire; u.onerror = fire;
-  const start = () => { current = u; synth.speak(u); };
+  u.onend = fire;
+  us.forEach((x) => { x.onerror = fire; });
+  const start = () => { current = u; us.forEach((x) => synth.speak(x)); };
   if (current) {
     // Đang đọc câu trước: huỷ rồi đợi một chút mới đọc (Safari hay "nuốt" câu đọc ngay sau cancel()).
     current = null;

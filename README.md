@@ -127,14 +127,19 @@ Số khớp MediaPipe (số lẻ = bên **trái của học sinh**): 11/12 vai �
   lưu PDF để giữ lại."*; để trống `RESULT_ENDPOINT` thì không gửi và nhắc *"Ảnh đã được lưu, em có thể lưu PDF để giữ lại."*
 - **Nút "Chấm luôn"** (bài không đếm nhịp): chốt kết quả với đúng những gì em đã làm được — điểm cao nhất đã đạt, hoặc số lần đã đạt.
   Tương đương nút **Bỏ qua nhịp** của bài đếm nhịp. Vẫn có ảnh, phiếu PDF và gửi kết quả như bình thường.
-- **Giọng đọc và lời nhắc "Chưa đạt" có ở mọi bài** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ):
-  vào bài đọc yêu cầu và hiện chữ to giữa khung camera (tự ẩn sau 5 giây); **chưa đạt quá 5 giây** thì đọc và hiện lý do cụ thể
-  (suy ra từ bộ phận điểm thấp nhất, vd *"Khuỷu tay co khoảng 90°: gập lại thêm khoảng 90 độ"*), rồi **nhắc lại mỗi 10 giây**
-  cho tới khi làm đúng. Xem `TELL_FIRST` / `TELL_AGAIN` và `tellWhy()` trong `js/practice.js`.
+- **Giọng đọc và lời nhắc "Chưa đạt" có ở mọi bài** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ).
+  Nhịp đọc nhanh, tính từ lúc **đọc xong** (không phải lúc bắt đầu đọc): **chào** → đọc **yêu cầu** → em làm chưa đúng thêm
+  **2 giây** (chỉ tính lúc máy thấy em) → đọc **nhận xét** → bài giữ tư thế / đếm lần nhắc lại sau mỗi lần đọc xong + 3 giây.
+  Hằng số `FB_FIRST` / `FB_AFTER` / `SKIP_AFTER` / `AGAIN_AFTER` và `speakThen()`, `tellWhy()` trong `js/practice.js`.
+- **Lời đọc có hồn** (`js/voice-lines.js`): câu chào lúc bắt đầu (cả mục 2. Video), lời khen khi qua nhịp, đếm to số lần đạt,
+  câu nhắc dễ thương khi máy chưa thấy em / em đứng xa / tư thế chưa đúng, lời kết theo điểm. Phần **hướng dẫn động tác
+  (tên nhịp, câu mô tả, câu gợi ý sửa) đọc nguyên văn theo SGK**; chỉ phần bao quanh được biến tấu, đổi câu luân phiên.
+  Lời chào/khen đọc cao giọng hơn (`pitch` 1,15) để có lên xuống. Máy tự chọn **giọng tự nhiên nhất** đang có
+  (Edge: *HoaiMy Online (Natural)*; Chrome: *Google Tiếng Việt*; iPhone: *Linh (Nâng cao)* nếu đã tải).
 
 **Chấm trọn bộ (10 bài thể dục, `scoring.mode = "sequence"`).** Máy chấm lần lượt **từng nhịp** theo đúng các hình trong sách:
 - Mỗi nhịp đạt khi máy thấy ít nhất một nửa số bộ phận và **quá nửa số bộ phận thấy được đạt ≥ 80%** (bộ phận bị khuất, vd chân, không chặn nhịp) và **giữ liên tục 1 giây** (`holdSeconds`). Tiêu chí được nới vừa phải (góc +8°, vị trí +¼ bề rộng vai, xem `easeSeq` trong `js/practice.js`). Đúng thì máy chụp ảnh nhịp đó và chuyển sang nhịp sau.
-- Thử **10 giây** (`autoSkipSeconds`, chỉ tính lúc máy thấy người; nhịp đầu thêm 5 giây) mà chưa được thì **tự sang nhịp sau** (tính 0 điểm). Vẫn có nút **Bỏ qua nhịp**.
+- Đọc xong hướng dẫn mà em vẫn chưa đúng thêm **2 giây** thì đọc nhận xét; đọc xong nhận xét thêm **2 giây** vẫn chưa đúng thì **tự sang nhịp sau** (tính 0 điểm, kèm câu "Không sao, mình sang nhịp sau nhé!"). Chỉ tính lúc máy thấy người; mốc an toàn tối đa `autoSkipSeconds × 2`. Vẫn có nút **Bỏ qua nhịp**.
 - Mỗi nhịp có câu hướng dẫn ngắn (`steps[k].say`): hiện **chữ to giữa khung camera** và **đọc bằng giọng tiếng Việt có sẵn trong máy** (nút 🔊/🔇; máy không có giọng tiếng Việt thì chỉ hiện chữ).
 - Hình mẫu trong khung camera mặc định **to** (cao gần bằng khung) để nhìn từ xa 2–3 m; bấm vào để đổi to → nhỏ → ẩn.
 - Hết bài mới có **điểm tổng = trung bình các nhịp**, kèm ảnh ghép tất cả các nhịp và điểm theo từng động tác.
